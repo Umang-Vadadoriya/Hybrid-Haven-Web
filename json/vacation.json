@@ -1,0 +1,78 @@
+[
+  {
+    "vacationId": 1,
+    "employeeId": 5,
+    "vacationStartDate": "2023-02-15",
+    "vacationEndDate": "2023-02-17",
+    "employeeByEmployeeId": {
+      "employeeId": 5,
+      "employeeName": "Parth Vaghela",
+      "employeeReportsTo": 2,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 5,
+          "employeeId": 5,
+          "employeeEmail": "parth.vaghela@bbd.co.za",
+          "employeeContact": "8534175698"
+        }
+      ]
+    }
+  },
+  {
+    "vacationId": 2,
+    "employeeId": 5,
+    "vacationStartDate": "2023-02-25",
+    "vacationEndDate": "2023-02-27",
+    "employeeByEmployeeId": {
+      "employeeId": 5,
+      "employeeName": "Parth Vaghela",
+      "employeeReportsTo": 2,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 5,
+          "employeeId": 5,
+          "employeeEmail": "parth.vaghela@bbd.co.za",
+          "employeeContact": "8534175698"
+        }
+      ]
+    }
+  },
+  {
+    "vacationId": 3,
+    "employeeId": 6,
+    "vacationStartDate": "2023-02-15",
+    "vacationEndDate": "2023-02-17",
+    "employeeByEmployeeId": {
+      "employeeId": 6,
+      "employeeName": "Vinayak Tiwari",
+      "employeeReportsTo": 5,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 6,
+          "employeeId": 6,
+          "employeeEmail": "vinayak.tiwari@bbd.co.za",
+          "employeeContact": "7524684689"
+        }
+      ]
+    }
+  },
+  {
+    "vacationId": 4,
+    "employeeId": 6,
+    "vacationStartDate": "2023-02-25",
+    "vacationEndDate": "2023-02-27",
+    "employeeByEmployeeId": {
+      "employeeId": 6,
+      "employeeName": "Vinayak Tiwari",
+      "employeeReportsTo": 5,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 6,
+          "employeeId": 6,
+          "employeeEmail": "vinayak.tiwari@bbd.co.za",
+          "employeeContact": "7524684689"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,242 @@
+[
+  {
+    "eventId": 1,
+    "employeeId": 1,
+    "eventEmployeeId": 1,
+    "eventsByEventId": {
+      "eventId": 1,
+      "eventName": "Lunch",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 1,
+      "employeeName": "Umang Vadadoriya",
+      "employeeReportsTo": 0,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 1,
+          "employeeId": 1,
+          "employeeEmail": "umang.vadadoriya@bbd.co.za",
+          "employeeContact": "9645034569"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 1,
+    "employeeId": 2,
+    "eventEmployeeId": 2,
+    "eventsByEventId": {
+      "eventId": 1,
+      "eventName": "Lunch",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 2,
+      "employeeName": "Krunal Rana",
+      "employeeReportsTo": 1,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 2,
+          "employeeId": 2,
+          "employeeEmail": "krunal.rana@bbd.co.za",
+          "employeeContact": "7854357453"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 1,
+    "employeeId": 3,
+    "eventEmployeeId": 3,
+    "eventsByEventId": {
+      "eventId": 1,
+      "eventName": "Lunch",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 3,
+      "employeeName": "Dinesh Saw",
+      "employeeReportsTo": 1,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 3,
+          "employeeId": 3,
+          "employeeEmail": "dinesh.saw@bbd.co.za",
+          "employeeContact": "8534567834"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 1,
+    "employeeId": 4,
+    "eventEmployeeId": 4,
+    "eventsByEventId": {
+      "eventId": 1,
+      "eventName": "Lunch",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 4,
+      "employeeName": "Nishant Taletiya",
+      "employeeReportsTo": 2,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 4,
+          "employeeId": 4,
+          "employeeEmail": "nishant.taletiya@bbd.co.za",
+          "employeeContact": "9053681346"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 1,
+    "employeeId": 6,
+    "eventEmployeeId": 5,
+    "eventsByEventId": {
+      "eventId": 1,
+      "eventName": "Lunch",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 6,
+      "employeeName": "Vinayak Tiwari",
+      "employeeReportsTo": 5,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 6,
+          "employeeId": 6,
+          "employeeEmail": "vinayak.tiwari@bbd.co.za",
+          "employeeContact": "7524684689"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 2,
+    "employeeId": 1,
+    "eventEmployeeId": 6,
+    "eventsByEventId": {
+      "eventId": 2,
+      "eventName": "Dinner",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 1,
+      "employeeName": "Umang Vadadoriya",
+      "employeeReportsTo": 0,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 1,
+          "employeeId": 1,
+          "employeeEmail": "umang.vadadoriya@bbd.co.za",
+          "employeeContact": "9645034569"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 2,
+    "employeeId": 2,
+    "eventEmployeeId": 7,
+    "eventsByEventId": {
+      "eventId": 2,
+      "eventName": "Dinner",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 2,
+      "employeeName": "Krunal Rana",
+      "employeeReportsTo": 1,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 2,
+          "employeeId": 2,
+          "employeeEmail": "krunal.rana@bbd.co.za",
+          "employeeContact": "7854357453"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 2,
+    "employeeId": 3,
+    "eventEmployeeId": 8,
+    "eventsByEventId": {
+      "eventId": 2,
+      "eventName": "Dinner",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 3,
+      "employeeName": "Dinesh Saw",
+      "employeeReportsTo": 1,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 3,
+          "employeeId": 3,
+          "employeeEmail": "dinesh.saw@bbd.co.za",
+          "employeeContact": "8534567834"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 2,
+    "employeeId": 4,
+    "eventEmployeeId": 9,
+    "eventsByEventId": {
+      "eventId": 2,
+      "eventName": "Dinner",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 4,
+      "employeeName": "Nishant Taletiya",
+      "employeeReportsTo": 2,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 4,
+          "employeeId": 4,
+          "employeeEmail": "nishant.taletiya@bbd.co.za",
+          "employeeContact": "9053681346"
+        }
+      ]
+    }
+  },
+  {
+    "eventId": 2,
+    "employeeId": 5,
+    "eventEmployeeId": 10,
+    "eventsByEventId": {
+      "eventId": 2,
+      "eventName": "Dinner",
+      "eventDescription": "At Absolute Barbeque",
+      "eventDate": "2024-01-12"
+    },
+    "employeeByEmployeeId": {
+      "employeeId": 5,
+      "employeeName": "Parth Vaghela",
+      "employeeReportsTo": 2,
+      "employeeContactsByEmployeeId": [
+        {
+          "employeeContactId": 5,
+          "employeeId": 5,
+          "employeeEmail": "parth.vaghela@bbd.co.za",
+          "employeeContact": "8534175698"
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "leadType": "",
+  "contactWorkPhoneNumber": "0828285812",
+  "contactFirstName": "Ashwin",
+  "contactMobilePhoneNumber": "0828285812",
+  "contactLastName": "Parashar",
+  "productId": "2-G2G4N56",
+  "channel": "Live",
+  "contactEmailAddress": "ashwin@bbd.co.za",
+  "productSelected": "Openserve - 25Mbps / Data:Uncapped",
+  "identityNumber": "",
+  "installationAddress": {
+    "unitNumber": "",
+    "buildingName": "",
+    "streetNumber": "6",
+    "streetAddress": "Watent Crescent",
+    "streetName": "Watent Crescent",
+    "suburb": "Wapadrand Security Village",
+    "city": "Pretoria",
+    "province": "Gauteng",
+    "postalCode": "0081",
+    "latitude": "-25.774496",
+    "longitude": "28.331799",
+    "seoid": "Vc8DFX5wW5_OFUHQQHIi-Rul41F384502",
+    "formattedAddress": "6 Watent Crescent, Wapadrand Security Village, Pretoria, Gauteng, 0081"
+  },
+  "deliveryAddress": {
+    "unitNumber": "",
+    "buildingName": "",
+    "streetNumber": "6",
+    "streetAddress": "Watent Crescent",
+    "suburb": "Wapadrand Security Village",
+    "city": "Pretoria",
+    "province": "Gauteng",
+    "postalCode": "0081",
+    "latitude": "-25.774496",
+    "longitude": "28.331799",
+    "docid": "",
+    "seoid": "Vc8DFX5wW5_OFUHQQHIi-Rul41F384502",
+    "formattedAddress": "6 Watent Crescent, Wapadrand Security Village, Pretoria, Gauteng, 0081"
+  },
+  "fromCampaign": false,
+  "additionalServices": {
+    "lte": false,
+    "superWifi": false,
+    "voiceLine": true,
+    "contractCover": true
+  },
+  "dealType": "Standalone Fibre Deals",
+  "customerType": "newIndividual",
+  "alternativeContactDetails": {}
+}

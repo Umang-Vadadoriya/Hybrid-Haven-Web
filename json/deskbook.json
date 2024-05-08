@@ -1,0 +1,56 @@
+[
+  {
+    "deskBookingId": 1,
+    "employeeId": 1,
+    "neighbourId": 2,
+    "deskBookingDate": "2024-02-13"
+  },
+  {
+    "deskBookingId": 2,
+    "employeeId": 1,
+    "neighbourId": 3,
+    "deskBookingDate": "2024-02-14"
+  },
+  {
+    "deskBookingId": 3,
+    "employeeId": 1,
+    "neighbourId": 1,
+    "deskBookingDate": "2024-02-15"
+  },
+  {
+    "deskBookingId": 4,
+    "employeeId": 2,
+    "neighbourId": 2,
+    "deskBookingDate": "2024-02-13"
+  },
+  {
+    "deskBookingId": 5,
+    "employeeId": 2,
+    "neighbourId": 3,
+    "deskBookingDate": "2024-02-14"
+  },
+  {
+    "deskBookingId": 6,
+    "employeeId": 2,
+    "neighbourId": 1,
+    "deskBookingDate": "2024-02-15"
+  },
+  {
+    "deskBookingId": 7,
+    "employeeId": 4,
+    "neighbourId": 2,
+    "deskBookingDate": "2024-02-13"
+  },
+  {
+    "deskBookingId": 8,
+    "employeeId": 4,
+    "neighbourId": 3,
+    "deskBookingDate": "2024-02-14"
+  },
+  {
+    "deskBookingId": 9,
+    "employeeId": 4,
+    "neighbourId": 1,
+    "deskBookingDate": "2024-02-15"
+  }
+]

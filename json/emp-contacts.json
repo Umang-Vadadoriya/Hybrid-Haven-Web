@@ -1,0 +1,56 @@
+[
+  {
+    "employeeContactId": 1,
+    "employeeId": 1,
+    "employeeEmail": "umang.vadadoriya@bbd.co.za",
+    "employeeContact": "9645034569"
+  },
+  {
+    "employeeContactId": 2,
+    "employeeId": 2,
+    "employeeEmail": "krunal.rana@bbd.co.za",
+    "employeeContact": "7854357453"
+  },
+  {
+    "employeeContactId": 3,
+    "employeeId": 3,
+    "employeeEmail": "dinesh.saw@bbd.co.za",
+    "employeeContact": "8534567834"
+  },
+  {
+    "employeeContactId": 4,
+    "employeeId": 4,
+    "employeeEmail": "nishant.taletiya@bbd.co.za",
+    "employeeContact": "9053681346"
+  },
+  {
+    "employeeContactId": 5,
+    "employeeId": 5,
+    "employeeEmail": "parth.vaghela@bbd.co.za",
+    "employeeContact": "8534175698"
+  },
+  {
+    "employeeContactId": 6,
+    "employeeId": 6,
+    "employeeEmail": "vinayak.tiwari@bbd.co.za",
+    "employeeContact": "7524684689"
+  },
+  {
+    "employeeContactId": 7,
+    "employeeId": 8,
+    "employeeEmail": "vm21242124@gmail.com",
+    "employeeContact": ""
+  },
+  {
+    "employeeContactId": 8,
+    "employeeId": 9,
+    "employeeEmail": "apsinghrana100@gmail.com",
+    "employeeContact": ""
+  },
+  {
+    "employeeContactId": 9,
+    "employeeId": 10,
+    "employeeEmail": "umangbooyah20@gmail.com",
+    "employeeContact": ""
+  }
+]

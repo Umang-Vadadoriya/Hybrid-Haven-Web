@@ -1,0 +1,125 @@
+[
+  {
+    "employeeId": 1,
+    "employeeName": "Umang Vadadoriya",
+    "employeeReportsTo": 0,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 1,
+        "employeeId": 1,
+        "employeeEmail": "umang.vadadoriya@bbd.co.za",
+        "employeeContact": "9645034569"
+      }
+    ]
+  },
+  {
+    "employeeId": 2,
+    "employeeName": "Krunal Rana",
+    "employeeReportsTo": 1,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 2,
+        "employeeId": 2,
+        "employeeEmail": "krunal.rana@bbd.co.za",
+        "employeeContact": "7854357453"
+      }
+    ]
+  },
+  {
+    "employeeId": 3,
+    "employeeName": "Dinesh Saw",
+    "employeeReportsTo": 1,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 3,
+        "employeeId": 3,
+        "employeeEmail": "dinesh.saw@bbd.co.za",
+        "employeeContact": "8534567834"
+      }
+    ]
+  },
+  {
+    "employeeId": 4,
+    "employeeName": "Nishant Taletiya",
+    "employeeReportsTo": 2,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 4,
+        "employeeId": 4,
+        "employeeEmail": "nishant.taletiya@bbd.co.za",
+        "employeeContact": "9053681346"
+      }
+    ]
+  },
+  {
+    "employeeId": 5,
+    "employeeName": "Parth Vaghela",
+    "employeeReportsTo": 2,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 5,
+        "employeeId": 5,
+        "employeeEmail": "parth.vaghela@bbd.co.za",
+        "employeeContact": "8534175698"
+      }
+    ]
+  },
+  {
+    "employeeId": 6,
+    "employeeName": "Vinayak Tiwari",
+    "employeeReportsTo": 5,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 6,
+        "employeeId": 6,
+        "employeeEmail": "vinayak.tiwari@bbd.co.za",
+        "employeeContact": "7524684689"
+      }
+    ]
+  },
+  {
+    "employeeId": 7,
+    "employeeName": "chirag",
+    "employeeReportsTo": 5,
+    "employeeContactsByEmployeeId": []
+  },
+  {
+    "employeeId": 8,
+    "employeeName": "vinod Mali",
+    "employeeReportsTo": 0,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 7,
+        "employeeId": 8,
+        "employeeEmail": "vm21242124@gmail.com",
+        "employeeContact": ""
+      }
+    ]
+  },
+  {
+    "employeeId": 9,
+    "employeeName": "Ajay pratap Singh",
+    "employeeReportsTo": 0,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 8,
+        "employeeId": 9,
+        "employeeEmail": "apsinghrana100@gmail.com",
+        "employeeContact": ""
+      }
+    ]
+  },
+  {
+    "employeeId": 10,
+    "employeeName": "Umang Booyah20",
+    "employeeReportsTo": 0,
+    "employeeContactsByEmployeeId": [
+      {
+        "employeeContactId": 9,
+        "employeeId": 10,
+        "employeeEmail": "umangbooyah20@gmail.com",
+        "employeeContact": ""
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "eventId": 1,
+    "eventName": "Lunch",
+    "eventDescription": "At Absolute Barbeque",
+    "eventDate": "2024-01-12"
+  },
+  {
+    "eventId": 2,
+    "eventName": "Dinner",
+    "eventDescription": "At Absolute Barbeque",
+    "eventDate": "2024-01-12"
+  }
+]

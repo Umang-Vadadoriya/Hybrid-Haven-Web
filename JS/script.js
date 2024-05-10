@@ -1,51 +1,3 @@
-// const buttons = document.querySelectorAll('button');
-// const mainContent = document.getElementById('main-content');
-
-// buttons.forEach(button => {
-//   button.addEventListener('click', () => {
-//     let content;
-//     switch (button.id) {
-//       case 'home-btn':
-//         content = '<p>Welcome to the home page!</p>';
-//         break;
-//       case 'about-btn':
-//         content = '<p>Learn more about us on the about page!</p>';
-//         break;
-//       case 'contact-btn':
-//         content = '<p>Get in touch with us on the contact page!</p>';
-//         break;
-//     }
-//     mainContent.innerHTML = content;
-//   });
-// });
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   const contentDiv = document.getElementById('content');
-//   const homeOption = document.getElementById('home');
-//   const detailsOption = document.getElementById('details');
-//   const aboutOption = document.getElementById('about');
-
-//   homeOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>Welcome to Home!</h2>
-//       <p>This is the home page content.</p>
-//     `;
-//   });
-
-//   detailsOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>Details</h2>
-//       <p>This is the details page content.</p>
-//     `;
-//   });
-
-//   aboutOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>About</h2>
-//       <p>This is the about page content.</p>
-//     `;
-//   });
-// });
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -60,7 +12,22 @@ const tomorrow = new Date(currentDate);
 tomorrow.setDate(currentDate.getDate() + 1);
 const tommorrowDate = `${tomorrow.getDate().toString().padStart(2, '0')}.${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}.${tomorrow.getFullYear()}`;
 
-indexPage();
+
+const toggle = document.getElementById("toggle-button");
+const leftPanel = document.getElementById("menu");
+
+function toggleButton(){
+  var width = window.innerWidth;
+  if(width <= 426){
+    toggle.style.display = "block";
+    leftPanel.style.display = "none";
+  }
+  else{
+    toggle.style.display = "none";
+    leftPanel.style.display = "block";
+    closeNav();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const contentDiv = document.getElementById("content");
@@ -68,6 +35,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
   const aboutOption = document.getElementById("about");
+  
+  indexPage();
+
+  window.addEventListener('resize', function() {
+    toggleButton();
+  });
+  
+  toggle.addEventListener("click",function() {
+    // console.log("ygvfyhjbgvhg");
+    // toggleContent();
+    openNav();
+  });
 
   // loadHomePage();
 
@@ -91,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <h2>About</h2>
       <p>This is the about page content.</p>
     `;
+    console.log("hgbjhbjih");
   });
 });
 
@@ -169,7 +149,7 @@ function loadDeskBooking() {
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
-
+    closeNav();
 }
 
 // Home + indexpage
@@ -177,6 +157,15 @@ function loadDeskBooking() {
 function loadHomePage() {
   const officeContentDiv = document.getElementById("office-content");
   const vacationContentDiv = document.getElementById("vacation-content");
+
+  const innerOfficeDiv = document.createElement("div");
+  innerOfficeDiv.classList.add("inner");
+
+  const innerVacctionDiv = document.createElement("div");
+  innerVacctionDiv.classList.add("inner");
+
+  // div.style.width = "20rem";
+  // div.style.padding = ".5em";
 
   fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
     .then((response) => response.json()) // Assuming response is JSON
@@ -191,11 +180,16 @@ function loadHomePage() {
 
             // Display the employee names
             const employeeName = employeeData.employeeName; 
-            const employeeNameElement = document.createElement("span");
+            const empDiv = document.createElement('div')  ;
+            empDiv.style.padding = ".5em";
+            empDiv.classList.add("name-tag");
+
+            // empDiv.style.marginBottom = "1em";
+            // const employeeNameElement = document.createElement("span");
             // const parantDiv = document.createElement("div");
-            employeeNameElement.classList.add("name-tag");
-            employeeNameElement.textContent = `@${employeeName} `;
-            officeContentDiv.appendChild(employeeNameElement);
+            empDiv.textContent = `@${employeeName} `;
+            // empDiv.appendChild(employeeNameElement);
+            innerOfficeDiv.appendChild(empDiv);
           })
           .catch((error) => {
             console.error("Error fetching employee data:", error);
@@ -206,6 +200,8 @@ function loadHomePage() {
       console.error("Error fetching data:", error);
     });
 
+    officeContentDiv.appendChild(innerOfficeDiv);
+
   fetch(`http://34.251.172.36:8080/vacations/date/16.02.2023`)
     .then((response) => response.json()) 
     .then((data) => {
@@ -213,27 +209,32 @@ function loadHomePage() {
       data.forEach((vacations) => {
         // console.log(vacations);
         const employeedata = vacations.employeeByEmployeeId;
-        console.log(employeedata.employeeName);
+        // console.log(employeedata.employeeName);
         const employeeName = employeedata.employeeName;
-        const employeeNameElement = document.createElement("span");
-        employeeNameElement.classList.add("name-tag");
-        employeeNameElement.textContent = `@${employeeName} `;
-        vacationContentDiv.appendChild(employeeNameElement);
+        const empDiv = document.createElement("div");
+        empDiv.style.padding = ".5em";
+        empDiv.classList.add("name-tag");
+        
+        empDiv.textContent = `@${employeeName} `;
+        innerVacctionDiv.appendChild(empDiv);
       });
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
+    vacationContentDiv.appendChild(innerVacctionDiv);
+
 }
 
 function indexPage() {
   const contentDiv = document.getElementById("content");
   const para= document.createElement('p');
-  const html = `<h2>Welcome to HybridHaven!</h2>
+  const html = `
+  <h2>Welcome to HybridHaven!</h2>
   <h3>Today</h2><hr>
     <div>
       <div class="office flex-con">
-        <div><img src="../image/office.png" alt="office Image"></div>
+        <div><img src="./image/office.png" alt="office Image"></div>
         <div> Office</div>
       </div>
       <div id="office-content">
@@ -243,7 +244,7 @@ function indexPage() {
     </div>
   <div>
     <div class="vacation flex-con">
-      <div><img src="../image/vacation.jpg" alt="Vacation Image"></div>
+      <div><img src="./image/vacation.jpg" alt="Vacation Image"></div>
       <div> Vacation</div>
     </div>
     <div id="vacation-content">
@@ -254,7 +255,17 @@ function indexPage() {
   contentDiv.innerHTML = html;
   // contentDiv.appendChild('beforechild',html);
   loadHomePage();
+  closeNav();
 }
+
+// function toggleContent() {
+// const rightPanel = document.getElementById('content');
+//   if (rightPanel.style.display === 'none') {
+//       rightPanel.style.display = 'block'; // Show if hidden
+//   } else {
+//       rightPanel.style.display = 'none'; // Hide if shown
+//   }
+// }
 
 // for Home Content
 // <div>
@@ -267,3 +278,12 @@ function indexPage() {
 //     </div>
 //     <br>
 //   </div>
+
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}

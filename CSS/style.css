@@ -6,8 +6,9 @@ body {
 }
 
 .container {
-  display: grid;
-  grid-template-columns: auto 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  
 }
 
 /* left panel */
@@ -16,25 +17,25 @@ body {
   background-color: #12023e;
   height: 100vh;
   color: #ddd;
+  flex: 1;
+  flex-direction: column;
 }
 
-.top-left {
+.left-panel.hidden {
+  flex: 0;
+}
+
+.top-right {
   display: flex;
   align-items: center;
-  width: 15rem;
-  padding: .6rem;
 }
 
-.top-left img {
-  width: 3rem;
+.top-right img {
+  max-width: 3rem;
   border-radius: 0.5rem;
   height: auto;
+  display: flex;
   margin-right: .6rem;
-}
-
-.top-left h1 {
-  margin: 0;
-  font-size: 1.2em;
 }
 
 .left-content{
@@ -43,10 +44,11 @@ body {
 
 .left-content ul {
   list-style-type: none;
-  padding: 0;
+  padding: 1em;
 }
 
 .left-content li {
+  color: #ddd;
   padding: .6em;
   cursor: pointer;
 }
@@ -55,13 +57,14 @@ body {
   background-color: #0c8a8f;
 }
 
-.bottom-left {
+.top-left {
+  color: #ddd;
   display: flex;
   align-items: center;
   padding: .7em;
 }
 
-.bottom-left img {
+.top-left img {
   max-width: 3rem;
   height: auto;
   border-radius: 0.5rem;
@@ -71,15 +74,15 @@ body {
 /* right panel */
 
 .right-panel {
-  padding: 2rem;
+  padding: 1rem;
+  flex:5;
 }
 
 
-#content img{
-  width: 1.8rem;
+.flex-con img{
+  max-width: 1.8rem;
   border-radius: 0.5rem;
   height: auto;
-  /* margin-right: 10px;  */
 }
 
 .flex-con {
@@ -94,6 +97,58 @@ body {
 .name-tag{
   background-color: lightblue;
   padding: 0.3rem;
-  border-radius: 0.3rem;
-  margin-right: 0.7rem;
+  border-radius: 0.3rem; 
+}
+
+.inner{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* display: grid;
+grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+grid-gap: 1px; */
+
+#toggle-button{
+  display: none;
+  margin-right: 1em;
+  background-color: gray;
+  border-radius: 0.5em;
+}
+
+/* sidebar */
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #12023e;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+} 
+
+.sidenav li {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav li:hover {
+  color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  /* margin-left: 50px; */
 }

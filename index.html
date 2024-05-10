@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Single Page Web App</title>
     <link rel="stylesheet" href="./CSS/style.css" />
+    <style>
+      
+    </style>
   </head>
   <body>
-    <div class="container">
-      <div class="left-panel">
+    <main class="container">
+      <section class="left-panel" id="menu">
         <div class="top-left">
-          <img src="./image/logo1.jpg" alt="HybridHaven Logo" />
-          <h1>HybridHaven</h1>
+          <img src="./image/logo2.jpg" alt="User Image" />
+          <p>User Name</p>
         </div>
         <div class="left-content">
           <ul>
@@ -21,15 +24,51 @@
             <li id="about">About</li>
           </ul>
         </div>
-        <div class="bottom-left">
+      </section>
+      <section class="right-panel">
+        <div>
+          <div class="top-right">
+            <div>
+              <button id="toggle-button">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="35"
+                  fill="currentColor"
+                  class="bi bi-list"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                  />
+                </svg>
+              </button>
+            </div>
+            <img src="./image/logo1.jpg" alt="HybridHaven Logo" />
+            <h1>HybridHaven</h1>
+          </div>
+        </div>
+        <div id="content"></div>
+      </section>
+
+      <div id="mySidenav" class="sidenav">
+        <button class="closebtn" onclick="closeNav()"
+          >&times;</button>
+        <div class="top-left">
           <img src="./image/logo2.jpg" alt="User Image" />
           <p>User Name</p>
         </div>
+        <div class="left-content">
+          <ul>
+            <li id="home" onclick="indexPage();">Home</li>
+            <li id="deskbooking" onclick="deskBookigPage()">Desk Booking</li>
+            <li id="messages">Messages</li>
+            <li id="about">About</li>
+          </ul>
+        </div>
       </div>
-      <div class="right-panel" id="content"></div>
-    </div>
-    
-    
+    </main>
     <script src="./JS/script.js"></script>
   </body>
 </html>

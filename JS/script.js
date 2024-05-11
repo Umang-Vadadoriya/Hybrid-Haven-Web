@@ -1,4 +1,3 @@
-
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
   currentDate.getMonth() + 1
@@ -10,19 +9,21 @@ const deskDate = "13.02.2024";
 
 const tomorrow = new Date(currentDate);
 tomorrow.setDate(currentDate.getDate() + 1);
-const tommorrowDate = `${tomorrow.getDate().toString().padStart(2, '0')}.${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}.${tomorrow.getFullYear()}`;
-
+const tommorrowDate = `${tomorrow.getDate().toString().padStart(2, "0")}.${(
+  tomorrow.getMonth() + 1
+)
+  .toString()
+  .padStart(2, "0")}.${tomorrow.getFullYear()}`;
 
 const toggle = document.getElementById("toggle-button");
 const leftPanel = document.getElementById("menu");
 
-function toggleButton(){
+function toggleButton() {
   var width = window.innerWidth;
-  if(width <= 426){
+  if (width <= 426) {
     toggle.style.display = "block";
     leftPanel.style.display = "none";
-  }
-  else{
+  } else {
     toggle.style.display = "none";
     leftPanel.style.display = "block";
     closeNav();
@@ -35,14 +36,14 @@ document.addEventListener("DOMContentLoaded", function () {
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
   const aboutOption = document.getElementById("about");
-  
+
   indexPage();
 
-  window.addEventListener('resize', function() {
+  window.addEventListener("resize", function () {
     toggleButton();
   });
-  
-  toggle.addEventListener("click",function() {
+
+  toggle.addEventListener("click", function () {
     // console.log("ygvfyhjbgvhg");
     // toggleContent();
     openNav();
@@ -84,14 +85,17 @@ function deskBookigPage() {
     <div>
       <h3>Meeting</h3>
       <div id="meeting-content"></div>
+      <button id="join-btn" value="Meeting" onClick=joinDesk("Meeting")>Join</button>
     </div>
     <div>
       <h3>Hot Desk</h3>
       <div id="hotdesk-content"></div>
+      <button id="join-btn" value="Hot Desk" onClick=joinDesk("HotDesk")>Join</button>
     </div>
     <div>
       <h3>Collab</h3>
       <div id="collab-content"></div>
+      <button id="join-btn" value="Collab" onClick=joinDesk("Collab")>Join</button>
     </div>
   `;
   contentDiv.innerHTML = html;
@@ -103,8 +107,17 @@ function loadDeskBooking() {
   const hotdeskContentDiv = document.getElementById("hotdesk-content");
   const collabContentDiv = document.getElementById("collab-content");
 
+  const innerMeetingDiv = document.createElement("div");
+  innerMeetingDiv.classList.add("inner");
+
+  const innerHotdeskDiv = document.createElement("div");
+  innerHotdeskDiv.classList.add("inner");
+
+  const innerCollabDiv = document.createElement("div");
+  innerCollabDiv.classList.add("inner");
+
   fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
-    .then((response) => response.json()) 
+    .then((response) => response.json())
     .then((data) => {
       console.log(data);
       data.forEach((deskbooking, index) => {
@@ -121,19 +134,20 @@ function loadDeskBooking() {
               .then((response) => response.json())
               .then((employeeData) => {
                 // Display the employee names
-                const employeeName = employeeData.employeeName; 
-                const employeeNameElement = document.createElement("span");
-                employeeNameElement.classList.add("name-tag")
+                const employeeName = employeeData.employeeName;
+                const employeeNameElement = document.createElement("div");
+                employeeNameElement.style.padding = ".5em";
+                employeeNameElement.classList.add("name-tag");
                 employeeNameElement.textContent = `@${employeeName} `;
                 switch (neighbourName) {
                   case "Meeting":
-                    meetingContentDiv.appendChild(employeeNameElement);
+                    innerMeetingDiv.appendChild(employeeNameElement);
                     break;
                   case "Hot Desk":
-                    hotdeskContentDiv.appendChild(employeeNameElement);
+                    innerHotdeskDiv.appendChild(employeeNameElement);
                     break;
                   case "Collab":
-                    collabContentDiv.appendChild(employeeNameElement);
+                    innerCollabDiv.appendChild(employeeNameElement);
                     break;
                 }
               })
@@ -149,7 +163,10 @@ function loadDeskBooking() {
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
-    closeNav();
+  meetingContentDiv.appendChild(innerMeetingDiv);
+  hotdeskContentDiv.appendChild(innerHotdeskDiv);
+  collabContentDiv.appendChild(innerCollabDiv);
+  closeNav();
 }
 
 // Home + indexpage
@@ -172,15 +189,17 @@ function loadHomePage() {
     .then((data) => {
       // console.log(data);
       data.forEach((deskbooking, index) => {
-        fetch(`http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`)
+        fetch(
+          `http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`
+        )
           .then((response) => response.json())
           .then((employeeData) => {
             // Process the fetched employee data
             // console.log(employeeData);
 
             // Display the employee names
-            const employeeName = employeeData.employeeName; 
-            const empDiv = document.createElement('div')  ;
+            const employeeName = employeeData.employeeName;
+            const empDiv = document.createElement("div");
             empDiv.style.padding = ".5em";
             empDiv.classList.add("name-tag");
 
@@ -200,10 +219,10 @@ function loadHomePage() {
       console.error("Error fetching data:", error);
     });
 
-    officeContentDiv.appendChild(innerOfficeDiv);
+  officeContentDiv.appendChild(innerOfficeDiv);
 
   fetch(`http://34.251.172.36:8080/vacations/date/16.02.2023`)
-    .then((response) => response.json()) 
+    .then((response) => response.json())
     .then((data) => {
       // console.log(data);
       data.forEach((vacations) => {
@@ -214,7 +233,7 @@ function loadHomePage() {
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";
         empDiv.classList.add("name-tag");
-        
+
         empDiv.textContent = `@${employeeName} `;
         innerVacctionDiv.appendChild(empDiv);
       });
@@ -222,13 +241,12 @@ function loadHomePage() {
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
-    vacationContentDiv.appendChild(innerVacctionDiv);
-
+  vacationContentDiv.appendChild(innerVacctionDiv);
 }
 
 function indexPage() {
   const contentDiv = document.getElementById("content");
-  const para= document.createElement('p');
+  const para = document.createElement("p");
   const html = `
   <h2>Welcome to HybridHaven!</h2>
   <h3>Today</h2><hr>
@@ -258,32 +276,89 @@ function indexPage() {
   closeNav();
 }
 
-// function toggleContent() {
-// const rightPanel = document.getElementById('content');
-//   if (rightPanel.style.display === 'none') {
-//       rightPanel.style.display = 'block'; // Show if hidden
-//   } else {
-//       rightPanel.style.display = 'none'; // Hide if shown
-//   }
-// }
-
-// for Home Content
-// <div>
-//     <div class="home flex-con">
-//       <div><img src="../image/home.jpg" alt="Home Image"></div>
-//       <div> Home</div>
-//     </div>
-//     <div id="home-content">
-//       <p>jbjbjbb</p>
-//     </div>
-//     <br>
-//   </div>
-
-
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
 }
 
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
+}
+
+//remaining desk Bookings
+// function totalDesks(deskid) {
+//   let totalDesks = 0;
+//   return new promise fetch(`http://34.251.172.36:8080/neighbourhoods/id/${deskid}`)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log(data);
+//       // totalDesks = data.neighbourNumberOfDesk;
+//       // return totalDesks;
+//       return data.neighbourNumberOfDesk;
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching data:", error);
+//     });
+//   // console.log(totalDesks);
+// }
+
+function totalDesks(deskid) {
+  return fetch(`http://34.251.172.36:8080/neighbourhoods/id/${deskid}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      return data.neighbourNumberOfDesk; // Return the fetched value
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+}
+
+function remainingDesk() {
+  totalDesks(deskbooking.employeeId)
+    .then((totalDesks) => {
+      console.log(totalDesks); // Use the returned value here
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+
+async function remainDeskBooking() {
+  try {
+    // Fetch total desks for each type
+    const meetingTotal = await totalDesks('meeting');
+    const hotdeskTotal = await totalDesks('hotdesk');
+    const collabTotal = await totalDesks('collab');
+
+    // Fetch desk bookings
+    const deskBookingsResponse = await fetch('http://localhost:8080/desk-bookings/date/07.05.2024');
+    const deskBookingsData = await deskBookingsResponse.json();
+
+    // Calculate remaining desks for each type
+    let meetingRemaining = meetingTotal;
+    let hotdeskRemaining = hotdeskTotal;
+    let collabRemaining = collabTotal;
+
+    deskBookingsData.forEach(deskBooking => {
+      switch (deskBooking.neighbourId) {
+        case 'meeting':
+          meetingRemaining--;
+          break;
+        case 'hotdesk':
+          hotdeskRemaining--;
+          break;
+        case 'collab':
+          collabRemaining--;
+          break;
+      }
+    });
+
+    // Update HTML with remaining desks
+    document.getElementById('meeting-remaining').textContent = meetingRemaining;
+    document.getElementById('hotdesk-remaining').textContent = hotdeskRemaining;
+    document.getElementById('collab-remaining').textContent = collabRemaining;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 }

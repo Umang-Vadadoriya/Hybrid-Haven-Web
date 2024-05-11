@@ -74,10 +74,9 @@ body {
 /* right panel */
 
 .right-panel {
-  padding: 1rem;
+  padding: 1rem;  
   flex:5;
 }
-
 
 .flex-con img{
   max-width: 1.8rem;
@@ -117,6 +116,11 @@ grid-gap: 1px; */
   border-radius: 0.5em;
 }
 
+#content{
+  overflow-y:scroll;
+  height: 80vh;
+}
+
 /* sidebar */
 
 .sidenav {
@@ -151,4 +155,24 @@ grid-gap: 1px; */
   right: 25px;
   font-size: 36px;
   /* margin-left: 50px; */
+}
+
+/* joining Button */
+
+#join-btn{
+  color: black;
+  font-size: 16px;
+  border: .1rem solid #12023e;
+  padding: .4rem 2rem;
+  margin-top: 1em;
+  box-shadow: .1rem .1rem .4rem black;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+
+#join-btn:hover{
+  background-color: #12023e;
+  color: white;
+  font-weight: 600;
 }

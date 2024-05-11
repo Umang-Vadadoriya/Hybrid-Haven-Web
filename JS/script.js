@@ -141,14 +141,17 @@ async function loadDeskBooking() {
   console.log(Employees);
 
   const mainShow = document.getElementById("main-show");
+  mainShow.innerHTML = '';
   let ele = document.createElement('div');
 
+  let avail =0;
   NeighbourHoods.map((nei) => {
     let heading = document.createElement('h3');
     heading.textContent = nei.neighbourName;
     ele.appendChild(heading)
+    avail = nei.neighbourNumberOfDesk;
+    let innerElement = document.createElement('div')
     if (countBooking(nei.neighbourId, Bookings) > 0) {
-      let innerElement = document.createElement('div')
       innerElement.classList.add("inner");
       Bookings.map((booking) => {
         if(booking.neighbourId == nei.neighbourId){
@@ -158,18 +161,25 @@ async function loadDeskBooking() {
                 employeeNameElement.classList.add("name-tag")
                 employeeNameElement.textContent = `@${emp.employeeName}`;
                 innerElement.appendChild(employeeNameElement);
+                avail--;
             }
           })
         }
       });
-      ele.appendChild(innerElement);
     } else {
       let nothingBooked = document.createElement('p');
       let italicTxt = document.createElement('i');
       italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
       nothingBooked.appendChild(italicTxt);
-      ele.appendChild(nothingBooked);
+      innerElement.appendChild(nothingBooked);
     }
+    ele.appendChild(innerElement);
+    
+    let employeeNameElement = document.createElement('span');
+    employeeNameElement.classList.add("avail-tag");
+    employeeNameElement.textContent = `+${avail}`;
+    console.log(employeeNameElement);
+    innerElement.appendChild(employeeNameElement);
   });
   mainShow.appendChild(ele);
 }

@@ -1,51 +1,4 @@
-// const buttons = document.querySelectorAll('button');
-// const mainContent = document.getElementById('main-content');
-
-// buttons.forEach(button => {
-//   button.addEventListener('click', () => {
-//     let content;
-//     switch (button.id) {
-//       case 'home-btn':
-//         content = '<p>Welcome to the home page!</p>';
-//         break;
-//       case 'about-btn':
-//         content = '<p>Learn more about us on the about page!</p>';
-//         break;
-//       case 'contact-btn':
-//         content = '<p>Get in touch with us on the contact page!</p>';
-//         break;
-//     }
-//     mainContent.innerHTML = content;
-//   });
-// });
-
-// document.addEventListener('DOMContentLoaded', function () {
-//   const contentDiv = document.getElementById('content');
-//   const homeOption = document.getElementById('home');
-//   const detailsOption = document.getElementById('details');
-//   const aboutOption = document.getElementById('about');
-
-//   homeOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>Welcome to Home!</h2>
-//       <p>This is the home page content.</p>
-//     `;
-//   });
-
-//   detailsOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>Details</h2>
-//       <p>This is the details page content.</p>
-//     `;
-//   });
-
-//   aboutOption.addEventListener('click', function () {
-//     contentDiv.innerHTML = `
-//       <h2>About</h2>
-//       <p>This is the about page content.</p>
-//     `;
-//   });
-// });
+var BaseURL = `http://34.251.172.36:8080`;
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -60,7 +13,22 @@ const tomorrow = new Date(currentDate);
 tomorrow.setDate(currentDate.getDate() + 1);
 const tommorrowDate = `${tomorrow.getDate().toString().padStart(2, '0')}.${(tomorrow.getMonth() + 1).toString().padStart(2, '0')}.${tomorrow.getFullYear()}`;
 
-indexPage();
+
+const toggle = document.getElementById("toggle-button");
+const leftPanel = document.getElementById("menu");
+
+function toggleButton(){
+  var width = window.innerWidth;
+  if(width <= 426){
+    toggle.style.display = "block";
+    leftPanel.style.display = "none";
+  }
+  else{
+    toggle.style.display = "none";
+    leftPanel.style.display = "block";
+    closeNav();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const contentDiv = document.getElementById("content");
@@ -68,6 +36,18 @@ document.addEventListener("DOMContentLoaded", function () {
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
   const aboutOption = document.getElementById("about");
+  
+  indexPage();
+
+  window.addEventListener('resize', function() {
+    toggleButton();
+  });
+  
+  toggle.addEventListener("click",function() {
+    // console.log("ygvfyhjbgvhg");
+    // toggleContent();
+    openNav();
+  });
 
   // loadHomePage();
 
@@ -99,77 +79,109 @@ document.addEventListener("DOMContentLoaded", function () {
 function deskBookigPage() {
   const contentDiv = document.getElementById("content");
   const html = `
-  <h1>WHO'S IN TOMORROW</h1>
+    <h1>WHO'S IN TOMORROW</h1>
     <hr />
-    <div>
-      <h3>Meeting</h3>
-      <div id="meeting-content"></div>
-    </div>
-    <div>
-      <h3>Hot Desk</h3>
-      <div id="hotdesk-content"></div>
-    </div>
-    <div>
-      <h3>Collab</h3>
-      <div id="collab-content"></div>
-    </div>
+    <div id="main-show"></div>    
   `;
   contentDiv.innerHTML = html;
   loadDeskBooking();
 }
 
-function loadDeskBooking() {
-  const meetingContentDiv = document.getElementById("meeting-content");
-  const hotdeskContentDiv = document.getElementById("hotdesk-content");
-  const collabContentDiv = document.getElementById("collab-content");
+async function getBookingWithDate(date) {
+  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`).then(
+    (response) => response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching booking data:", error);
+  });;
+  return Bookings;
+}
 
-  fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
-    .then((response) => response.json()) 
-    .then((data) => {
-      console.log(data);
-      data.forEach((deskbooking, index) => {
-        fetch(
-          `http://34.251.172.36:8080/neighbourhoods/id/${deskbooking.neighbourId}`
-        )
-          .then((response) => response.json())
-          .then((neighbourhoods) => {
-            // Process the fetched employee data
-            let neighbourName = neighbourhoods.neighbourName;
-            fetch(
-              `http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`
-            )
-              .then((response) => response.json())
-              .then((employeeData) => {
-                // Display the employee names
-                const employeeName = employeeData.employeeName; 
-                const employeeNameElement = document.createElement("span");
+async function getAllNeighbour() {
+  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`).then(
+    (response) => response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching neighbourhood data:", error);
+  });;
+  return NeighbourHoods;
+}
+
+async function GetAllEmployee() {
+  let Employees = await fetch(`${BaseURL}/employees`).then((response) =>
+    response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });;
+
+  return Employees;
+}
+
+function countBooking(neighbourId, Bookings) {
+  let count = 0;
+
+  Bookings.forEach((booking) => {
+    if (booking.neighbourId == neighbourId) {
+      count++;
+    }
+  });
+
+  return count;
+}
+
+async function loadDeskBooking() {
+
+  const Bookings = await getBookingWithDate("15.02.2024");
+  const NeighbourHoods = await getAllNeighbour();
+  const Employees = await GetAllEmployee();
+
+  console.log(Bookings);
+  console.log(NeighbourHoods);
+  console.log(Employees);
+
+  const mainShow = document.getElementById("main-show");
+  mainShow.innerHTML = '';
+  let ele = document.createElement('div');
+
+  let avail =0;
+  NeighbourHoods.map((nei) => {
+    let heading = document.createElement('h3');
+    heading.textContent = nei.neighbourName;
+    ele.appendChild(heading)
+    avail = nei.neighbourNumberOfDesk;
+    let innerElement = document.createElement('div')
+    if (countBooking(nei.neighbourId, Bookings) > 0) {
+      innerElement.classList.add("inner");
+      Bookings.map((booking) => {
+        if(booking.neighbourId == nei.neighbourId){
+          Employees.map((emp)=>{
+            if(emp.employeeId == booking.employeeId){
+                let employeeNameElement = document.createElement('span');
                 employeeNameElement.classList.add("name-tag")
-                employeeNameElement.textContent = `@${employeeName} `;
-                switch (neighbourName) {
-                  case "Meeting":
-                    meetingContentDiv.appendChild(employeeNameElement);
-                    break;
-                  case "Hot Desk":
-                    hotdeskContentDiv.appendChild(employeeNameElement);
-                    break;
-                  case "Collab":
-                    collabContentDiv.appendChild(employeeNameElement);
-                    break;
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching employee data:", error);
-              });
+                employeeNameElement.textContent = `@${emp.employeeName}`;
+                innerElement.appendChild(employeeNameElement);
+                avail--;
+            }
           })
-          .catch((error) => {
-            console.error("Error fetching employee data:", error);
-          });
+        }
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-
+    } else {
+      let nothingBooked = document.createElement('p');
+      let italicTxt = document.createElement('i');
+      italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
+      nothingBooked.appendChild(italicTxt);
+      innerElement.appendChild(nothingBooked);
+    }
+    ele.appendChild(innerElement);
+    
+    let employeeNameElement = document.createElement('span');
+    employeeNameElement.classList.add("avail-tag");
+    employeeNameElement.textContent = `+${avail}`;
+    console.log(employeeNameElement);
+    innerElement.appendChild(employeeNameElement);
+  });
+  mainShow.appendChild(ele);
 }
 
 // Home + indexpage
@@ -177,6 +189,15 @@ function loadDeskBooking() {
 function loadHomePage() {
   const officeContentDiv = document.getElementById("office-content");
   const vacationContentDiv = document.getElementById("vacation-content");
+
+  const innerOfficeDiv = document.createElement("div");
+  innerOfficeDiv.classList.add("inner");
+
+  const innerVacctionDiv = document.createElement("div");
+  innerVacctionDiv.classList.add("inner");
+
+  // div.style.width = "20rem";
+  // div.style.padding = ".5em";
 
   fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
     .then((response) => response.json()) // Assuming response is JSON
@@ -191,11 +212,16 @@ function loadHomePage() {
 
             // Display the employee names
             const employeeName = employeeData.employeeName; 
-            const employeeNameElement = document.createElement("span");
+            const empDiv = document.createElement('div')  ;
+            empDiv.style.padding = ".5em";
+            empDiv.classList.add("name-tag");
+
+            // empDiv.style.marginBottom = "1em";
+            // const employeeNameElement = document.createElement("span");
             // const parantDiv = document.createElement("div");
-            employeeNameElement.classList.add("name-tag");
-            employeeNameElement.textContent = `@${employeeName} `;
-            officeContentDiv.appendChild(employeeNameElement);
+            empDiv.textContent = `@${employeeName} `;
+            // empDiv.appendChild(employeeNameElement);
+            innerOfficeDiv.appendChild(empDiv);
           })
           .catch((error) => {
             console.error("Error fetching employee data:", error);
@@ -206,6 +232,8 @@ function loadHomePage() {
       console.error("Error fetching data:", error);
     });
 
+    officeContentDiv.appendChild(innerOfficeDiv);
+
   fetch(`http://34.251.172.36:8080/vacations/date/16.02.2023`)
     .then((response) => response.json()) 
     .then((data) => {
@@ -213,27 +241,32 @@ function loadHomePage() {
       data.forEach((vacations) => {
         // console.log(vacations);
         const employeedata = vacations.employeeByEmployeeId;
-        console.log(employeedata.employeeName);
+        // console.log(employeedata.employeeName);
         const employeeName = employeedata.employeeName;
-        const employeeNameElement = document.createElement("span");
-        employeeNameElement.classList.add("name-tag");
-        employeeNameElement.textContent = `@${employeeName} `;
-        vacationContentDiv.appendChild(employeeNameElement);
+        const empDiv = document.createElement("div");
+        empDiv.style.padding = ".5em";
+        empDiv.classList.add("name-tag");
+        
+        empDiv.textContent = `@${employeeName} `;
+        innerVacctionDiv.appendChild(empDiv);
       });
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
     });
+    vacationContentDiv.appendChild(innerVacctionDiv);
+
 }
 
 function indexPage() {
   const contentDiv = document.getElementById("content");
   const para= document.createElement('p');
-  const html = `<h2>Welcome to HybridHaven!</h2>
+  const html = `
+  <h2>Welcome to HybridHaven!</h2>
   <h3>Today</h2><hr>
     <div>
       <div class="office flex-con">
-        <div><img src="../image/office.png" alt="office Image"></div>
+        <div><img src="./image/office.png" alt="office Image"></div>
         <div> Office</div>
       </div>
       <div id="office-content">
@@ -243,7 +276,7 @@ function indexPage() {
     </div>
   <div>
     <div class="vacation flex-con">
-      <div><img src="../image/vacation.jpg" alt="Vacation Image"></div>
+      <div><img src="./image/vacation.jpg" alt="Vacation Image"></div>
       <div> Vacation</div>
     </div>
     <div id="vacation-content">
@@ -254,7 +287,17 @@ function indexPage() {
   contentDiv.innerHTML = html;
   // contentDiv.appendChild('beforechild',html);
   loadHomePage();
+  closeNav();
 }
+
+// function toggleContent() {
+// const rightPanel = document.getElementById('content');
+//   if (rightPanel.style.display === 'none') {
+//       rightPanel.style.display = 'block'; // Show if hidden
+//   } else {
+//       rightPanel.style.display = 'none'; // Hide if shown
+//   }
+// }
 
 // for Home Content
 // <div>
@@ -267,3 +310,12 @@ function indexPage() {
 //     </div>
 //     <br>
 //   </div>
+
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}

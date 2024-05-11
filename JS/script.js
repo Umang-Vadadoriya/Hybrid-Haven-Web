@@ -83,21 +83,7 @@ function deskBookigPage() {
   const html = `
     <h1>WHO'S IN TOMORROW</h1>
     <hr />
-    <div>
-      <h3>Meeting</h3>
-      <div id="meeting-content"></div>
-      <button id="join-btn" value="Meeting" onClick=joinDesk("Meeting")>Join</button>
-    </div>
-    <div>
-      <h3>Hot Desk</h3>
-      <div id="hotdesk-content"></div>
-      <button id="join-btn" value="Hot Desk" onClick=joinDesk("HotDesk")>Join</button>
-    </div>
-    <div>
-      <h3>Collab</h3>
-      <div id="collab-content"></div>
-      <button id="join-btn" value="Collab" onClick=joinDesk("Collab")>Join</button>
-    </div>
+    <div id="main-show"></div>
   `;
   contentDiv.innerHTML = html;
   loadDeskBooking();

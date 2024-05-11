@@ -1,3 +1,4 @@
+var BaseURL = `http://34.251.172.36:8080`;
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -70,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
       <h2>About</h2>
       <p>This is the about page content.</p>
     `;
-    console.log("hgbjhbjih");
   });
 });
 
@@ -79,77 +79,99 @@ document.addEventListener("DOMContentLoaded", function () {
 function deskBookigPage() {
   const contentDiv = document.getElementById("content");
   const html = `
-  <h1>WHO'S IN TOMORROW</h1>
+    <h1>WHO'S IN TOMORROW</h1>
     <hr />
-    <div>
-      <h3>Meeting</h3>
-      <div id="meeting-content"></div>
-    </div>
-    <div>
-      <h3>Hot Desk</h3>
-      <div id="hotdesk-content"></div>
-    </div>
-    <div>
-      <h3>Collab</h3>
-      <div id="collab-content"></div>
-    </div>
+    <div id="main-show"></div>    
   `;
   contentDiv.innerHTML = html;
   loadDeskBooking();
 }
 
-function loadDeskBooking() {
-  const meetingContentDiv = document.getElementById("meeting-content");
-  const hotdeskContentDiv = document.getElementById("hotdesk-content");
-  const collabContentDiv = document.getElementById("collab-content");
+async function getBookingWithDate(date) {
+  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`).then(
+    (response) => response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching booking data:", error);
+  });;
+  return Bookings;
+}
 
-  fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
-    .then((response) => response.json()) 
-    .then((data) => {
-      console.log(data);
-      data.forEach((deskbooking, index) => {
-        fetch(
-          `http://34.251.172.36:8080/neighbourhoods/id/${deskbooking.neighbourId}`
-        )
-          .then((response) => response.json())
-          .then((neighbourhoods) => {
-            // Process the fetched employee data
-            let neighbourName = neighbourhoods.neighbourName;
-            fetch(
-              `http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`
-            )
-              .then((response) => response.json())
-              .then((employeeData) => {
-                // Display the employee names
-                const employeeName = employeeData.employeeName; 
-                const employeeNameElement = document.createElement("span");
+async function getAllNeighbour() {
+  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`).then(
+    (response) => response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching neighbourhood data:", error);
+  });;
+  return NeighbourHoods;
+}
+
+async function GetAllEmployee() {
+  let Employees = await fetch(`${BaseURL}/employees`).then((response) =>
+    response.json()
+  )
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });;
+
+  return Employees;
+}
+
+function countBooking(neighbourId, Bookings) {
+  let count = 0;
+
+  Bookings.forEach((booking) => {
+    if (booking.neighbourId == neighbourId) {
+      count++;
+    }
+  });
+
+  return count;
+}
+
+async function loadDeskBooking() {
+
+  const Bookings = await getBookingWithDate("15.02.2024");
+  const NeighbourHoods = await getAllNeighbour();
+  const Employees = await GetAllEmployee();
+
+  console.log(Bookings);
+  console.log(NeighbourHoods);
+  console.log(Employees);
+
+  const mainShow = document.getElementById("main-show");
+  let ele = document.createElement('div');
+
+  NeighbourHoods.map((nei) => {
+    let heading = document.createElement('h3');
+    heading.textContent = nei.neighbourName;
+    ele.appendChild(heading)
+    if (countBooking(nei.neighbourId, Bookings) > 0) {
+      let innerElement = document.createElement('div')
+      innerElement.classList.add("inner");
+      Bookings.map((booking) => {
+        if(booking.neighbourId == nei.neighbourId){
+          Employees.map((emp)=>{
+            if(emp.employeeId == booking.employeeId){
+                let employeeNameElement = document.createElement('span');
                 employeeNameElement.classList.add("name-tag")
-                employeeNameElement.textContent = `@${employeeName} `;
-                switch (neighbourName) {
-                  case "Meeting":
-                    meetingContentDiv.appendChild(employeeNameElement);
-                    break;
-                  case "Hot Desk":
-                    hotdeskContentDiv.appendChild(employeeNameElement);
-                    break;
-                  case "Collab":
-                    collabContentDiv.appendChild(employeeNameElement);
-                    break;
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching employee data:", error);
-              });
+                employeeNameElement.textContent = `@${emp.employeeName}`;
+                innerElement.appendChild(employeeNameElement);
+            }
           })
-          .catch((error) => {
-            console.error("Error fetching employee data:", error);
-          });
+        }
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-    closeNav();
+      ele.appendChild(innerElement);
+    } else {
+      let nothingBooked = document.createElement('p');
+      let italicTxt = document.createElement('i');
+      italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
+      nothingBooked.appendChild(italicTxt);
+      ele.appendChild(nothingBooked);
+    }
+  });
+  mainShow.appendChild(ele);
 }
 
 // Home + indexpage

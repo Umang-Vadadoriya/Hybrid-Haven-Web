@@ -1,5 +1,55 @@
-var BaseURL = `http://34.251.172.36:8080`;
+// var BaseURL = `http://34.251.172.36:8080`;
+var BaseURL;
+import("./env.js")
+  .then((module) => {
+    BaseURL = module.default.BaseURL;
+  })
+  .catch((error) => {
+    console.error("Error importing env.js:", error);
+  });
+
+const code = await parseTokenFromUrl();
+if(code){
+  console.log(`has code ${code}`);
+  const token = await getTokenFromCode(code)
+  if(!token.includes("error")){
+    localStorage.setItem("token",token);
+    console.log(token);
+    console.log("Stored");
+    window.location.href = "http://127.0.0.1:5500"
+  }
+  else{
+    console.log("Not Stored");
+  }
+}
+
 import { joinDesk } from "./deskBook.js";
+import { loadLogin, parseTokenFromUrl, getTokenFromCode} from "./login.js";
+
+async function RedirectAsPerLogIn() {
+  const code = await parseTokenFromUrl();
+  // const storedEmail = sessionStorage.getItem('email');
+  // const storedToken = sessionStorage.getItem('access_token');
+  // Get the current URL
+
+  // console.log(new URLSearchParams('http://localhost:5500/?a=2323'));
+  if (!code) {
+    loadLogin();
+  } else {
+    const token = await getTokenFromCode(code)
+    localStorage.setItem("token",token);
+    console.log(token);
+  }
+  // if (!idToken && !storedEmail) {
+  //   console.log("Loading Log In");
+  //     loadLogin();
+  // } else {
+  //     if (!storedEmail) {
+  //         fetchUserInfo(idToken);
+  //     }
+  //     loadHome();
+  // }
+}
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -39,11 +89,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
   const aboutOption = document.getElementById("about");
+  const signInBtn = document.getElementById("sign-in-btn");
 
   indexPage();
+ 
 
   window.addEventListener("resize", function () {
     toggleButton();
+  });
+
+  signInBtn.addEventListener("click", function () {
+    // console.log("ygvfyhjbgvhg");
+    // toggleContent();
+    RedirectAsPerLogIn();
   });
 
   toggle.addEventListener("click", function () {
@@ -91,7 +149,12 @@ export function deskBookigPage() {
 }
 
 async function getBookingWithDate(date) {
-  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`)
+  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching booking data:", error);
@@ -100,7 +163,12 @@ async function getBookingWithDate(date) {
 }
 
 async function getAllNeighbour() {
-  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`)
+  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching neighbourhood data:", error);
@@ -109,7 +177,12 @@ async function getAllNeighbour() {
 }
 
 async function GetAllEmployee() {
-  let Employees = await fetch(`${BaseURL}/employees`)
+  let Employees = await fetch(`${BaseURL}/employees`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching employees data:", error);
@@ -159,7 +232,7 @@ async function loadDeskBooking() {
         if (booking.neighbourId == nei.neighbourId) {
           Employees.map((emp) => {
             if (emp.employeeId == booking.employeeId) {
-              if(4 == emp.employeeId){
+              if (4 == emp.employeeId) {
                 console.log(emp.employeeId);
                 booked = true;
               }
@@ -188,17 +261,16 @@ async function loadDeskBooking() {
     // console.log(employeeNameElement);
     ele.appendChild(employeeNameElement);
 
-    
     if (avail > 0 && !booked) {
       let joinButton = document.createElement("button");
-    joinButton.id = `neighbourhood-${nei.neighbourName}`;
-    joinButton.classList.add("join-btn");
-    joinButton.textContent = "Join";
-    joinButton.value = nei.neighbourName;
-    joinButton.onclick = function () {
-      joinDesk(joinButton.value,"Dinesh Saw",tommorrowDate);
-    };
-    ele.appendChild(joinButton);
+      joinButton.id = `neighbourhood-${nei.neighbourName}`;
+      joinButton.classList.add("join-btn");
+      joinButton.textContent = "Join";
+      joinButton.value = nei.neighbourName;
+      joinButton.onclick = function () {
+        joinDesk(joinButton.value, "Dinesh Saw", tommorrowDate);
+      };
+      ele.appendChild(joinButton);
     }
 
     // console.log(joinButton);
@@ -216,19 +288,37 @@ function loadHomePage() {
   const innerOfficeDiv = document.createElement("div");
   innerOfficeDiv.classList.add("inner");
 
+  fetch(`https://api.github.com/user`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((res)=> res.json())
+  .then((data)=> console.log(data));
+
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
 
   // div.style.width = "20rem";
   // div.style.padding = ".5em";
 
-  fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`)
+  fetch(`http://34.251.172.36:8080/desk-bookings/date/07.05.2024`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
     .then((response) => response.json()) // Assuming response is JSON
     .then((data) => {
       // console.log(data);
       data.forEach((deskbooking, index) => {
         fetch(
-          `http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`
+          `http://34.251.172.36:8080/employees/id/${deskbooking.employeeId}`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         )
           .then((response) => response.json())
           .then((employeeData) => {
@@ -259,7 +349,12 @@ function loadHomePage() {
 
   officeContentDiv.appendChild(innerOfficeDiv);
 
-  fetch(`http://34.251.172.36:8080/vacations/date/16.02.2023`)
+  fetch(`http://34.251.172.36:8080/vacations/date/16.02.2023`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       // console.log(data);

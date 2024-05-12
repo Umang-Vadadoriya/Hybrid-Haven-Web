@@ -1,5 +1,28 @@
-var BaseURL = `http://34.251.172.36:8080`;
+// var BaseURL = `http://34.251.172.36:8080`;
 // var BaseURL = `http://localhost:8080`;
+var BaseURL;
+import("./env.js")
+  .then((module) => {
+    BaseURL = module.default.BaseURL;
+  })
+  .catch((error) => {
+    console.error("Error importing env.js:", error);
+  });
+
+const code = await parseTokenFromUrl();
+if(code){
+  console.log(`has code ${code}`);
+  const token = await getTokenFromCode(code)
+  if(!token.includes("error")){
+    localStorage.setItem("token",token);
+    console.log(token);
+    console.log("Stored");
+    window.location.href = "http://127.0.0.1:5500"
+  }
+  else{
+    console.log("Not Stored");
+  }
+}
 
 function login() {
   const username = "Nishant Taletiya";
@@ -11,6 +34,33 @@ function login() {
 }
 
 login();
+
+import { loadLogin, parseTokenFromUrl, getTokenFromCode} from "./login.js";
+
+async function RedirectAsPerLogIn() {
+  const code = await parseTokenFromUrl();
+  // const storedEmail = sessionStorage.getItem('email');
+  // const storedToken = sessionStorage.getItem('access_token');
+  // Get the current URL
+
+  // console.log(new URLSearchParams('http://localhost:5500/?a=2323'));
+  if (!code) {
+    loadLogin();
+  } else {
+    const token = await getTokenFromCode(code)
+    localStorage.setItem("token",token);
+    console.log(token);
+  }
+  // if (!idToken && !storedEmail) {
+  //   console.log("Loading Log In");
+  //     loadLogin();
+  // } else {
+  //     if (!storedEmail) {
+  //         fetchUserInfo(idToken);
+  //     }
+  //     loadHome();
+  // }
+}
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -50,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
   const aboutOption = document.getElementById("about");
+  const signInBtn = document.getElementById("sign-in-btn");
   const username = document.getElementById("userName");
 
   indexPage();
@@ -58,6 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
     toggleButton();
   });
 
+  signInBtn.addEventListener("click", function () {
+    // console.log("ygvfyhjbgvhg");
+    // toggleContent();
+    RedirectAsPerLogIn();
+  });
+  
   toggle.addEventListener("click", function () {
     openNav();
   });
@@ -341,11 +398,9 @@ async function loadEvents() {
 
 // Home + indexpage
 const fetchOptions = {
-  // mode: 'no-cors',
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
-    // Add other headers if needed
   },
 };
 
@@ -358,6 +413,14 @@ function loadHomePage() {
 
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
+
+  fetch(`https://api.github.com/user`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then((res)=> res.json())
+  .then((data)=> console.log(data));
 
   // div.style.width = "20rem";
   // div.style.padding = ".5em";

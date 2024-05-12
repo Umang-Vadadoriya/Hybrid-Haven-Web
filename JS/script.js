@@ -1,4 +1,5 @@
 var BaseURL = `http://34.251.172.36:8080`;
+import { joinDesk } from "./deskBook.js";
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -78,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // DeskBooking Page
 
-function deskBookigPage() {
+export function deskBookigPage() {
   const contentDiv = document.getElementById("content");
   const html = `
     <h1>WHO'S IN TOMORROW</h1>
@@ -90,32 +91,29 @@ function deskBookigPage() {
 }
 
 async function getBookingWithDate(date) {
-  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`).then(
-    (response) => response.json()
-  )
-  .catch((error) => {
-    console.error("Error fetching booking data:", error);
-  });;
+  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`)
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error fetching booking data:", error);
+    });
   return Bookings;
 }
 
 async function getAllNeighbour() {
-  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`).then(
-    (response) => response.json()
-  )
-  .catch((error) => {
-    console.error("Error fetching neighbourhood data:", error);
-  });;
+  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`)
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error fetching neighbourhood data:", error);
+    });
   return NeighbourHoods;
 }
 
 async function GetAllEmployee() {
-  let Employees = await fetch(`${BaseURL}/employees`).then((response) =>
-    response.json()
-  )
-  .catch((error) => {
-    console.error("Error fetching employees data:", error);
-  });;
+  let Employees = await fetch(`${BaseURL}/employees`)
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error fetching employees data:", error);
+    });
 
   return Employees;
 }
@@ -133,8 +131,7 @@ function countBooking(neighbourId, Bookings) {
 }
 
 async function loadDeskBooking() {
-
-  const Bookings = await getBookingWithDate("15.02.2024");
+  const Bookings = await getBookingWithDate(tommorrowDate);
   const NeighbourHoods = await getAllNeighbour();
   const Employees = await GetAllEmployee();
 
@@ -143,47 +140,71 @@ async function loadDeskBooking() {
   console.log(Employees);
 
   const mainShow = document.getElementById("main-show");
-  mainShow.innerHTML = '';
-  let ele = document.createElement('div');
+  mainShow.innerHTML = "";
+  let ele = document.createElement("div");
 
-  let avail =0;
+  let booked = false;
   NeighbourHoods.map((nei) => {
-    let heading = document.createElement('h3');
+    let avail = 0;
+
+    let heading = document.createElement("h3");
     heading.textContent = nei.neighbourName;
-    ele.appendChild(heading)
+    ele.appendChild(heading);
     avail = nei.neighbourNumberOfDesk;
-    let innerElement = document.createElement('div')
+    let innerElement = document.createElement("div");
+
     if (countBooking(nei.neighbourId, Bookings) > 0) {
       innerElement.classList.add("inner");
       Bookings.map((booking) => {
-        if(booking.neighbourId == nei.neighbourId){
-          Employees.map((emp)=>{
-            if(emp.employeeId == booking.employeeId){
-                let employeeNameElement = document.createElement('span');
-                employeeNameElement.classList.add("name-tag")
-                employeeNameElement.textContent = `@${emp.employeeName}`;
-                innerElement.appendChild(employeeNameElement);
-                avail--;
+        if (booking.neighbourId == nei.neighbourId) {
+          Employees.map((emp) => {
+            if (emp.employeeId == booking.employeeId) {
+              if(4 == emp.employeeId){
+                console.log(emp.employeeId);
+                booked = true;
+              }
+              let employeeNameElement = document.createElement("span");
+              employeeNameElement.classList.add("name-tag");
+              employeeNameElement.textContent = `@${emp.employeeName}`;
+              innerElement.appendChild(employeeNameElement);
+              avail--;
             }
-          })
+          });
         }
       });
     } else {
-      let nothingBooked = document.createElement('p');
-      let italicTxt = document.createElement('i');
+      let nothingBooked = document.createElement("p");
+      let italicTxt = document.createElement("i");
       italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
       nothingBooked.appendChild(italicTxt);
       innerElement.appendChild(nothingBooked);
     }
     ele.appendChild(innerElement);
-    
-    let employeeNameElement = document.createElement('span');
+    console.log(nei.neighbourName);
+
+    let employeeNameElement = document.createElement("div");
     employeeNameElement.classList.add("avail-tag");
-    employeeNameElement.textContent = `+${avail}`;
-    console.log(employeeNameElement);
-    innerElement.appendChild(employeeNameElement);
+    employeeNameElement.textContent = `+${avail} Desks left`;
+    // console.log(employeeNameElement);
+    ele.appendChild(employeeNameElement);
+
+    
+    if (avail > 0 && !booked) {
+      let joinButton = document.createElement("button");
+    joinButton.id = `neighbourhood-${nei.neighbourName}`;
+    joinButton.classList.add("join-btn");
+    joinButton.textContent = "Join";
+    joinButton.value = nei.neighbourName;
+    joinButton.onclick = function () {
+      joinDesk(joinButton.value,"Dinesh Saw",tommorrowDate);
+    };
+    ele.appendChild(joinButton);
+    }
+
+    // console.log(joinButton);
   });
   mainShow.appendChild(ele);
+  closeNav();
 }
 
 // Home + indexpage
@@ -299,83 +320,4 @@ function openNav() {
 
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
-}
-
-//remaining desk Bookings
-// function totalDesks(deskid) {
-//   let totalDesks = 0;
-//   return new promise fetch(`http://34.251.172.36:8080/neighbourhoods/id/${deskid}`)
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log(data);
-//       // totalDesks = data.neighbourNumberOfDesk;
-//       // return totalDesks;
-//       return data.neighbourNumberOfDesk;
-//     })
-//     .catch((error) => {
-//       console.error("Error fetching data:", error);
-//     });
-//   // console.log(totalDesks);
-// }
-
-function totalDesks(deskid) {
-  return fetch(`http://34.251.172.36:8080/neighbourhoods/id/${deskid}`)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      return data.neighbourNumberOfDesk; // Return the fetched value
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-}
-
-function remainingDesk() {
-  totalDesks(deskbooking.employeeId)
-    .then((totalDesks) => {
-      console.log(totalDesks); // Use the returned value here
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-}
-
-
-async function remainDeskBooking() {
-  try {
-    // Fetch total desks for each type
-    const meetingTotal = await totalDesks('meeting');
-    const hotdeskTotal = await totalDesks('hotdesk');
-    const collabTotal = await totalDesks('collab');
-
-    // Fetch desk bookings
-    const deskBookingsResponse = await fetch('http://localhost:8080/desk-bookings/date/07.05.2024');
-    const deskBookingsData = await deskBookingsResponse.json();
-
-    // Calculate remaining desks for each type
-    let meetingRemaining = meetingTotal;
-    let hotdeskRemaining = hotdeskTotal;
-    let collabRemaining = collabTotal;
-
-    deskBookingsData.forEach(deskBooking => {
-      switch (deskBooking.neighbourId) {
-        case 'meeting':
-          meetingRemaining--;
-          break;
-        case 'hotdesk':
-          hotdeskRemaining--;
-          break;
-        case 'collab':
-          collabRemaining--;
-          break;
-      }
-    });
-
-    // Update HTML with remaining desks
-    document.getElementById('meeting-remaining').textContent = meetingRemaining;
-    document.getElementById('hotdesk-remaining').textContent = hotdeskRemaining;
-    document.getElementById('collab-remaining').textContent = collabRemaining;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
 }

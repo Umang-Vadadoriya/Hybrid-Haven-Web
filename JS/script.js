@@ -143,8 +143,10 @@ async function loadDeskBooking() {
   mainShow.innerHTML = "";
   let ele = document.createElement("div");
 
-  let avail = 0;
+  let booked = false;
   NeighbourHoods.map((nei) => {
+    let avail = 0;
+
     let heading = document.createElement("h3");
     heading.textContent = nei.neighbourName;
     ele.appendChild(heading);
@@ -157,6 +159,10 @@ async function loadDeskBooking() {
         if (booking.neighbourId == nei.neighbourId) {
           Employees.map((emp) => {
             if (emp.employeeId == booking.employeeId) {
+              if(4 == emp.employeeId){
+                console.log(emp.employeeId);
+                booked = true;
+              }
               let employeeNameElement = document.createElement("span");
               employeeNameElement.classList.add("name-tag");
               employeeNameElement.textContent = `@${emp.employeeName}`;
@@ -183,7 +189,7 @@ async function loadDeskBooking() {
     ele.appendChild(employeeNameElement);
 
     
-    if (avail > 0) {
+    if (avail > 0 && !booked) {
       let joinButton = document.createElement("button");
     joinButton.id = `neighbourhood-${nei.neighbourName}`;
     joinButton.classList.add("join-btn");

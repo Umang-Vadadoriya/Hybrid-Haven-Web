@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Single Page Web App</title>
     <link rel="stylesheet" href="./CSS/style.css" />
-    <script type="module" src="./JS/deskBook.js"></script>
+    <script defer src="./JS/script.js"></script>
   </head>
   <body>
     <main class="container">
       <section class="left-panel" id="menu">
-        <div class="top-left" id="sign-in-btn">
+        <div class="top-left">
           <img src="./image/logo2.jpg" alt="User Image" />
-          <p>User Name</p>
+          <div id="userName"></div> 
         </div>
         <div class="left-content">
           <ul>
             <li id="home">Home</li>
             <li id="deskbooking">Desk Booking</li>
-            <li id="messages">Messages</li>
+            <li id="messages">Events</li>
             <li id="about">About</li>
           </ul>
         </div>
@@ -59,14 +59,36 @@
         </div>
         <div class="left-content">
           <ul>
-            <li id="home" onclick="indexPage();">Home</li>
+            <li id="home" onclick="indexPage()">Home</li>
             <li id="deskbooking" onclick="deskBookigPage()">Desk Booking</li>
-            <li id="messages">Messages</li>
+            <li id="messages" onclick="loadEventsPage()">Events</li>
             <li id="about">About</li>
           </ul>
         </div>
       </div>
+
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="model-inner">
+            <div id="old-child"></div>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="profileModal" class="profile-modal">
+        <div class="profile-modal-content">
+          <span class="profile-close">&times;</span>
+          <img src="./image/logo1.jpg" class="profile-img" alt="HybridHaven Logo" />
+          <form id="profileForm">
+            <h3 id="username-profile">Krunal rana</h3>
+            <h4 id="useremail-profile">ranakrunal219@gmail.com</h4>
+            <option></option>
+            <!-- <button type="submit">Save Changes</button> -->
+          </form>
+        </div>
+      </div>
     </main>
-    <script type="module" src="./JS/script.js"></script>
   </body>
 </html>

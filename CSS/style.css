@@ -1,4 +1,14 @@
 
+:root {
+  --primary-color: #12023e;
+  --secondary-color: #818181;
+  --font-color-black: black;
+  --font-color-white:#ddd;
+  --modal-bg-color: rgba(0, 0, 0, 0.5);
+  --modal-content-bg-color: #fefefe;
+  --modal-close-color: #aaa;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -14,9 +24,9 @@ body {
 /* left panel */
 
 .left-panel {
-  background-color: #12023e;
+  background-color: var(--primary-color);
   height: 100vh;
-  color: #ddd;
+  color: var(--font-color-white);
   flex: 1;
   flex-direction: column;
 }
@@ -48,7 +58,7 @@ body {
 }
 
 .left-content li {
-  color: #ddd;
+  color: var(--font-color-white);
   padding: .6em;
   cursor: pointer;
 }
@@ -58,7 +68,7 @@ body {
 }
 
 .top-left {
-  color: #ddd;
+  color: var(--font-color-white);
   display: flex;
   align-items: center;
   padding: .7em;
@@ -99,7 +109,7 @@ body {
   border-radius: 0.3rem; 
 }
 .avail-tag{
-  color: #818181;
+  color: var(--secondary-color);
   padding: 0.3rem;
   border-radius: 0.3rem; 
 }
@@ -136,7 +146,7 @@ grid-gap: 1px; */
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #12023e;
+  background-color: var(--primary-color);
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -146,7 +156,7 @@ grid-gap: 1px; */
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: var(--secondary-color);
   display: block;
   transition: 0.3s;
 }
@@ -166,19 +176,152 @@ grid-gap: 1px; */
 /* joining Button */
 
 .join-btn{
-  color: black;
+  color: var(--font-color-black);
   font-size: 16px;
-  border: .1rem solid #12023e;
+  border: .1rem solid var(--primary-color);
   padding: .4rem 2rem;
   margin-bottom: 1em;
-  box-shadow: .1rem .1rem .4rem black;
+  box-shadow: .1rem .1rem .4rem var(--font-color-black);
   cursor: pointer;
   border-radius: 5px;
   text-align: center;
 }
 
 .join-btn:hover{
-  background-color: #12023e;
+  background-color: var(--primary-color);
   color: white;
   font-weight: 600;
 }
+
+/* model */
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+  background-color: var(--modal-bg-color); 
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: var(--modal-content-bg-color);
+  margin: 15% auto;
+  padding: 2rem;
+  border-radius: 0.7rem;
+  width: 50%; 
+  height: auto;
+  text-align: center;
+}
+
+/* The Close Button */
+.close {
+  color: var(--modal-close-color);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--font-color-black);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+/* username */
+
+#userName{
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+#userName:hover{
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+
+/* user profile Model */
+
+.profile-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-bg-color);
+}
+
+.profile-modal-content{
+  background-color: var(--modal-content-bg-color);
+  margin: 10% auto;
+  padding: 1rem;
+  width: 50%;
+  height: auto;
+  border-radius: 1em;
+  text-align: center;
+}
+
+.profile-close{
+  color: var(--modal-close-color);
+  float: right;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.profile-close:hover,
+.profile-close:focus {
+  color: var(--font-color-black);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.profile-img{
+  max-width: 3rem;
+  border-radius: 0.5rem;
+  height: auto;
+}
+
+/* events */
+
+.event-card{
+  padding: 0.7rem;
+  background-color: var(--font-color-white);
+  margin-bottom: 1em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.event-line{
+  background-color: var(--primary-color);
+  width: 0.2rem;
+  height: auto;
+}
+
+.event-date{
+  padding: 1rem;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 1.5rem;
+}
+
+.event-name{
+  padding:1rem;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.event-desc{
+  padding:1rem;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.5rem;
+}
+

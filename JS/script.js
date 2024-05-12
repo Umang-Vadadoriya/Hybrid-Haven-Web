@@ -182,21 +182,20 @@ async function loadDeskBooking() {
     // console.log(employeeNameElement);
     ele.appendChild(employeeNameElement);
 
-    let joinButton = document.createElement("button");
+    
+    if (avail > 0) {
+      let joinButton = document.createElement("button");
     joinButton.id = `neighbourhood-${nei.neighbourName}`;
     joinButton.classList.add("join-btn");
     joinButton.textContent = "Join";
     joinButton.value = nei.neighbourName;
-    if (avail <= 0) {
-      joinButton.disabled = true;
-    } else {
-      joinButton.disabled = false;
-    }
     joinButton.onclick = function () {
       joinDesk(joinButton.value,"Dinesh Saw",tommorrowDate);
     };
-    // console.log(joinButton);
     ele.appendChild(joinButton);
+    }
+
+    // console.log(joinButton);
   });
   mainShow.appendChild(ele);
   closeNav();

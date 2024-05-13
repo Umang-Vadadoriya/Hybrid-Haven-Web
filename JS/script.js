@@ -133,8 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const homeOption = document.getElementById("home");
   const deskbookingOption = document.getElementById("deskbooking");
   const messagesOption = document.getElementById("messages");
-  const aboutOption = document.getElementById("about");
-  const signInBtn = document.getElementById("sign-in-btn");
   const username = document.getElementById("userName");
 
   RedirectAsPerLogIn();
@@ -162,13 +160,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   messagesOption.addEventListener("click", function () {
     loadEventsPage();
-  });
-
-  aboutOption.addEventListener("click", function () {
-    contentDiv.innerHTML = `
-      <h2>About</h2>
-      <p>This is the about page content.</p>
-    `;
   });
 });
 

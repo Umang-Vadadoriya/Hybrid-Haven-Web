@@ -33,6 +33,7 @@ jobs:
 
             # Clone new repository
             git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git
+            git checkout HH-37-cicd-pipeline-for-frontend
             
             # Start Node.js server
             nohup node server.js > output.log 2>&1 &

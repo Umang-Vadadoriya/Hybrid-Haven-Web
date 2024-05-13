@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Single Page Web App</title>
     <link rel="stylesheet" href="./CSS/style.css" />
-    <script defer src="./JS/script.js"></script>
+    <script type="module" src="./JS/script.js"></script>
   </head>
   <body>
     <main class="container">
       <section class="left-panel" id="menu">
         <div class="top-left">
-          <img src="./image/logo2.jpg" alt="User Image" />
-          <div id="userName"></div> 
+          <img id="user-img" alt="User Image" />
+          <div id="userName" ></div> 
         </div>
         <div class="left-content">
           <ul>
@@ -81,12 +81,10 @@
         <div class="profile-modal-content">
           <span class="profile-close">&times;</span>
           <img src="./image/logo1.jpg" class="profile-img" alt="HybridHaven Logo" />
-          <form id="profileForm">
-            <h3 id="username-profile">Krunal rana</h3>
-            <h4 id="useremail-profile">ranakrunal219@gmail.com</h4>
-            <option></option>
-            <!-- <button type="submit">Save Changes</button> -->
-          </form>
+          
+            <h3 id="username-profile"></h3>
+            <h4 id="useremail-profile"></h4>
+          
         </div>
       </div>
     </main>

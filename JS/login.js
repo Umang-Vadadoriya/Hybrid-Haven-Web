@@ -3,6 +3,7 @@ export function loadLogin() {
   const redirectUri = "http://34.251.172.36:5500";
   const scope = "email profile openid";
 
+  
   // Construct Google OAuth URL with OpenID Connect for ID token
   const authUrl = `https://github.com/login/oauth/select_account?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=read`;
 

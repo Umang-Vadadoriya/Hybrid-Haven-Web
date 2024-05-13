@@ -50,7 +50,7 @@ async function RedirectAsPerLogIn() {
       console.log("Stored");
       login();
 
-      window.location.href = "http://127.0.0.1:5500";
+      window.location.href = "http://34.251.172.36:5500";
     }
 
   }

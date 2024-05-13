@@ -5,7 +5,7 @@ var BaseURL = `http://34.251.172.36:8080`;
 var BaseURL;
 
 
-function login() {
+async function login() {
   let username;
   let useremail;
   let userDiv = document.getElementById("userName");
@@ -45,17 +45,12 @@ async function RedirectAsPerLogIn() {
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-
       console.log(token);
       console.log("Stored");
-      login();
-
-      window.location.href = "http://127.0.0.1:5500";
+      await login();
+      window.location.href = "http://34.251.172.36:5500";
     }
-
   }
-
-
 }
 
 

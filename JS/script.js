@@ -75,7 +75,6 @@ async function login() {
 
 }
 
-
 async function RedirectAsPerLogIn() {
   const code = await parseTokenFromUrl();
   console.log(code);
@@ -91,7 +90,6 @@ async function RedirectAsPerLogIn() {
       localStorage.setItem("token", token);
       console.log(token);
       console.log("Stored");
-      await login();
       window.location.href = "http://34.251.172.36:5500";
     }
   }

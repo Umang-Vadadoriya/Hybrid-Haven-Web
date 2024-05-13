@@ -89,17 +89,12 @@ async function RedirectAsPerLogIn() {
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-
       console.log(token);
       console.log("Stored");
-      // await login();
-
-      window.location.href = "http://127.0.0.1:5500";
+      await login();
+      window.location.href = "http://34.251.172.36:5500";
     }
-
   }
-
-
 }
 
 

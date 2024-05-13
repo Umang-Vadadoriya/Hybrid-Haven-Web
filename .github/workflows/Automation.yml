@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Upload-To-EC2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          passphrase: ${{ secrets.EC2_PASSPHRASE }}
+          script: |
+            # Stop existing Node.js server
+            PID=$(sudo lsof -t -i:5500)
+            if [ ! -z "$PID" ]; then
+              sudo kill -9 $PID
+            fi
+            
+            # Remove previous repository
+            rm -rf Hybrid-Haven-Web
+
+            # Clone new repository
+            git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git
+            
+            # Start Node.js server
+            nohup node server.js > output.log 2>&1 &

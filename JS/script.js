@@ -19,7 +19,6 @@ async function login() {
   })
   .then((res) => res.json())
   .then((data) => {
-    console.log(data);
     username = data.name ? data.name : "Profile";
     useremail = data.email ? data.email : data.login;
     localStorage.setItem("username", username);
@@ -34,7 +33,6 @@ async function login() {
   if(localStorage.getItem("username")){
     const Employees = await GetAllEmployee();
     Employees.map((emp)=>{
-      console.log(emp.employeeName);
       if(localStorage.getItem("username")===emp.employeeName){
         saved = true;
       }
@@ -65,7 +63,6 @@ async function login() {
       .then((data) => {
         // openModal("User Added successfully:");
         loadEventsPage();
-        console.log("Employee created successfully:", data);
       })
       .catch((error) => {
         console.error("Error creating employee", error);
@@ -77,19 +74,13 @@ async function login() {
 
 async function RedirectAsPerLogIn() {
   const code = await parseTokenFromUrl();
-  console.log(code);
   
   if (!code && !localStorage.getItem("token")) {
-    console.log("in if");
     loadLogin();
   } else {
-    console.log("in else");
-    console.log(`has code ${code}`);
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-      console.log(token);
-      console.log("Stored");
       window.location.href = "http://34.251.172.36:5500";
     }
   }
@@ -102,7 +93,6 @@ const todayDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
 )
   .toString()
   .padStart(2, "0")}.${currentDate.getFullYear()}`;
-console.log(todayDate);
 const deskDate = "13.02.2024";
 
 const tomorrow = new Date(currentDate);
@@ -226,10 +216,6 @@ async function loadDeskBooking() {
   const NeighbourHoods = await getAllNeighbour();
   const Employees = await GetAllEmployee();
 
-  console.log(Bookings);
-  console.log(NeighbourHoods);
-  console.log(Employees);
-
   const mainShow = document.getElementById("main-show");
   mainShow.innerHTML = "";
   let ele = document.createElement("div");
@@ -251,7 +237,6 @@ async function loadDeskBooking() {
           Employees.map((emp) => {
             if (emp.employeeId == booking.employeeId) {
               if (localStorage.getItem("username") == emp.employeeName) {
-                console.log(emp.employeeId);
                 booked = true;
               }
               let employeeNameElement = document.createElement("span");
@@ -271,12 +256,10 @@ async function loadDeskBooking() {
       innerElement.appendChild(nothingBooked);
     }
     ele.appendChild(innerElement);
-    console.log(nei.neighbourName);
 
     let employeeNameElement = document.createElement("div");
     employeeNameElement.classList.add("avail-tag");
     employeeNameElement.textContent = `+${avail} Desks left`;
-    // console.log(employeeNameElement);
     ele.appendChild(employeeNameElement);
 
     if (avail > 0 && !booked) {
@@ -294,8 +277,6 @@ async function loadDeskBooking() {
       };
       ele.appendChild(joinButton);
     }
-
-    // console.log(joinButton);
   });
   mainShow.appendChild(ele);
   closeNav();
@@ -385,7 +366,6 @@ async function loadEvents() {
           eventemp.employeeByEmployeeId.employeeName
         ) {
           eventbooked = true;
-          console.log("gbuhj");
         }
         let employeeNameElement = document.createElement("div");
         employeeNameElement.classList.add("name-tag");
@@ -395,7 +375,6 @@ async function loadEvents() {
     });
     div.appendChild(eventEmployee);
     card.appendChild(div);
-    console.log(eventbooked);
     if (!eventbooked) {
       let joinButton = document.createElement("button");
       joinButton.id = `event-${events.eventId}`;
@@ -407,7 +386,6 @@ async function loadEvents() {
           events.eventId,
           localStorage.getItem("username")
         );
-        console.log(joinButton.value);
       };
       card.appendChild(joinButton);
     }
@@ -422,7 +400,6 @@ async function joinEvent(eventId,name){
   let employeeId;
 
   employees.map((employee) => {
-    console.log(employee.employeeName);
     employeeId = employee.employeeId;
   });
 
@@ -451,7 +428,6 @@ async function joinEvent(eventId,name){
     .then((data) => {
       openModal("Event booked successfully:");
       loadEventsPage();
-      console.log("Desk booking created successfully:", data);
     })
     .catch((error) => {
       console.error("Error creating desk booking:", error);
@@ -481,7 +457,6 @@ async function loadHomePage() {
   fetch(`${BaseURL}/desk-bookings/date/${todayDate}`, fetchOptions)
     .then((response) => response.json()) 
     .then((data) => {
-      // console.log(data);
       data.forEach((deskbooking, index) => {
         fetch(`${BaseURL}/employees/id/${deskbooking.employeeId}`, fetchOptions)
           .then((response) => response.json())
@@ -507,7 +482,6 @@ async function loadHomePage() {
   fetch(`${BaseURL}/vacations/date/${todayDate}`, fetchOptions)
     .then((response) => response.json())
     .then((data) => {
-      // console.log(data);
       data.forEach((vacations) => {
         
         const employeedata = vacations.employeeByEmployeeId;
@@ -571,15 +545,12 @@ function closeNav() {
 // joining desks
 
 function joinDesk(type, name, date) {
-  // console.log(type);
   switch (type) {
     case "Meeting":
       
       createDeskBooking(1, getTomorrowDate(), name, date);
-      console.log("meet");
       break;
     case "Hot Desk":
-      console.log("hot desk");
       createDeskBooking(2, getTomorrowDate(), name, date);
       break;
     case "Collab":
@@ -623,7 +594,6 @@ async function createDeskBooking(
   let flag = false;
 
   employees.map((employee) => {
-    console.log(employee.employeeName);
     employeeId = employee.employeeId;
     bookings.map((booking) => {
       if (employee.employeeId === booking.employeeId) {
@@ -663,7 +633,6 @@ async function createDeskBooking(
       .then((data) => {
         openModal("Desk booking created successfully:");
         deskBookigPage();
-        console.log("Desk booking created successfully:", data);
       })
       .catch((error) => {
         console.error("Error creating desk booking:", error);

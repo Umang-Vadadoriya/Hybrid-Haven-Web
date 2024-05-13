@@ -1,66 +1,63 @@
-// var BaseURL = `http://34.251.172.36:8080`;
+import { loadLogin, parseTokenFromUrl, getTokenFromCode } from "./login.js";
+var BaseURL = `http://34.251.172.36:8080`;
 // var BaseURL = `http://localhost:8080`;
-var BaseURL;
-import("./env.js")
-  .then((module) => {
-    BaseURL = module.default.BaseURL;
-  })
-  .catch((error) => {
-    console.error("Error importing env.js:", error);
-  });
 
-const code = await parseTokenFromUrl();
-if(code){
-  console.log(`has code ${code}`);
-  const token = await getTokenFromCode(code)
-  if(!token.includes("error")){
-    localStorage.setItem("token",token);
-    console.log(token);
-    console.log("Stored");
-    window.location.href = "http://127.0.0.1:5500"
-  }
-  else{
-    console.log("Not Stored");
-  }
-}
+var BaseURL;
+
 
 function login() {
-  const username = "Nishant Taletiya";
-  const useremail = "ranakrunal219@gmail.com";
+  let username;
+  let useremail;
   let userDiv = document.getElementById("userName");
-  localStorage.setItem("username", username);
-  localStorage.setItem("userEmail", useremail);
-  userDiv.innerText = localStorage.getItem("username");
+  let userimage = document.getElementById("user-img");
+  
+  fetch(`https://api.github.com/user`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data);
+    username = data.name ? data.name : "Profile";
+    useremail = data.email ? data.email : data.login;
+    localStorage.setItem("username", username);
+    localStorage.setItem("userEmail", useremail);
+    userDiv.innerText= localStorage.getItem("username");
+    userimage.src = data.avatar_url;
+    
+  });
+  
 }
 
-login();
-
-import { loadLogin, parseTokenFromUrl, getTokenFromCode} from "./login.js";
 
 async function RedirectAsPerLogIn() {
   const code = await parseTokenFromUrl();
-  // const storedEmail = sessionStorage.getItem('email');
-  // const storedToken = sessionStorage.getItem('access_token');
-  // Get the current URL
-
-  // console.log(new URLSearchParams('http://localhost:5500/?a=2323'));
-  if (!code) {
+  console.log(code);
+  
+  if (!code && !localStorage.getItem("token")) {
+    console.log("in if");
     loadLogin();
   } else {
-    const token = await getTokenFromCode(code)
-    localStorage.setItem("token",token);
-    console.log(token);
+    console.log("in else");
+    console.log(`has code ${code}`);
+    const token = await getTokenFromCode(code);
+    if (!token.includes("error")) {
+      localStorage.setItem("token", token);
+
+      console.log(token);
+      console.log("Stored");
+      login();
+
+      window.location.href = "http://127.0.0.1:5500";
+    }
+
   }
-  // if (!idToken && !storedEmail) {
-  //   console.log("Loading Log In");
-  //     loadLogin();
-  // } else {
-  //     if (!storedEmail) {
-  //         fetchUserInfo(idToken);
-  //     }
-  //     loadHome();
-  // }
+
+
 }
+
 
 const currentDate = new Date();
 const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -103,18 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const signInBtn = document.getElementById("sign-in-btn");
   const username = document.getElementById("userName");
 
+  RedirectAsPerLogIn();
   indexPage();
 
   window.addEventListener("resize", function () {
     toggleButton();
   });
 
-  signInBtn.addEventListener("click", function () {
-    // console.log("ygvfyhjbgvhg");
-    // toggleContent();
-    RedirectAsPerLogIn();
-  });
-  
   toggle.addEventListener("click", function () {
     openNav();
   });
@@ -326,7 +318,7 @@ async function loadEvents() {
 
   const mainShow = document.getElementById("main-show");
   let ele = document.createElement("div");
-  
+
   Events.map((events) => {
     let eventbooked = false;
     let card = document.createElement("div");
@@ -353,47 +345,89 @@ async function loadEvents() {
     eventDesc.textContent = events.eventDescription;
     card.appendChild(eventDesc);
 
-    let div = document.createElement('div');
+    let div = document.createElement("div");
     div.classList.add("event-desc");
 
     let eventEmployee = document.createElement("div");
     eventEmployee.classList.add("inner");
     EventsEmployees.map((eventemp) => {
       if (events.eventId == eventemp.eventId) {
-        if(localStorage.getItem("username") == eventemp.employeeByEmployeeId.employeeName){
+        if (
+          localStorage.getItem("username") ==
+          eventemp.employeeByEmployeeId.employeeName
+        ) {
           eventbooked = true;
           console.log("gbuhj");
         }
-          let employeeNameElement = document.createElement("div");
-          employeeNameElement.classList.add("name-tag");
-          employeeNameElement.textContent = `@${eventemp.employeeByEmployeeId.employeeName}`;
-          eventEmployee.appendChild(employeeNameElement);
+        let employeeNameElement = document.createElement("div");
+        employeeNameElement.classList.add("name-tag");
+        employeeNameElement.textContent = `@${eventemp.employeeByEmployeeId.employeeName}`;
+        eventEmployee.appendChild(employeeNameElement);
       }
     });
     div.appendChild(eventEmployee);
     card.appendChild(div);
     console.log(eventbooked);
-    if(!eventbooked){
+    if (!eventbooked) {
       let joinButton = document.createElement("button");
       joinButton.id = `event-${events.eventId}`;
       joinButton.classList.add("join-btn");
       joinButton.textContent = "Join";
       joinButton.value = events.eventName;
       joinButton.onclick = function () {
-        // joinDesk(
-        //   joinButton.value,
-        //   localStorage.getItem("username"),
-        //   tommorrowDate
-        // );
+        joinEvent(
+          events.eventId,
+          localStorage.getItem("username")
+        );
         console.log(joinButton.value);
       };
       card.appendChild(joinButton);
     }
-    
-    
+
     ele.appendChild(card);
   });
   mainShow.appendChild(ele);
+}
+
+async function joinEvent(eventId,name){
+  const employees = await getEmployeeByName(name);
+  let employeeId;
+
+  employees.map((employee) => {
+    console.log(employee.employeeName);
+    employeeId = employee.employeeId;
+  });
+
+  
+  const requestBody = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      employeeId: employeeId,
+      eventId: eventId,
+    }),
+  };
+
+  // Send the POST request
+  fetch(`${BaseURL}/events-employee`, requestBody)
+    .then((response) => {
+      if (!response.ok) {
+        openModal("Failed to book Event");
+        throw new Error("Failed to create event booking");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      openModal("Event booked successfully:");
+      loadEventsPage();
+      console.log("Desk booking created successfully:", data);
+    })
+    .catch((error) => {
+      console.error("Error creating desk booking:", error);
+    });
 }
 
 // Home + indexpage
@@ -414,26 +448,16 @@ function loadHomePage() {
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
 
-  fetch(`https://api.github.com/user`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  }).then((res)=> res.json())
-  .then((data)=> console.log(data));
-
-  // div.style.width = "20rem";
-  // div.style.padding = ".5em";
+  
 
   fetch(`${BaseURL}/desk-bookings/date/07.05.2024`, fetchOptions)
-    .then((response) => response.json()) // Assuming response is JSON
+    .then((response) => response.json()) 
     .then((data) => {
       // console.log(data);
       data.forEach((deskbooking, index) => {
         fetch(`${BaseURL}/employees/id/${deskbooking.employeeId}`, fetchOptions)
           .then((response) => response.json())
           .then((employeeData) => {
-          
             const employeeName = employeeData.employeeName;
             const empDiv = document.createElement("div");
             empDiv.style.padding = ".5em";
@@ -457,9 +481,9 @@ function loadHomePage() {
     .then((data) => {
       // console.log(data);
       data.forEach((vacations) => {
-        // console.log(vacations);
+        
         const employeedata = vacations.employeeByEmployeeId;
-        // console.log(employeedata.employeeName);
+        
         const employeeName = employeedata.employeeName;
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";
@@ -476,6 +500,7 @@ function loadHomePage() {
 }
 
 function indexPage() {
+  login();
   const contentDiv = document.getElementById("content");
   const para = document.createElement("p");
   const html = `
@@ -502,7 +527,7 @@ function indexPage() {
     <br>
   </div>`;
   contentDiv.innerHTML = html;
-  // contentDiv.appendChild('beforechild',html);
+  
   loadHomePage();
   closeNav();
 }
@@ -521,7 +546,7 @@ function joinDesk(type, name, date) {
   // console.log(type);
   switch (type) {
     case "Meeting":
-      // console.log("meeting");
+      
       createDeskBooking(1, getTomorrowDate(), name, date);
       console.log("meet");
       break;
@@ -543,7 +568,7 @@ function getTomorrowDate() {
   tomorrow.setDate(today.getDate() + 1);
 
   const year = tomorrow.getFullYear();
-  const month = String(tomorrow.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed
+  const month = String(tomorrow.getMonth() + 1).padStart(2, "0"); 
   const day = String(tomorrow.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
@@ -574,8 +599,6 @@ async function createDeskBooking(
     employeeId = employee.employeeId;
     bookings.map((booking) => {
       if (employee.employeeId === booking.employeeId) {
-        // console.log("Your desk is already booked");
-        // openModal("Your desk is already booked");
         flag = true;
         return;
       }
@@ -590,6 +613,7 @@ async function createDeskBooking(
     const requestBody = {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -658,12 +682,12 @@ function openProfileModal() {
   modalProfile.style.display = "block";
 }
 
-// When the user clicks on <span> (x), close the modal
+
 closeBtn.onclick = function () {
   modalProfile.style.display = "none";
 };
 
-// When the user clicks anywhere outside of the modal, close it
+
 window.onclick = function (event) {
   if (event.target == modalProfile) {
     modalProfile.style.display = "none";

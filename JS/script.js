@@ -10,6 +10,7 @@ async function login() {
   let useremail;
   let userDiv = document.getElementById("userName");
   let userimage = document.getElementById("user-img");
+  let userimage1 = document.getElementById("user-img1");
   
   fetch(`https://api.github.com/user`, {
     method: "GET",
@@ -25,6 +26,7 @@ async function login() {
     localStorage.setItem("userEmail", useremail);
     userDiv.innerText= localStorage.getItem("username");
     userimage.src = data.avatar_url;
+    userimage1.src = data.avatar_url;
   });
 
   let saved = false;

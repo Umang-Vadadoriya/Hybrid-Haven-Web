@@ -20,6 +20,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
+          passphrase: ${{ secrets.EC2_PASSPHRASE }}
           script: |
             # Stop existing Node.js server
             PID=$(sudo lsof -t -i:3000)

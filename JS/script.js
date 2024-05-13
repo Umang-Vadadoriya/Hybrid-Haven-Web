@@ -27,8 +27,52 @@ async function login() {
     userDiv.innerText= localStorage.getItem("username");
     userimage.src = data.avatar_url;
     
+    
   });
+
+  let saved = false;
+  if(localStorage.getItem("username")){
+    const Employees = await GetAllEmployee();
+    Employees.map((emp)=>{
+      console.log(emp.employeeName);
+      if(localStorage.getItem("username")===emp.employeeName){
+        saved = true;
+      }
+    })
+  }
+  if(!saved){
+    const requestBody = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        employeeName: localStorage.getItem('username'),
+        employeeReportsTo: 0
+      }),
+    };
   
+    // Send the POST request
+    fetch(`${BaseURL}/employees`, requestBody)
+      .then((response) => {
+        if (!response.ok) {
+          // openModal("Failed to add use");
+          throw new Error("Failed to add user");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // openModal("User Added successfully:");
+        loadEventsPage();
+        console.log("Employee created successfully:", data);
+      })
+      .catch((error) => {
+        console.error("Error creating employee", error);
+      });
+
+  }
+
 }
 
 
@@ -55,12 +99,12 @@ async function RedirectAsPerLogIn() {
 
 
 const currentDate = new Date();
-const formattedDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
+const todayDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
   currentDate.getMonth() + 1
 )
   .toString()
   .padStart(2, "0")}.${currentDate.getFullYear()}`;
-console.log(formattedDate);
+console.log(todayDate);
 const deskDate = "13.02.2024";
 
 const tomorrow = new Date(currentDate);
@@ -433,7 +477,7 @@ const fetchOptions = {
   },
 };
 
-function loadHomePage() {
+async function loadHomePage() {
   const officeContentDiv = document.getElementById("office-content");
   const vacationContentDiv = document.getElementById("vacation-content");
 
@@ -445,7 +489,7 @@ function loadHomePage() {
 
   
 
-  fetch(`${BaseURL}/desk-bookings/date/07.05.2024`, fetchOptions)
+  fetch(`${BaseURL}/desk-bookings/date/${todayDate}`, fetchOptions)
     .then((response) => response.json()) 
     .then((data) => {
       // console.log(data);
@@ -471,7 +515,7 @@ function loadHomePage() {
 
   officeContentDiv.appendChild(innerOfficeDiv);
 
-  fetch(`${BaseURL}/vacations/date/16.02.2023`, fetchOptions)
+  fetch(`${BaseURL}/vacations/date/${todayDate}`, fetchOptions)
     .then((response) => response.json())
     .then((data) => {
       // console.log(data);
@@ -494,8 +538,8 @@ function loadHomePage() {
   vacationContentDiv.appendChild(innerVacctionDiv);
 }
 
-function indexPage() {
-  login();
+async function indexPage() {
+  await login();
   const contentDiv = document.getElementById("content");
   const para = document.createElement("p");
   const html = `

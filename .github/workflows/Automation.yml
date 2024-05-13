@@ -23,7 +23,7 @@ jobs:
           passphrase: ${{ secrets.EC2_PASSPHRASE }}
           script: |
             # Stop existing Node.js server
-            PID=$(sudo lsof -t -i:3000)
+            PID=$(sudo lsof -t -i:5500)
             if [ ! -z "$PID" ]; then
               sudo kill -9 $PID
             fi

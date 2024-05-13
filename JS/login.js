@@ -1,6 +1,6 @@
 export function loadLogin() {
   const clientId = "Ov23lignJITTKppMvFvt";
-  const redirectUri = "http://127.0.0.1:5500";
+  const redirectUri = "http://34.251.172.36:5500";
   const scope = "email profile openid";
 
   // Construct Google OAuth URL with OpenID Connect for ID token

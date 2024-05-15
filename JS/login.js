@@ -1,7 +1,6 @@
 export function loadLogin() {
   const clientId = "Ov23lignJITTKppMvFvt";
-  const redirectUri = "https://hybrid-haven.projects.bbdgrad.com";
-  const scope = "email profile openid";
+  const redirectUri = "https://hybrid-haven.projects.bbdgrad.com/web/";
 
   
   // Construct Google OAuth URL with OpenID Connect for ID token
@@ -21,7 +20,7 @@ export async function parseTokenFromUrl() {
 }
 
 export async function getTokenFromCode(code){
-    const url = `http://34.251.172.36:8080/auth/code?code=${code}`;
+    const url = `https://hybrid-haven.projects.bbdgrad.com/api/auth/code?code=${code}`;
     
     let Token = await fetch(url)
     .then((response) => response.text())

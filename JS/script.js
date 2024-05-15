@@ -1,5 +1,5 @@
 import { loadLogin, parseTokenFromUrl, getTokenFromCode } from "./login.js";
-var BaseURL = `http://34.251.172.36:8080`;
+var BaseURL = `https://hybrid-haven.projects.bbdgrad.com/api/`;
 // var BaseURL = `http://localhost:8080`;
 
 var BaseURL;
@@ -81,7 +81,7 @@ async function RedirectAsPerLogIn() {
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-      window.location.href = "https://hybrid-haven.projects.bbdgrad.com";
+      window.location.href = "https://hybrid-haven.projects.bbdgrad.com/web/";
     }
   }
 }

@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -21,17 +18,17 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           passphrase: ${{ secrets.EC2_PASSPHRASE }}
           script: |
-            # Stop existing Node.js server
-            PID=$(sudo lsof -t -i:80)
+            # Killing existing Node.js server
+            PID=$(sudo lsof -t -i:5500)
             if [ ! -z "$PID" ]; then
               sudo kill -9 $PID
             fi
             
-            # Remove previous repository
+            # Remove previously Cloned Repo
             rm -rf Hybrid-Haven-Web
 
-            # Clone new repository
+            # Clone Our repository
             git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git
             
-            # Start Node.js server
+            # Start Node.js server In No HangUp Mode
             sudo nohup node server.js > output.log 2>&1 &

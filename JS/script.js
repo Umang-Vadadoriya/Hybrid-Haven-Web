@@ -81,7 +81,7 @@ async function RedirectAsPerLogIn() {
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-      window.location.href = "http://34.251.172.36:5500";
+      window.location.href = "https://hybrid-haven.projects.bbdgrad.com";
     }
   }
 }

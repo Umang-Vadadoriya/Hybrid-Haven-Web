@@ -22,7 +22,7 @@ jobs:
           passphrase: ${{ secrets.EC2_PASSPHRASE }}
           script: |
             # Stop existing Node.js server
-            PID=$(sudo lsof -t -i:443)
+            PID=$(sudo lsof -t -i:80)
             if [ ! -z "$PID" ]; then
               sudo kill -9 $PID
             fi
@@ -34,4 +34,4 @@ jobs:
             git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git
             
             # Start Node.js server
-            nohup node server.js > output.log 2>&1 &
+            sudo nohup node server.js > output.log 2>&1 &

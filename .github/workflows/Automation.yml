@@ -21,14 +21,14 @@ jobs:
             # Killing existing Node.js server
             PID=$(sudo lsof -t -i:5500)
             if [ ! -z "$PID" ]; then
-              sudo kill -9 $PID
+              sudo kill -9 $PID || { echo "Failed to kill process with PID $PID"; exit 1; }
             fi
-            
+
             # Remove previously Cloned Repo
-            rm -rf Hybrid-Haven-Web
+            rm -rf Hybrid-Haven-Web || { echo "Failed to remove Hybrid-Haven-Web directory"; exit 1; }
 
             # Clone Our repository
-            git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git
-            
+            git clone https://github.com/Umang-Vadadoriya-BBD/Hybrid-Haven-Web.git || { echo "Failed to clone repository"; exit 1; }
+
             # Start Node.js server In No HangUp Mode
-            sudo nohup node server.js > output.log 2>&1 &
+            sudo nohup node server.js > WebOutput.log 2>&1 & || { echo "Failed to start Node.js server"; exit 1; }

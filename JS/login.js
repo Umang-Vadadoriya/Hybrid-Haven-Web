@@ -1,6 +1,6 @@
 export function loadLogin() {
   const clientId = "Ov23lignJITTKppMvFvt";
-  const redirectUri = "http://34.251.172.36:5500";
+  const redirectUri = "https://hybrid-haven.projects.bbdgrad.com";
   const scope = "email profile openid";
 
   

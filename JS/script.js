@@ -1,9 +1,8 @@
 import { loadLogin, parseTokenFromUrl, getTokenFromCode } from "./login.js";
-var BaseURL = `https://hybrid-haven.projects.bbdgrad.com/api/`;
-// var BaseURL = `http://localhost:8080`;
+import { API_RUN, WEB_RUN } from './URLCollection.js'
 
-var BaseURL;
-
+var APIURL = API_RUN;
+var HostURL = WEB_RUN;
 
 async function login() {
   let username;
@@ -11,34 +10,34 @@ async function login() {
   let userDiv = document.getElementById("userName");
   let userimage = document.getElementById("user-img");
   let userimage1 = document.getElementById("user-img1");
-  
+
   fetch(`https://api.github.com/user`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   })
-  .then((res) => res.json())
-  .then((data) => {
-    username = data.name ? data.name : "Profile";
-    useremail = data.email ? data.email : data.login;
-    localStorage.setItem("username", username);
-    localStorage.setItem("userEmail", useremail);
-    userDiv.innerText= localStorage.getItem("username");
-    userimage.src = data.avatar_url;
-    userimage1.src = data.avatar_url;
-  });
+    .then((res) => res.json())
+    .then((data) => {
+      username = data.name ? data.name : "Profile";
+      useremail = data.email ? data.email : data.login;
+      localStorage.setItem("username", username);
+      localStorage.setItem("userEmail", useremail);
+      userDiv.innerText = localStorage.getItem("username");
+      userimage.src = data.avatar_url;
+      userimage1.src = data.avatar_url;
+    });
 
   let saved = false;
-  if(localStorage.getItem("username")){
+  if (localStorage.getItem("username")) {
     const Employees = await GetAllEmployee();
-    Employees.map((emp)=>{
-      if(localStorage.getItem("username")===emp.employeeName){
+    Employees.map((emp) => {
+      if (localStorage.getItem("username") === emp.employeeName) {
         saved = true;
       }
-    })
+    });
   }
-  if(!saved){
+  if (!saved) {
     const requestBody = {
       method: "POST",
       headers: {
@@ -46,13 +45,13 @@ async function login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        employeeName: localStorage.getItem('username'),
-        employeeReportsTo: 0
+        employeeName: localStorage.getItem("username"),
+        employeeReportsTo: 0,
       }),
     };
-  
+
     // Send the POST request
-    fetch(`${BaseURL}/employees`, requestBody)
+    fetch(`${APIURL}employees`, requestBody)
       .then((response) => {
         if (!response.ok) {
           // openModal("Failed to add use");
@@ -67,25 +66,22 @@ async function login() {
       .catch((error) => {
         console.error("Error creating employee", error);
       });
-
   }
-
 }
 
 async function RedirectAsPerLogIn() {
   const code = await parseTokenFromUrl();
-  
+
   if (!code && !localStorage.getItem("token")) {
     loadLogin();
   } else {
     const token = await getTokenFromCode(code);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-      window.location.href = "https://hybrid-haven.projects.bbdgrad.com/web/";
+      window.location.href = HostURL;
     }
   }
 }
-
 
 const currentDate = new Date();
 const todayDate = `${currentDate.getDate().toString().padStart(2, "0")}.${(
@@ -168,7 +164,7 @@ function deskBookigPage() {
 
 async function getBookingWithDate(date) {
   let Bookings = await fetch(
-    `${BaseURL}/desk-bookings/date/${date}`,
+    `${APIURL}desk-bookings/date/${date}`,
     fetchOptions
   )
     .then((response) => response.json())
@@ -179,7 +175,7 @@ async function getBookingWithDate(date) {
 }
 
 async function getAllNeighbour() {
-  let NeighbourHoods = await fetch(`${BaseURL}/neighbourhoods`, fetchOptions)
+  let NeighbourHoods = await fetch(`${APIURL}neighbourhoods`, fetchOptions)
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching neighbourhood data:", error);
@@ -188,7 +184,7 @@ async function getAllNeighbour() {
 }
 
 async function GetAllEmployee() {
-  let Employees = await fetch(`${BaseURL}/employees`, fetchOptions)
+  let Employees = await fetch(`${APIURL}employees`, fetchOptions)
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching employees data:", error);
@@ -285,7 +281,7 @@ async function loadDeskBooking() {
 // Events Page
 
 async function getAllEvents() {
-  let events = await fetch(`${BaseURL}/events`, fetchOptions)
+  let events = await fetch(`${APIURL}events`, fetchOptions)
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching employees data:", error);
@@ -294,7 +290,7 @@ async function getAllEvents() {
 }
 
 async function getAllEventsEmployee() {
-  let eventsEmployees = await fetch(`${BaseURL}/events-employee`, fetchOptions)
+  let eventsEmployees = await fetch(`${APIURL}events-employee`, fetchOptions)
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching employees data:", error);
@@ -382,10 +378,7 @@ async function loadEvents() {
       joinButton.textContent = "Join";
       joinButton.value = events.eventName;
       joinButton.onclick = function () {
-        joinEvent(
-          events.eventId,
-          localStorage.getItem("username")
-        );
+        joinEvent(events.eventId, localStorage.getItem("username"));
       };
       card.appendChild(joinButton);
     }
@@ -395,7 +388,7 @@ async function loadEvents() {
   mainShow.appendChild(ele);
 }
 
-async function joinEvent(eventId,name){
+async function joinEvent(eventId, name) {
   const employees = await getEmployeeByName(name);
   let employeeId;
 
@@ -403,7 +396,6 @@ async function joinEvent(eventId,name){
     employeeId = employee.employeeId;
   });
 
-  
   const requestBody = {
     method: "POST",
     headers: {
@@ -417,7 +409,7 @@ async function joinEvent(eventId,name){
   };
 
   // Send the POST request
-  fetch(`${BaseURL}/events-employee`, requestBody)
+  fetch(`${APIURL}events-employee`, requestBody)
     .then((response) => {
       if (!response.ok) {
         openModal("Failed to book Event");
@@ -452,13 +444,11 @@ async function loadHomePage() {
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
 
-  
-
-  fetch(`${BaseURL}/desk-bookings/date/${todayDate}`, fetchOptions)
-    .then((response) => response.json()) 
+  fetch(`${APIURL}desk-bookings/date/${todayDate}`, fetchOptions)
+    .then((response) => response.json())
     .then((data) => {
       data.forEach((deskbooking, index) => {
-        fetch(`${BaseURL}/employees/id/${deskbooking.employeeId}`, fetchOptions)
+        fetch(`${APIURL}employees/id/${deskbooking.employeeId}`, fetchOptions)
           .then((response) => response.json())
           .then((employeeData) => {
             const employeeName = employeeData.employeeName;
@@ -479,13 +469,12 @@ async function loadHomePage() {
 
   officeContentDiv.appendChild(innerOfficeDiv);
 
-  fetch(`${BaseURL}/vacations/date/${todayDate}`, fetchOptions)
+  fetch(`${APIURL}vacations/date/${todayDate}`, fetchOptions)
     .then((response) => response.json())
     .then((data) => {
       data.forEach((vacations) => {
-        
         const employeedata = vacations.employeeByEmployeeId;
-        
+
         const employeeName = employeedata.employeeName;
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";
@@ -529,7 +518,7 @@ async function indexPage() {
     <br>
   </div>`;
   contentDiv.innerHTML = html;
-  
+
   loadHomePage();
   closeNav();
 }
@@ -547,7 +536,6 @@ function closeNav() {
 function joinDesk(type, name, date) {
   switch (type) {
     case "Meeting":
-      
       createDeskBooking(1, getTomorrowDate(), name, date);
       break;
     case "Hot Desk":
@@ -567,14 +555,14 @@ function getTomorrowDate() {
   tomorrow.setDate(today.getDate() + 1);
 
   const year = tomorrow.getFullYear();
-  const month = String(tomorrow.getMonth() + 1).padStart(2, "0"); 
+  const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
   const day = String(tomorrow.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
 
 async function getEmployeeByName(name) {
-  let employee = await fetch(`${BaseURL}/employees/name/${name}`, fetchOptions)
+  let employee = await fetch(`${APIURL}employees/name/${name}`, fetchOptions)
     .then((response) => response.json())
     .catch((error) => {
       console.error("Error fetching booking data:", error);
@@ -605,7 +593,7 @@ async function createDeskBooking(
 
   if (!flag) {
     // // Construct the URL
-    const url = `${BaseURL}/desk-bookings`;
+    const url = `${APIURL}desk-bookings`;
 
     // Create the request body
     const requestBody = {
@@ -679,11 +667,9 @@ function openProfileModal() {
   modalProfile.style.display = "block";
 }
 
-
 closeBtn.onclick = function () {
   modalProfile.style.display = "none";
 };
-
 
 window.onclick = function (event) {
   if (event.target == modalProfile) {

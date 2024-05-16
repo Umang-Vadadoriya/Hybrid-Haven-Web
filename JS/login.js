@@ -1,6 +1,11 @@
+import { API_RUN, WEB_RUN } from './URLCollection.js'
+
+var APIURL = API_RUN;
+var HostURL = WEB_RUN;
+
 export function loadLogin() {
   const clientId = "Ov23lignJITTKppMvFvt";
-  const redirectUri = "https://hybrid-haven.projects.bbdgrad.com/web/";
+  const redirectUri = HostURL;
 
   
   // Construct Google OAuth URL with OpenID Connect for ID token
@@ -9,7 +14,7 @@ export function loadLogin() {
   // Redirect user to Google OAuth URL
   window.location.href = authUrl;
 }
-
+  
 export async function parseTokenFromUrl() {
   const currentUrl = new URL(window.location.href);
   
@@ -20,7 +25,7 @@ export async function parseTokenFromUrl() {
 }
 
 export async function getTokenFromCode(code){
-    const url = `https://hybrid-haven.projects.bbdgrad.com/api/auth/code?code=${code}`;
+    const url = `${APIURL}auth/code?code=${code}`;
     
     let Token = await fetch(url)
     .then((response) => response.text())

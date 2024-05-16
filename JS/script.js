@@ -1,5 +1,5 @@
 import { loadLogin, parseTokenFromUrl, getTokenFromCode } from "./login.js";
-import { API_RUN, WEB_RUN } from './URLCollection.js'
+import { API_RUN, WEB_RUN } from "./URLCollection.js";
 
 var APIURL = API_RUN;
 var HostURL = WEB_RUN;
@@ -72,14 +72,16 @@ async function login() {
 async function RedirectAsPerLogIn() {
   const code = await parseTokenFromUrl();
 
-  if (!code && !localStorage.getItem("token")) {
-    loadLogin();
-  } else {
+  if (code && !localStorage.getItem("token")) {
+    console.log("Code", code);
     const token = await getTokenFromCode(code);
+    console.log("Token", token);
     if (!token.includes("error")) {
       localStorage.setItem("token", token);
-      window.location.href = HostURL;
     }
+    window.location.href = HostURL;
+  } else if (!localStorage.getItem("token")) {
+    loadLogin();
   }
 }
 

@@ -1,59 +1,119 @@
-import { deskBookigPage } from "./script.js";
+import {
+  countBooking,
+  getAllNeighbour,
+  getBookingWithDate,
+  tommorrowDate,
+  GetAllEmployee,
+  closeNav,
+  getTomorrowDate,
+  getEmployeeByName
+} from "./common.js";
+import {openModal} from "./modal.js";
+import { API_RUN} from "./URLCollection.js";
 
-var BaseURL = `http://34.251.172.36:8080`;
+var APIURL = API_RUN;
 
-export function joinDesk(type, name, date) {
-  // console.log(type);
+
+// Deskbooking Page
+
+export function deskBookigPage() {
+  const contentDiv = document.getElementById("content");
+  const html = `
+    <h1>WHO'S IN TOMORROW</h1>
+    <hr />
+    <div id="main-show"></div>
+  `;
+  contentDiv.innerHTML = html;
+  loadDeskBooking();
+}
+
+async function loadDeskBooking() {
+  const Bookings = await getBookingWithDate(tommorrowDate);
+  const NeighbourHoods = await getAllNeighbour();
+  const Employees = await GetAllEmployee();
+
+  const mainShow = document.getElementById("main-show");
+  // mainShow.innerHTML = "";
+  let ele = document.createElement("div");
+
+  let booked = false;
+  NeighbourHoods.map((nei) => {
+    let avail = 0;
+
+    let heading = document.createElement("h3");
+    heading.textContent = nei.neighbourName;
+    ele.appendChild(heading);
+    avail = nei.neighbourNumberOfDesk;
+    let innerElement = document.createElement("div");
+
+    if (countBooking(nei.neighbourId, Bookings) > 0) {
+      innerElement.classList.add("inner");
+      Bookings.map((booking) => {
+        if (booking.neighbourId == nei.neighbourId) {
+          Employees.map((emp) => {
+            if (emp.employeeId == booking.employeeId) {
+              if (localStorage.getItem("username") == emp.employeeName) {
+                booked = true;
+              }
+              let employeeNameElement = document.createElement("span");
+              employeeNameElement.classList.add("name-tag");
+              employeeNameElement.textContent = `@${emp.employeeName}`;
+              innerElement.appendChild(employeeNameElement);
+              avail--;
+            }
+          });
+        }
+      });
+    } else {
+      let nothingBooked = document.createElement("p");
+      let italicTxt = document.createElement("i");
+      italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
+      nothingBooked.appendChild(italicTxt);
+      innerElement.appendChild(nothingBooked);
+    }
+    ele.appendChild(innerElement);
+
+    let employeeNameElement = document.createElement("div");
+    employeeNameElement.classList.add("avail-tag");
+    employeeNameElement.textContent = `+${avail} Desks left`;
+    ele.appendChild(employeeNameElement);
+
+    if ((avail > 0 && !booked) && !booked) {
+      let joinButton = document.createElement("button");
+      joinButton.id = `neighbourhood-${nei.neighbourName}`;
+      joinButton.classList.add("join-btn");
+      joinButton.textContent = "Join";
+      joinButton.value = nei.neighbourName;
+      joinButton.onclick = function () {
+        joinDesk(
+          joinButton.value,
+          localStorage.getItem("username"),
+          tommorrowDate
+        );
+      };
+      ele.appendChild(joinButton);
+    }
+  });
+  mainShow.appendChild(ele);
+  closeNav();
+}
+
+function joinDesk(type, name, date) {
   switch (type) {
     case "Meeting":
-      // console.log("meeting");
-      createDeskBooking(3, 1, getTomorrowDate(), name, date);
-      console.log("meet");
+      createDeskBooking(1, getTomorrowDate(), name, date);
       break;
     case "Hot Desk":
-      console.log("collab");
-      createDeskBooking(1, 2, getTomorrowDate(), name, date);
+      createDeskBooking(2, getTomorrowDate(), name, date);
       break;
     case "Collab":
       console.log("collab");
-      createDeskBooking(1, 3, getTomorrowDate(), name, date);
+      createDeskBooking(3, getTomorrowDate(), name, date);
       break;
   }
 }
 
-function getTomorrowDate() {
-  const today = new Date();
-
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-
-  const year = tomorrow.getFullYear();
-  const month = String(tomorrow.getMonth() + 1).padStart(2, "0"); // Month is zero-indexed
-  const day = String(tomorrow.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-}
-
-async function getBookingWithDate(date) {
-  let Bookings = await fetch(`${BaseURL}/desk-bookings/date/${date}`)
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error fetching booking data:", error);
-    });
-  return Bookings;
-}
-
-async function getEmployeeByName(name) {
-  let employee = await fetch(`${BaseURL}/employees/name/${name}`)
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error fetching booking data:", error);
-    });
-  return employee;
-}
-
 async function createDeskBooking(
-  employeeId,
   neighbourId,
   deskBookingDate,
   name,
@@ -61,13 +121,13 @@ async function createDeskBooking(
 ) {
   const employees = await getEmployeeByName(name);
   const bookings = await getBookingWithDate(tommorrowDate);
+  let employeeId;
   let flag = false;
 
   employees.map((employee) => {
-    console.log(employee.employeeName);
+    employeeId = employee.employeeId;
     bookings.map((booking) => {
       if (employee.employeeId === booking.employeeId) {
-        console.log("Your desk is already booked");
         flag = true;
         return;
       }
@@ -76,12 +136,13 @@ async function createDeskBooking(
 
   if (!flag) {
     // // Construct the URL
-    const url = `${BaseURL}/desk-bookings`;
+    const url = `${APIURL}desk-bookings`;
 
     // Create the request body
     const requestBody = {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -95,14 +156,14 @@ async function createDeskBooking(
     fetch(url, requestBody)
       .then((response) => {
         if (!response.ok) {
+          openModal("Failed to create desk booking");
           throw new Error("Failed to create desk booking");
         }
         return response.json();
       })
       .then((data) => {
-        window.alert("Your Desk is Booked");
+        openModal("Desk booking created successfully:");
         deskBookigPage();
-        console.log("Desk booking created successfully:", data);
       })
       .catch((error) => {
         console.error("Error creating desk booking:", error);

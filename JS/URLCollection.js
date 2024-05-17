@@ -6,5 +6,5 @@ const URLS = Object.freeze({
   });
 
 // export default URLS.API_LOCAL;
-export const API_RUN = URLS.API_LIVE;
-export const WEB_RUN = URLS.WEB_LIVE;
+export const API_RUN = URLS.API_LOCAL;
+export const WEB_RUN = URLS.WEB_LOCAL;

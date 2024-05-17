@@ -6,10 +6,11 @@ var HostURL = WEB_RUN;
 export function loadLogin() {
   const clientId = "Ov23lignJITTKppMvFvt";
   const redirectUri = HostURL;
+  const scope = `user:email`
 
   
   // Construct Google OAuth URL with OpenID Connect for ID token
-  const authUrl = `https://github.com/login/oauth/select_account?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=read`;
+  const authUrl = `https://github.com/login/oauth/select_account?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
 
   // Redirect user to Google OAuth URL
   window.location.href = authUrl;

@@ -217,7 +217,7 @@ export function pageStructure() {
     const eventsItem = document.createElement("li");
     eventsItem.id = "events";
     eventsItem.textContent = "Events";
-    deskBookingItem.addEventListener("click", function () {
+    eventsItem.addEventListener("click", function () {
       loadEventsPage();
     });
   

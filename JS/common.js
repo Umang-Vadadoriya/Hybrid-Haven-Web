@@ -4,7 +4,7 @@ var APIURL = API_RUN;
 
 export const fetchOptions = {
   headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     "Content-Type": "application/json",
   },
 };

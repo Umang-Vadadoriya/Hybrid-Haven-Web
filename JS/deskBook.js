@@ -17,13 +17,17 @@ var APIURL = API_RUN;
 // Deskbooking Page
 
 export function deskBookigPage() {
+  const rightPanel = document.getElementById("right-panel");
   const contentDiv = document.getElementById("content");
+  const div = document.createElement("div");
+  div.id = "content";
   const html = `
     <h1>WHO'S IN TOMORROW</h1>
     <hr />
     <div id="main-show"></div>
   `;
-  contentDiv.innerHTML = html;
+  div.innerHTML = html;
+  rightPanel.replaceChild(div,contentDiv);
   loadDeskBooking();
 }
 
@@ -142,7 +146,7 @@ async function createDeskBooking(
     const requestBody = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -5,29 +5,9 @@ import {indexPage} from "./homepage.js";
 import {deskBookigPage} from "./deskBook.js";
 import {loadEventsPage} from "./eventspage.js";
 import {openProfileModal} from "./modal.js";
+import {loadLoginPage} from './scriptlogin.js';
 
-
-var HostURL = WEB_RUN;
-
-async function RedirectAsPerLogIn() {
-  const code = await parseTokenFromUrl();
-
-  if (code && !localStorage.getItem("token")) {
-    console.log("Code", code);
-    const token = await getTokenFromCode(code);
-    console.log("Token", token);
-    if (!token.includes("error")) {
-      localStorage.setItem("token", token);
-    }
-    window.location.href = HostURL;
-  } else if (!localStorage.getItem("token")) {
-    loadLogin();
-  }
-}
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   const homeOption = document.getElementById("home");
   const deskbookingOption = document.getElementById("deskbooking");
   const eventsOption = document.getElementById("events");
@@ -37,9 +17,26 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebarHome = document.getElementById("home-side");
   const sidebarDesk = document.getElementById("deskbooking-side");
   const sidebarevents = document.getElementById("events-side");
+  
+  loadLoginPage();
+  var access_code = await parseTokenFromUrl();
+  console.log(access_code);
+  if(access_code && !localStorage.getItem("access_token")){
+     var access_token = await getTokenFromCode(access_code);
 
-  RedirectAsPerLogIn();
-  indexPage();
+    if (!access_token.includes("error")) {
+      localStorage.setItem("access_token", access_token);
+      window.location.href = WEB_RUN;
+    }
+    else{
+      console.log("Error Token: ", access_token);
+    }
+  }
+  if(!access_code && localStorage.getItem('access_token')){
+    indexPage();
+  }
+  // RedirectAsPerLogIn();
+  // indexPage();
 
   window.addEventListener("resize", function () {
     toggleButton();
@@ -79,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function () {
   sidebarevents.addEventListener("click",function(){
     loadEventsPage();
   })
+
+  
 });
 
 

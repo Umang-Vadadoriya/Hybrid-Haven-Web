@@ -11,13 +11,17 @@ import { API_RUN} from "./URLCollection.js";
 var APIURL = API_RUN;
 
 export function loadEventsPage() {
+  const rightPanel = document.getElementById("right-panel");
   const contentDiv = document.getElementById("content");
+  const div = document.createElement("div");
+  div.id = "content";
   const html = `
       <h1>Events</h1>
       <hr />
-      <div id="main-show"><div></div></div>
+      <div id="main-show2"><div></div></div>
     `;
-  contentDiv.innerHTML = html;
+  div.innerHTML = html;
+  rightPanel.replaceChild(div,contentDiv);
   loadEvents();
   closeNav();
 }
@@ -26,7 +30,7 @@ async function loadEvents() {
   const Events = await getAllEvents();
   const EventsEmployees = await getAllEventsEmployee();
 
-  const mainShow = document.getElementById("main-show");
+  const mainShow = document.getElementById("main-show2");
   let ele = document.createElement("div");
 
   Events.map((events) => {
@@ -104,7 +108,7 @@ async function joinEvent(eventId, name) {
   const requestBody = {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({

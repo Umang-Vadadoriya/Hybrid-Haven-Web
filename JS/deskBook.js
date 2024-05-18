@@ -61,7 +61,7 @@ async function loadDeskBooking() {
               }
               let employeeNameElement = document.createElement("span");
               employeeNameElement.classList.add("name-tag");
-              employeeNameElement.textContent = `@${emp.employeeName}`;
+              employeeNameElement.textContent = `${emp.employeeName}`;
               innerElement.appendChild(employeeNameElement);
               avail--;
             }

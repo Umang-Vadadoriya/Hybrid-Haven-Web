@@ -74,7 +74,7 @@ async function loadEvents() {
         }
         let employeeNameElement = document.createElement("div");
         employeeNameElement.classList.add("name-tag");
-        employeeNameElement.textContent = `@${eventemp.employeeByEmployeeId.employeeName}`;
+        employeeNameElement.textContent = `${eventemp.employeeByEmployeeId.employeeName}`;
         eventEmployee.appendChild(employeeNameElement);
       }
     });

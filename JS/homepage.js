@@ -90,7 +90,7 @@ async function loadHomePage() {
             const empDiv = document.createElement("div");
             empDiv.style.padding = ".5em";
             empDiv.classList.add("name-tag");
-            empDiv.textContent = `@${employeeName} `;
+            empDiv.textContent = `${employeeName} `;
             innerOfficeDiv.appendChild(empDiv);
           })
           .catch((error) => {
@@ -115,7 +115,7 @@ async function loadHomePage() {
         empDiv.style.padding = ".5em";
         empDiv.classList.add("name-tag");
 
-        empDiv.textContent = `@${employeeName} `;
+        empDiv.textContent = `${employeeName} `;
         innerVacctionDiv.appendChild(empDiv);
       });
     })

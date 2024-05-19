@@ -181,7 +181,7 @@ grid-gap: 1px; */
 
 .join-btn{
   color: var(--font-color-black);
-  font-size: 1.2rem;
+  font-size: 1rem;
   border: .1rem solid var(--primary-color);
   padding: .4rem 2rem;
   margin-bottom: 1em;

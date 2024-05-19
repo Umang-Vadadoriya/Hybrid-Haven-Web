@@ -4,6 +4,7 @@
   --secondary-color: #818181;
   --font-color-black: black;
   --font-color-white:#ddd;
+  --font-color-red: #ff5252;
   --modal-bg-color: rgba(0, 0, 0, 0.5);
   --modal-content-bg-color: #fefefe;
   --modal-close-color: #aaa;
@@ -183,16 +184,41 @@ grid-gap: 1px; */
   border: .1rem solid var(--primary-color);
   padding: .4rem 2rem;
   margin-bottom: 1em;
-  box-shadow: .1rem .1rem .4rem var(--font-color-black);
+  box-shadow: .1rem .4rem .4rem var(--secondary-color);
   cursor: pointer;
   border-radius: 5px;
   text-align: center;
+  transition: 0.3s ease-in-out;
 }
 
 .join-btn:hover{
   background-color: var(--primary-color);
-  color: white;
-  font-weight: 600;
+  border-color: var(--font-color-white);
+  color: var(--font-color-white);
+  box-shadow: .5rem .4rem .4rem var(--secondary-color);
+}
+
+/* cancel Button */
+
+.cancel-btn {
+  color: var(--font-color-red);
+  font-size: 16px;
+  border: 0.1rem solid var(--font-color-red);
+  padding: 0.4rem 2rem;
+  margin-bottom: 1em;
+  box-shadow: .1rem .4rem .4rem var(--secondary-color);
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  background-color: transparent;
+  transition: 0.3s ease-in-out;
+}
+
+.cancel-btn:hover {
+  background-color: var(--font-color-red);
+  border-color: var(--font-color-white);
+  box-shadow: .5rem .4rem .4rem var(--secondary-color);
+  color: var(--font-color-white);
 }
 
 /* model */

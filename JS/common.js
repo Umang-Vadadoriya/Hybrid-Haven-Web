@@ -29,6 +29,7 @@ export async function getEmployeeByName(name) {
   return employee;
 }
 
+// get today date
 const currentDate = new Date();
 export const todayDate = `${currentDate
   .getDate()
@@ -38,6 +39,7 @@ export const todayDate = `${currentDate
   .padStart(2, "0")}.${currentDate.getFullYear()}`;
 const deskDate = "13.02.2024";
 
+// get tomorrow date
 const tomorrow = new Date(currentDate);
 tomorrow.setDate(currentDate.getDate() + 1);
 export const tommorrowDate = `${tomorrow
@@ -47,6 +49,8 @@ export const tommorrowDate = `${tomorrow
   .toString()
   .padStart(2, "0")}.${tomorrow.getFullYear()}`;
 
+
+// For Event date display formate
 export function formatDate(date) {
   const originalDate = date;
   const parts = originalDate.split("-");
@@ -140,6 +144,17 @@ export function getTomorrowDate() {
   return `${year}-${month}-${day}`;
 }
 
+// format to YYYYMMDD date
+
+export function formatDateToYYYYMMDD(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+// logout
 export function logout() {
   const profileModal = document.getElementById("profileModal");
   if (localStorage.getItem("access_token") && localStorage.getItem("username")) {
@@ -151,3 +166,13 @@ export function logout() {
   
 }
 
+// employeeEmail
+
+export async function employeeByEmail(email){
+  let employee = await fetch(`${APIURL}employeeContact/byEmail?email=${email}`, fetchOptions)
+  .then((response) => response.json())
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });
+  return employee;
+}

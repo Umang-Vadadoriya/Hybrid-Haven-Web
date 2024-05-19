@@ -23,7 +23,7 @@ export function deskBookigPage() {
   const html = `
     <h1>WHO'S IN TOMORROW</h1>
     <hr />
-    <div id="main-show"></div>
+    <div id="main-show"><div></div></div>
   `;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);

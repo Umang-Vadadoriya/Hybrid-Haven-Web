@@ -174,6 +174,7 @@ grid-gap: 1px; */
   right: 1rem;
   float: right;
   font-size: 2rem;
+  border-radius: 0.8rem;
   /* margin-left: 50px; */
 }
 
@@ -384,8 +385,52 @@ grid-gap: 1px; */
 
 .countdown{
   display: none;
+  color: var(--primary-color);
   margin-top: 1rem;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: 600;
 }
 
+/* vacation page */
+
+.vacation-div{
+  display: flex;
+  justify-content: left;
+  align-items: top;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+.vacation-container{
+  text-align: center;
+}
+
+.vacation-form label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.vacation-form input {
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.vacation-form button {
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  display: block;
+}
+
+#message {
+  margin-top: 1rem;
+  color: red;
+}

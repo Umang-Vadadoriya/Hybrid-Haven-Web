@@ -4,6 +4,7 @@ import { closeNav, logout } from "./common.js";
 import { deskBookigPage } from "./deskBook.js";
 import { loadEventsPage } from "./eventspage.js";
 import { createRightpanel, indexPage } from "./homepage.js";
+import { loadVacationPage } from "./vacation.js";
 
 var modal = document.getElementById("myModal");
 var span = document.getElementsByClassName("close")[0];
@@ -106,9 +107,18 @@ export function createSidebar(){
     loadEventsPage();
   })
 
+  const vacationLi = document.createElement("li");
+  vacationLi.id = "vacation-side";
+  vacationLi.textContent = "Vacation";
+  vacationLi.addEventListener("click",function(){
+    loadVacationPage();
+  })
+
+
   ulElement.appendChild(homeLi);
   ulElement.appendChild(deskBookingLi);
   ulElement.appendChild(eventsLi);
+  ulElement.appendChild(vacationLi);
 
   leftContent.appendChild(ulElement);
 

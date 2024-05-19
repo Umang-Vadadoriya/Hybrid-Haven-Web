@@ -5,10 +5,16 @@ import {
   fetchOptions,
   closeNav,
   openNav,
+  employeeByEmail,
 } from "./common.js";
 import { deskBookigPage } from "./deskBook.js";
 import { loadEventsPage } from "./eventspage.js";
-import { createProfilemodel, createSidebar, openProfileModal } from "./modal.js";
+import {
+  createProfilemodel,
+  createSidebar,
+  openProfileModal,
+} from "./modal.js";
+import { loadVacationPage } from "./vacation.js";
 
 var APIURL = API_RUN;
 
@@ -30,9 +36,7 @@ async function login() {
     .then((res) => res.json())
     .then((data) => {
       username = data.name ? data.name : "Profile";
-      useremail = data.email ? data.email : data.login;
       localStorage.setItem("username", username);
-      localStorage.setItem("userEmail", useremail);
       userDiv.innerText = localStorage.getItem("username");
       sidebarUname.innerText = localStorage.getItem("username");
       userimage.src = data.avatar_url;
@@ -40,14 +44,28 @@ async function login() {
       sidebarImage.src = data.avatar_url;
     });
 
-  let saved = false;
-  if (localStorage.getItem("username")) {
-    const Employees = await GetAllEmployee();
-    Employees.map((emp) => {
-      if (localStorage.getItem("username") === emp.employeeName) {
-        saved = true;
-      }
+  fetch(`https://api.github.com/user/emails`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      useremail = data[0]["email"];
+      localStorage.setItem("userEmail", useremail);
     });
+
+  let saved = false;
+
+  if (localStorage.getItem("userEmail")) {
+    let employee = await employeeByEmail(localStorage.getItem("userEmail"));
+    console.log(employee);
+    if (employee) {
+      saved = true;
+      localStorage.setItem("employeeId", employee.employeeId);
+    }
   }
   if (!saved) {
     const requestBody = {
@@ -71,7 +89,36 @@ async function login() {
         return response.json();
       })
       .then((data) => {
-        indexPage();
+        let empid = data.employeeId;
+        localStorage.setItem("employeeId", empid);
+        const requestBodyContact = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            employeeId: empid,
+            employeeEmail: localStorage.getItem("userEmail"),
+            employeeContact: 0,
+          }),
+        };
+
+        console.log(data);
+        fetch(`${APIURL}employeeContact/`, requestBodyContact)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to add user");
+            }
+            return response.json();
+          })
+          .then((contact) => {
+            console.log(contact);
+            // indexPage();
+          })
+          .catch((error) => {
+            console.error("Error creating employee", error);
+          });
       })
       .catch((error) => {
         console.error("Error creating employee", error);
@@ -181,7 +228,7 @@ export function pageStructure() {
   const newelement = document.createElement("main");
   newelement.classList.add("container");
   newelement.id = "main-container";
-  
+
   const leftPanel = document.createElement("section");
   leftPanel.classList.add("left-panel");
   leftPanel.id = "menu";
@@ -189,11 +236,9 @@ export function pageStructure() {
   const topLeftDiv = document.createElement("div");
   topLeftDiv.classList.add("top-left");
 
-
   const userImg = document.createElement("img");
   userImg.id = "user-img";
   userImg.alt = "User Image";
-
 
   const userName = document.createElement("div");
   userName.id = "userName";
@@ -229,10 +274,18 @@ export function pageStructure() {
   eventsItem.addEventListener("click", function () {
     loadEventsPage();
   });
-  
+
+  const vacationItem = document.createElement("li");
+  vacationItem.id = "vacation";
+  vacationItem.textContent = "Vacation";
+  vacationItem.addEventListener("click", function () {
+    loadVacationPage();
+  });
+
   menuList.appendChild(homeItem);
   menuList.appendChild(deskBookingItem);
   menuList.appendChild(eventsItem);
+  menuList.appendChild(vacationItem);
 
   leftContent.appendChild(menuList);
 
@@ -254,7 +307,6 @@ export function pageStructure() {
     openNav();
   });
 
-
   const svgIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svgIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
   svgIcon.setAttribute("width", "30");
@@ -262,7 +314,6 @@ export function pageStructure() {
   svgIcon.setAttribute("fill", "currentColor");
   svgIcon.classList.add("bi", "bi-list");
   svgIcon.setAttribute("viewBox", "0 0 16 16");
-
 
   const svgPath = document.createElementNS(
     "http://www.w3.org/2000/svg",
@@ -273,7 +324,6 @@ export function pageStructure() {
     "d",
     "M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
   );
-
 
   svgIcon.appendChild(svgPath);
 

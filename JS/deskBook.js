@@ -29,6 +29,7 @@ export function deskBookigPage() {
   div.innerHTML = html;
   rightPanel.replaceChild(div,contentDiv);
   loadDeskBooking();
+  closeNav();
 }
 
 async function loadDeskBooking() {
@@ -99,7 +100,6 @@ async function loadDeskBooking() {
     }
   });
   mainShow.appendChild(ele);
-  closeNav();
 }
 
 function joinDesk(type, name, date) {

@@ -9,7 +9,8 @@
   --modal-close-color: #aaa;
 }
 
-body {
+body,html {
+  overflow: hidden;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -18,7 +19,6 @@ body {
 .container {
   display: flex;
   flex-wrap: wrap;
-  
 }
 
 /* left panel */
@@ -28,6 +28,7 @@ body {
   height: 100vh;
   color: var(--font-color-white);
   flex: 1;
+  border-radius: 0rem 1rem 1rem 0rem;
   flex-direction: column;
 }
 
@@ -59,12 +60,14 @@ body {
 
 .left-content li {
   color: var(--font-color-white);
+  font-size: 1.5rem;
   padding: .6em;
   cursor: pointer;
 }
 
 .left-content li:hover {
   background-color: #0c8a8f;
+  border-radius: .5rem;
 }
 
 .top-left {
@@ -86,6 +89,7 @@ body {
 .right-panel {
   padding: 1rem;  
   flex:5;
+  height: 100vh;
 }
 
 .flex-con img{
@@ -126,16 +130,13 @@ grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
 grid-gap: 1px; */
 
 #toggle-button{
-  display: none;
+  display: none; 
   margin-right: 1em;
-  background-color: gray;
+  background-color: rgb(255, 255, 255);
   border-radius: 0.5em;
 }
 
-#content{
-  overflow-y:scroll;
-  height: 80vh;
-}
+
 
 /* sidebar */
 
@@ -150,15 +151,16 @@ grid-gap: 1px; */
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
+  border-radius: 0rem 1rem 1rem 0rem;
 } 
 
 .sidenav li {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: var(--secondary-color);
+  color: var(--font-color-white);
   display: block;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 
 .sidenav li:hover {
@@ -264,7 +266,7 @@ grid-gap: 1px; */
   background-color: var(--modal-content-bg-color);
   margin: 10% auto;
   padding: 1rem;
-  width: 40%;
+  width: 50%;
   height: auto;
   border-radius: 1em;
   text-align: center;
@@ -323,5 +325,41 @@ grid-gap: 1px; */
   padding:1rem;
   font-family: 'Times New Roman', Times, serif;
   font-size: 1.5rem;
+}
+
+/* overflow */
+
+#main-show , #main-show2,#main-show-home{
+  overflow-y: auto; 
+  height: 63vh;
+}
+
+/* logout */
+#logout-button {
+  background-color: #e74c3c;  
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;  
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease; 
+}
+
+#logout-button:hover {
+  background-color: #c0392b; 
+}
+
+#logout-button:active {
+  transform: translateY(10px);
+}
+
+/* countdown */
+
+.countdown{
+  display: none;
+  margin-top: 1rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 

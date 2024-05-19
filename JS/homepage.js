@@ -1,7 +1,14 @@
 import { API_RUN } from "./URLCollection.js";
-import { GetAllEmployee, todayDate, fetchOptions, closeNav } from "./common.js";
-import {deskBookigPage} from './deskBook.js';
-import {loadEventsPage} from './eventspage.js';
+import {
+  GetAllEmployee,
+  todayDate,
+  fetchOptions,
+  closeNav,
+  openNav,
+} from "./common.js";
+import { deskBookigPage } from "./deskBook.js";
+import { loadEventsPage } from "./eventspage.js";
+import { createProfilemodel, createSidebar, openProfileModal } from "./modal.js";
 
 var APIURL = API_RUN;
 
@@ -11,6 +18,8 @@ async function login() {
   let userDiv = document.getElementById("userName");
   let userimage = document.getElementById("user-img");
   let userimage1 = document.getElementById("user-img1");
+  let sidebarImage = document.getElementById("sidebar-img");
+  let sidebarUname = document.getElementById("sidebar-uname");
 
   fetch(`https://api.github.com/user`, {
     method: "GET",
@@ -25,8 +34,10 @@ async function login() {
       localStorage.setItem("username", username);
       localStorage.setItem("userEmail", useremail);
       userDiv.innerText = localStorage.getItem("username");
+      sidebarUname.innerText = localStorage.getItem("username");
       userimage.src = data.avatar_url;
       userimage1.src = data.avatar_url;
+      sidebarImage.src = data.avatar_url;
     });
 
   let saved = false;
@@ -55,13 +66,11 @@ async function login() {
     fetch(`${APIURL}employees`, requestBody)
       .then((response) => {
         if (!response.ok) {
-          // openModal("Failed to add use");
           throw new Error("Failed to add user");
         }
         return response.json();
       })
       .then((data) => {
-        // openModal("User Added successfully:");
         indexPage();
       })
       .catch((error) => {
@@ -129,6 +138,10 @@ async function loadHomePage() {
 export async function indexPage() {
   pageStructure();
   await login();
+  createRightpanel();
+}
+
+export function createRightpanel() {
   const rightPanel = document.getElementById("right-panel");
   const contentDiv = document.getElementById("content");
   const div = document.createElement("div");
@@ -136,6 +149,7 @@ export async function indexPage() {
   const html = `
     <h2>Welcome to HybridHaven!</h2>
     <h3>Today</h2><hr>
+    <div id="main-show-home">
       <div>
         <div class="office flex-con">
           <div><img src="./image/office.png" alt="office Image"></div>
@@ -157,8 +171,7 @@ export async function indexPage() {
       <br>
     </div>`;
   div.innerHTML = html;
-  rightPanel.replaceChild(div,contentDiv);
-
+  rightPanel.replaceChild(div, contentDiv);
   loadHomePage();
   closeNav();
 }
@@ -168,138 +181,127 @@ export function pageStructure() {
   const newelement = document.createElement("main");
   newelement.classList.add("container");
   newelement.id = "main-container";
+  
+  const leftPanel = document.createElement("section");
+  leftPanel.classList.add("left-panel");
+  leftPanel.id = "menu";
 
+  const topLeftDiv = document.createElement("div");
+  topLeftDiv.classList.add("top-left");
+
+
+  const userImg = document.createElement("img");
+  userImg.id = "user-img";
+  userImg.alt = "User Image";
+
+
+  const userName = document.createElement("div");
+  userName.id = "userName";
+  userName.addEventListener("click", function () {
+    openProfileModal();
+  });
+
+  topLeftDiv.appendChild(userImg);
+  topLeftDiv.appendChild(userName);
+
+  const leftContent = document.createElement("div");
+  leftContent.classList.add("left-content");
+
+  const menuList = document.createElement("ul");
+
+  const homeItem = document.createElement("li");
+  homeItem.id = "home";
+  homeItem.textContent = "Home";
+  homeItem.addEventListener("click", function () {
+    createRightpanel();
+  });
+
+  const deskBookingItem = document.createElement("li");
+  deskBookingItem.id = "deskbooking";
+  deskBookingItem.textContent = "Desk Booking";
+  deskBookingItem.addEventListener("click", function () {
+    deskBookigPage();
+  });
+
+  const eventsItem = document.createElement("li");
+  eventsItem.id = "events";
+  eventsItem.textContent = "Events";
+  eventsItem.addEventListener("click", function () {
+    loadEventsPage();
+  });
   
-    // Create left panel section
-    const leftPanel = document.createElement("section");
-    leftPanel.classList.add("left-panel");
-    leftPanel.id = "menu";
-  
-    // Create top-left div
-    const topLeftDiv = document.createElement("div");
-    topLeftDiv.classList.add("top-left");
-  
-    // Create user image
-    const userImg = document.createElement("img");
-    userImg.id = "user-img";
-    userImg.alt = "User Image";
-  
-    // Create userName div
-    const userName = document.createElement("div");
-    userName.id = "userName";
-  
-    // Append user image and userName to top-left div
-    topLeftDiv.appendChild(userImg);
-    topLeftDiv.appendChild(userName);
-  
-    // Create left content div
-    const leftContent = document.createElement("div");
-    leftContent.classList.add("left-content");
-  
-    // Create ul for menu items
-    const menuList = document.createElement("ul");
-  
-    // Create menu items
-    const homeItem = document.createElement("li");
-    homeItem.id = "home";
-    homeItem.textContent = "Home";
-    homeItem.addEventListener("click", function () {
-      indexPage();
-    });
-  
-    const deskBookingItem = document.createElement("li");
-    deskBookingItem.id = "deskbooking";
-    deskBookingItem.textContent = "Desk Booking";
-    deskBookingItem.addEventListener("click", function () {
-      deskBookigPage();
-    });
-  
-    const eventsItem = document.createElement("li");
-    eventsItem.id = "events";
-    eventsItem.textContent = "Events";
-    eventsItem.addEventListener("click", function () {
-      loadEventsPage();
-    });
-  
-    // Append menu items to ul
-    menuList.appendChild(homeItem);
-    menuList.appendChild(deskBookingItem);
-    menuList.appendChild(eventsItem);
-  
-    // Append ul to left content div
-    leftContent.appendChild(menuList);
-  
-    // Append top-left div and left content div to left panel section
-    leftPanel.appendChild(topLeftDiv);
-    leftPanel.appendChild(leftContent);
-  
-    // Create right panel section
-    const rightPanel = document.createElement("section");
-    rightPanel.classList.add("right-panel");
-    rightPanel.id = "right-panel";
-  
-    // Create top-right div
-    const topRightDiv = document.createElement("div");
-    topRightDiv.classList.add("top-right");
-  
-    // Create div for toggle button
-    const toggleButtonDiv = document.createElement("div");
-  
-    // Create toggle button
-    const toggleButton = document.createElement("button");
-    toggleButton.id = "toggle-button";
-  
-    // Create SVG icon for toggle button
-    const svgIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svgIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svgIcon.setAttribute("width", "30");
-    svgIcon.setAttribute("height", "35");
-    svgIcon.setAttribute("fill", "currentColor");
-    svgIcon.classList.add("bi", "bi-list");
-    svgIcon.setAttribute("viewBox", "0 0 16 16");
-  
-    // Create path for SVG icon
-    const svgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    svgPath.setAttribute("fill-rule", "evenodd");
-    svgPath.setAttribute(
-      "d",
-      "M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
-    );
-  
-    // Append path to SVG icon
-    svgIcon.appendChild(svgPath);
-  
-    // Append SVG icon to toggle button
-    toggleButton.appendChild(svgIcon);
-  
-    // Append toggle button to its div
-    toggleButtonDiv.appendChild(toggleButton);
-  
-    // Create logo image
-    const logoImg = document.createElement("img");
-    logoImg.src = "./image/logo1.jpg";
-    logoImg.alt = "HybridHaven Logo";
-  
-    // Create title
-    const title = document.createElement("h1");
-    title.textContent = "HybridHaven";
-  
-    // Append elements to top-right div
-    topRightDiv.appendChild(toggleButtonDiv);
-    topRightDiv.appendChild(logoImg);
-    topRightDiv.appendChild(title);
-  
-    // Create content div
-    const contentDiv = document.createElement("div");
-    contentDiv.id = "content";
-  
-    // Append elements to right panel section
-    rightPanel.appendChild(topRightDiv);
-    rightPanel.appendChild(contentDiv);
-  
-    // Append left panel and right panel to body
-    newelement.appendChild(leftPanel);
-    newelement.appendChild(rightPanel);
-  
+  menuList.appendChild(homeItem);
+  menuList.appendChild(deskBookingItem);
+  menuList.appendChild(eventsItem);
+
+  leftContent.appendChild(menuList);
+
+  leftPanel.appendChild(topLeftDiv);
+  leftPanel.appendChild(leftContent);
+
+  const rightPanel = document.createElement("section");
+  rightPanel.classList.add("right-panel");
+  rightPanel.id = "right-panel";
+
+  const topRightDiv = document.createElement("div");
+  topRightDiv.classList.add("top-right");
+
+  const toggleButtonDiv = document.createElement("div");
+
+  const toggleButton = document.createElement("button");
+  toggleButton.id = "toggle-button";
+  toggleButton.addEventListener("click", function () {
+    openNav();
+  });
+
+
+  const svgIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svgIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  svgIcon.setAttribute("width", "30");
+  svgIcon.setAttribute("height", "35");
+  svgIcon.setAttribute("fill", "currentColor");
+  svgIcon.classList.add("bi", "bi-list");
+  svgIcon.setAttribute("viewBox", "0 0 16 16");
+
+
+  const svgPath = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "path"
+  );
+  svgPath.setAttribute("fill-rule", "evenodd");
+  svgPath.setAttribute(
+    "d",
+    "M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+  );
+
+
+  svgIcon.appendChild(svgPath);
+
+  toggleButton.appendChild(svgIcon);
+
+  toggleButtonDiv.appendChild(toggleButton);
+
+  const logoImg = document.createElement("img");
+  logoImg.src = "./image/logo1.jpg";
+  logoImg.alt = "HybridHaven Logo";
+
+  const title = document.createElement("h1");
+  title.textContent = "HybridHaven";
+
+  topRightDiv.appendChild(toggleButtonDiv);
+  topRightDiv.appendChild(logoImg);
+  topRightDiv.appendChild(title);
+
+  const contentDiv = document.createElement("div");
+  contentDiv.id = "content";
+
+  rightPanel.appendChild(topRightDiv);
+  rightPanel.appendChild(contentDiv);
+
+  newelement.appendChild(leftPanel);
+  newelement.appendChild(rightPanel);
+
   document.body.replaceChild(newelement, div);
+  createSidebar();
+  createProfilemodel();
 }

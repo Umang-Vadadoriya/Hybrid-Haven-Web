@@ -1,4 +1,5 @@
-import { API_RUN } from "./URLCollection.js";
+import { API_RUN,WEB_RUN } from "./URLCollection.js";
+import { loadLoginPage } from "./scriptlogin.js";
 
 var APIURL = API_RUN;
 
@@ -53,10 +54,9 @@ export function formatDate(date) {
   return formattedDate;
 }
 
-const toggle = document.getElementById("toggle-button");
-const leftPanel = document.getElementById("menu");
-
 export function toggleButton() {
+  const toggle = document.getElementById("toggle-button");
+  const leftPanel = document.getElementById("menu");
   var width = window.innerWidth;
   if (width <= 426) {
     toggle.style.display = "block";
@@ -139,3 +139,15 @@ export function getTomorrowDate() {
 
   return `${year}-${month}-${day}`;
 }
+
+export function logout() {
+  const profileModal = document.getElementById("profileModal");
+  if (localStorage.getItem("access_token") && localStorage.getItem("username")) {
+    console.log("logout");
+    localStorage.clear();
+    profileModal.style.display = "none";
+    loadLoginPage();
+  }
+  
+}
+

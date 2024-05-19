@@ -1,29 +1,4 @@
-import { loadLogin, parseTokenFromUrl, getTokenFromCode } from "./login.js";
-import { API_RUN, WEB_RUN } from "./URLCollection.js";
-import {indexPage,pageStructure} from "./homepage.js";
-
-
-var HostURL = WEB_RUN;
-
-// async function RedirectAsPerLogIn() {
-//   const code = await parseTokenFromUrl();
-
-//   if (code && !localStorage.getItem("token")) {
-//     console.log("Code", code);
-//     const token = await getTokenFromCode(code);
-//     console.log("Token", token);
-//     if (!token.includes("error")) {
-//       localStorage.setItem("token", token);
-//     }
-//     // window.location.href = HostURL;
-//     indexPage();
-//   } else if (!localStorage.getItem("token")) {
-//     loadLogin();
-//   }
-// }
-
-
-
+import { loadLogin} from "./login.js";
 
 export function loadLoginPage() {
   const body = document.getElementById("main-container");
@@ -31,33 +6,45 @@ export function loadLoginPage() {
   mainContainer.classList.add("login-container");
   mainContainer.id = "main-container";
 
-  // Create content div
   const contentDiv = document.createElement("div");
   contentDiv.classList.add("login-content");
 
-  // Create and set h1 element
   const welcomeMessage = document.createElement("h1");
   welcomeMessage.classList.add = "loginh1"
   welcomeMessage.textContent = "Welcome to HybridHaven!";
 
-  // Create and set button element
   const signInButton = document.createElement("button");
   signInButton.classList.add("signbtn");
   signInButton.id = "signInButton";
   signInButton.textContent = "SignIn with GitHub";
   signInButton.addEventListener("click", function () {
-    // RedirectAsPerLogIn(); 
-    console.log("ijuhjb");
-    loadLogin();
-    // pageStructure();
-    // RedirectAsPerLogIn();
+    startCountdown(); 
   });
 
-  // Append elements
+  const countdownDiv = document.createElement("div");
+  countdownDiv.id = "countdown";
+  countdownDiv.className = "countdown";
+  
   contentDiv.appendChild(welcomeMessage);
   contentDiv.appendChild(signInButton);
+  contentDiv.appendChild(countdownDiv);
   mainContainer.appendChild(contentDiv);
 
-  // Append main container to body
+  
   document.body.replaceChild(mainContainer,body);
 }
+
+function startCountdown() {
+  const countdownElement = document.getElementById("countdown");
+  let countdown = 3;
+  countdownElement.style.display = "block";
+  const interval = setInterval(() => {
+    countdownElement.textContent = `Redirecting in ${countdown}...`;
+    if (countdown === 0) {
+      clearInterval(interval);
+      loadLogin();
+    }
+    countdown--;
+  }, 1000);
+}
+

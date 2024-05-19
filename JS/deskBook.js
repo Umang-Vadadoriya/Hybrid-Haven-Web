@@ -36,8 +36,12 @@ async function loadDeskBooking() {
   const NeighbourHoods = await getAllNeighbour();
   const Employees = await GetAllEmployee();
 
-  const mainShow = document.getElementById("main-show");
-  // mainShow.innerHTML = "";
+
+  const contentDiv = document.getElementById("content");
+  const old_mainShow = document.getElementById("main-show");
+  const new_mainshow = document.createElement("div");
+  new_mainshow.id = "main-show";
+  
   let ele = document.createElement("div");
 
   let booked = false;
@@ -112,7 +116,8 @@ async function loadDeskBooking() {
       ele.appendChild(CancelButton);
     }
   });
-  mainShow.appendChild(ele);
+  new_mainshow.appendChild(ele);
+  contentDiv.replaceChild(new_mainshow,old_mainShow);
 }
 
 function joinDesk(type, name, date) {

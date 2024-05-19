@@ -29,8 +29,11 @@ export function loadEventsPage() {
 async function loadEvents() {
   const Events = await getAllEvents();
   const EventsEmployees = await getAllEventsEmployee();
+  const contentDiv = document.getElementById("content");
+  const old_mainShow = document.getElementById("main-show2");
+  const new_mainShow = document.createElement("div");
+  new_mainShow.id = "main-show2";
 
-  const mainShow = document.getElementById("main-show2");
   let ele = document.createElement("div");
 
   Events.map((events) => {
@@ -94,7 +97,8 @@ async function loadEvents() {
 
     ele.appendChild(card);
   });
-  mainShow.appendChild(ele);
+  new_mainShow.appendChild(ele);
+  contentDiv.replaceChild(new_mainShow,old_mainShow);
 }
 
 async function joinEvent(eventId, name) {

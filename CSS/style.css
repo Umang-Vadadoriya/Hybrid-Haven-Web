@@ -61,7 +61,7 @@ body,html {
 
 .left-content li {
   color: var(--font-color-white);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   padding: .6em;
   cursor: pointer;
 }
@@ -122,7 +122,7 @@ body,html {
 .inner{
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
 
@@ -151,14 +151,14 @@ grid-gap: 1px; */
   background-color: var(--primary-color);
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 60px;
+  padding-top: 1rem;
   border-radius: 0rem 1rem 1rem 0rem;
 } 
 
 .sidenav li {
-  padding: 8px 8px 8px 32px;
+  padding: 1rem 1rem 1rem 2rem;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 1.2rem;
   color: var(--font-color-white);
   display: block;
   transition: 0.2s;
@@ -169,10 +169,11 @@ grid-gap: 1px; */
 }
 
 .sidenav .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
+  position: relative;
+  top: 1rem;
+  right: 1rem;
+  float: right;
+  font-size: 2rem;
   /* margin-left: 50px; */
 }
 
@@ -180,13 +181,13 @@ grid-gap: 1px; */
 
 .join-btn{
   color: var(--font-color-black);
-  font-size: 16px;
+  font-size: 1.2rem;
   border: .1rem solid var(--primary-color);
   padding: .4rem 2rem;
   margin-bottom: 1em;
   box-shadow: .1rem .4rem .4rem var(--secondary-color);
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: .5rem;
   text-align: center;
   transition: 0.3s ease-in-out;
 }
@@ -251,7 +252,7 @@ grid-gap: 1px; */
 .close {
   color: var(--modal-close-color);
   float: right;
-  font-size: 28px;
+  font-size: 2rem;
   font-weight: bold;
 }
 
@@ -364,21 +365,20 @@ grid-gap: 1px; */
 #logout-button {
   background-color: #e74c3c;  
   color: white;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 5px;  
+  border-radius: .5rem;  
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1.2rem;
   transition: all 0.3s ease; 
 }
 
 #logout-button:hover {
   background-color: #c0392b; 
+  transform: translate(0rem, -0.5rem);
 }
 
-#logout-button:active {
-  transform: translateY(10px);
-}
+
 
 /* countdown */
 

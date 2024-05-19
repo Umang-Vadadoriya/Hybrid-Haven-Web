@@ -4,7 +4,7 @@ var APIURL = API_RUN;
 var HostURL = WEB_RUN;
 
 export function loadLogin() {
-  const clientId = "Ov23lignJITTKppMvFvt";
+  const clientId = "Iv23li3qU94lJ91G0nxX";
   const redirectUri = HostURL;
   const scope = `user:email`
 

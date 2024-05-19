@@ -6,13 +6,12 @@ import {
   GetAllEmployee,
   closeNav,
   getTomorrowDate,
-  getEmployeeByName
+  getEmployeeByName,
 } from "./common.js";
-import {openModal} from "./modal.js";
-import { API_RUN} from "./URLCollection.js";
+import { openModal } from "./modal.js";
+import { API_RUN } from "./URLCollection.js";
 
 var APIURL = API_RUN;
-
 
 // Deskbooking Page
 
@@ -27,7 +26,7 @@ export function deskBookigPage() {
     <div id="main-show"></div>
   `;
   div.innerHTML = html;
-  rightPanel.replaceChild(div,contentDiv);
+  rightPanel.replaceChild(div, contentDiv);
   loadDeskBooking();
 }
 
@@ -41,6 +40,8 @@ async function loadDeskBooking() {
   let ele = document.createElement("div");
 
   let booked = false;
+  let bookedNeighbourHoodName;
+  let bookedBookingID;
   NeighbourHoods.map((nei) => {
     let avail = 0;
 
@@ -58,6 +59,8 @@ async function loadDeskBooking() {
             if (emp.employeeId == booking.employeeId) {
               if (localStorage.getItem("username") == emp.employeeName) {
                 booked = true;
+                bookedNeighbourHoodName = nei.neighbourName;
+                bookedBookingID = booking.deskBookingId;
               }
               let employeeNameElement = document.createElement("span");
               employeeNameElement.classList.add("name-tag");
@@ -82,12 +85,12 @@ async function loadDeskBooking() {
     employeeNameElement.textContent = `+${avail} Desks left`;
     ele.appendChild(employeeNameElement);
 
-    if ((avail > 0 && !booked) && !booked) {
+    if ((avail > 0 && !booked) && !booked) {      
       let joinButton = document.createElement("button");
       joinButton.id = `neighbourhood-${nei.neighbourName}`;
       joinButton.classList.add("join-btn");
       joinButton.textContent = "Join";
-      joinButton.value = nei.neighbourName;
+      joinButton.value = nei.neighbourId;
       joinButton.onclick = function () {
         joinDesk(
           joinButton.value,
@@ -96,6 +99,16 @@ async function loadDeskBooking() {
         );
       };
       ele.appendChild(joinButton);
+    } else if (booked && nei.neighbourName == bookedNeighbourHoodName) {
+      let CancelButton = document.createElement("button");
+      CancelButton.id = `neighbourhood-${nei.neighbourName}`;
+      CancelButton.classList.add("cancel-btn");
+      CancelButton.textContent = "Cancel";
+      CancelButton.value = bookedBookingID;
+      CancelButton.onclick = function () {
+        cancelDesk(CancelButton.value);
+      };
+      ele.appendChild(CancelButton);
     }
   });
   mainShow.appendChild(ele);
@@ -103,18 +116,11 @@ async function loadDeskBooking() {
 }
 
 function joinDesk(type, name, date) {
-  switch (type) {
-    case "Meeting":
-      createDeskBooking(1, getTomorrowDate(), name, date);
-      break;
-    case "Hot Desk":
-      createDeskBooking(2, getTomorrowDate(), name, date);
-      break;
-    case "Collab":
-      console.log("collab");
-      createDeskBooking(3, getTomorrowDate(), name, date);
-      break;
-  }
+  createDeskBooking(type, getTomorrowDate(), name, date);
+}
+
+function cancelDesk(deskBookingId) {
+  cancelDeskBooking(deskBookingId);
 }
 
 async function createDeskBooking(
@@ -161,16 +167,46 @@ async function createDeskBooking(
       .then((response) => {
         if (!response.ok) {
           openModal("Failed to create desk booking");
-          throw new Error("Failed to create desk booking");
+          throw new Error("Failed to create desk booking :(");
         }
         return response.json();
       })
       .then((data) => {
-        openModal("Desk booking created successfully:");
+        openModal("Desk booking created successfully..!!");
         deskBookigPage();
       })
       .catch((error) => {
-        console.error("Error creating desk booking:", error);
+        console.error("Error creating desk booking :(", error);
       });
   }
+}
+
+async function cancelDeskBooking(deskBookingId) {
+  // Construct the URL
+  const url = `${APIURL}desk-bookings/id/${deskBookingId}`;
+
+  // Create the request body
+  const requestBody = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  // Send the DELETE request
+  fetch(url, requestBody)
+    .then((response) => {
+      if (!response.ok) {
+        openModal("Failed to cancel desk booking");
+        throw new Error("Failed to cancel desk booking :(");
+      }
+    })
+    .then(() => {
+      openModal("Sorry To See You Go..!!");
+      deskBookigPage();
+    })
+    .catch((error) => {
+      console.error("Error creating desk booking :(", error);
+    });
 }

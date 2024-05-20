@@ -42,6 +42,9 @@ async function login() {
       userimage.src = data.avatar_url;
       userimage1.src = data.avatar_url;
       sidebarImage.src = data.avatar_url;
+    })
+    .catch((error) => {
+      console.error("Error fetching userdata", error);
     });
 
   fetch(`https://api.github.com/user/emails`, {
@@ -55,6 +58,9 @@ async function login() {
       console.log(data);
       useremail = data[0]["email"];
       localStorage.setItem("userEmail", useremail);
+    })
+    .catch((error) => {
+      console.error("Error fetching userdata", error);
     });
 
   let saved = false;
@@ -215,7 +221,7 @@ export function createRightpanel() {
         <div id="vacation-content">
           <p><i>Enjoying Vacation</i></p>
       </div>
-      <br>
+      <br>  
     </div>`;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);

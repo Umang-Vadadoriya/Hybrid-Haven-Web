@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
   if(!access_code && localStorage.getItem('access_token')){
-    indexPage();
+    await indexPage();
   }
   
   window.addEventListener("resize", function () {

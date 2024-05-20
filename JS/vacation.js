@@ -96,16 +96,14 @@ function loadVacation() {
     const end = new Date(endDate);
     const today = new Date();
 
-    joinVacation(formatDateToYYYYMMDD(start),formatDateToYYYYMMDD(end));
     
-    console.log(formatDateToYYYYMMDD(start));
 
     if (start < today) {
       messageDiv.textContent = "Start date cannot be in the past.";
     } else if (end < start) {
       messageDiv.textContent = "End date cannot be before start date.";
     } else {
-      joinVacation();
+      joinVacation(formatDateToYYYYMMDD(start),formatDateToYYYYMMDD(end));
     }
   });
 }

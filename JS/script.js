@@ -1,6 +1,6 @@
 import {  parseTokenFromUrl, getTokenFromCode } from "./login.js";
 import {  WEB_RUN } from "./URLCollection.js";
-import {toggleButton} from "./common.js";
+import {employeeByEmail, toggleButton} from "./common.js";
 import {indexPage} from "./homepage.js";
 import {loadLoginPage} from './scriptlogin.js';
 
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     toggleButton();
   });
 
+  // employeeByEmail(localStorage.getItem("userEmail"));
 });
 
 

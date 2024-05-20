@@ -43,10 +43,8 @@ function loadVacation() {
   startDateInput.id = "startDate";
   startDateInput.required = true;
 
-  // Create line break
   const br1 = document.createElement("br");
 
-  // Create and set label and input for end date
   const endDateLabel = document.createElement("label");
   endDateLabel.setAttribute("for", "endDate");
   endDateLabel.textContent = "Vacation End Date:";
@@ -56,19 +54,17 @@ function loadVacation() {
   endDateInput.id = "endDate";
   endDateInput.required = true;
 
-  // Create line break
   const br2 = document.createElement("br");
 
-  // Create and set button element
+
   const joinButton = document.createElement("button");
   joinButton.id = "joinVacationButton";
   joinButton.textContent = "Join Vacation";
 
-  // Create message div
+
   const messageDiv = document.createElement("div");
   messageDiv.id = "message";
 
-  // Append elements to vacation form div
   vacationForm.appendChild(startDateLabel);
   vacationForm.appendChild(startDateInput);
   vacationForm.appendChild(br1);
@@ -78,7 +74,6 @@ function loadVacation() {
   vacationForm.appendChild(joinButton);
   vacationForm.appendChild(messageDiv);
 
-  // Append elements to container div
 
   container.appendChild(vacationForm);
 
@@ -110,18 +105,15 @@ function loadVacation() {
     } else if (end < start) {
       messageDiv.textContent = "End date cannot be before start date.";
     } else {
-      let join = joinVacation();
-      console.log(join);
-      messageDiv.textContent = "You have joined the vacation!";
-      messageDiv.style.color = "green";
+      joinVacation();
     }
   });
 }
 
 
-function joinVacation(startDate,endDate){
-    console.log(startDate);
-    console.log(endDate);
+async function joinVacation(startDate,endDate){
+  const mes = document.getElementById("message");
+    let empid = localStorage.getItem("employeeId");
     const requestBody = {
       method: "POST",
       headers: {
@@ -129,24 +121,21 @@ function joinVacation(startDate,endDate){
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        employeeId : localStorage.getItem("employeeId"),
+        employeeId : empid,
         vacationStartDate: startDate,
         vacationEndDate: endDate,
       }),
     };
 
-    fetch(`${APIURL}vacations`,requestBody)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to add user");
-      }
-      return response.json();
-    })
+    await fetch(`${APIURL}vacations`,requestBody)
+    .then((res) => res.json())
     .then((data)=>{
-      console.log("inside");
-      return true;
+      
+      mes.textContent = "You have joined the vacation!";
+      mes.style.color = "green";
     })
     .catch((error)=>{
       console.log("error creating vacation",error);
     });
+  
 }

@@ -61,13 +61,16 @@ export function formatDate(date) {
 export function toggleButton() {
   const toggle = document.getElementById("toggle-button");
   const leftPanel = document.getElementById("menu");
+  const TopRight = document.getElementById("top-right");
   var width = window.innerWidth;
   if (width <= 426) {
     toggle.style.display = "block";
     leftPanel.style.display = "none";
+    TopRight.classList.add("top-right-mobile");
   } else {
     toggle.style.display = "none";
     leftPanel.style.display = "block";
+    TopRight.classList.remove("top-right-mobile");
     closeNav();
   }
 }

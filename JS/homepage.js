@@ -312,6 +312,7 @@ export function pageStructure() {
 
   const topRightDiv = document.createElement("div");
   topRightDiv.classList.add("top-right");
+  topRightDiv.id = "top-right";
 
   const toggleButtonDiv = document.createElement("div");
 
@@ -346,15 +347,11 @@ export function pageStructure() {
   toggleButtonDiv.appendChild(toggleButton);
 
   const logoImg = document.createElement("img");
-  logoImg.src = "./image/logo1.jpg";
+  logoImg.src = "./image/logo1.png";
   logoImg.alt = "HybridHaven Logo";
-
-  const title = document.createElement("h1");
-  title.textContent = "HybridHaven";
-
+  
   topRightDiv.appendChild(toggleButtonDiv);
   topRightDiv.appendChild(logoImg);
-  topRightDiv.appendChild(title);
 
   const contentDiv = document.createElement("div");
   contentDiv.id = "content";

@@ -346,12 +346,33 @@ export function pageStructure() {
 
   toggleButtonDiv.appendChild(toggleButton);
 
+  const LogoAndSlogunHolder = document.createElement("div")
+  LogoAndSlogunHolder.classList.add("LogoContainer");
+
   const logoImg = document.createElement("img");
   logoImg.src = "./image/logo1.png";
   logoImg.alt = "HybridHaven Logo";
+
+  const Slogan = document.createElement("h2");
+  Slogan.classList.add("slogan");
+
+  const SloganPart1 = document.createElement("span");
+  SloganPart1.classList.add("slogan-text");
+  SloganPart1.textContent = "The Smarter Path to ";
+  Slogan.appendChild(SloganPart1);
+  
+  const SloganPart2 = document.createElement("span");
+  SloganPart2.classList.add("slogan-highlight");
+  SloganPart2.textContent = "Hybrid Workflows";
+  Slogan.appendChild(SloganPart2);
+
+  LogoAndSlogunHolder.appendChild(logoImg);
+  LogoAndSlogunHolder.appendChild(Slogan);
   
   topRightDiv.appendChild(toggleButtonDiv);
-  topRightDiv.appendChild(logoImg);
+  
+  topRightDiv.appendChild(LogoAndSlogunHolder);
+
 
   const contentDiv = document.createElement("div");
   contentDiv.id = "content";

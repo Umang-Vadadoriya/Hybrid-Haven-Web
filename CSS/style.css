@@ -145,7 +145,7 @@ body,html {
 
 .name-tag{
   background-color: lightblue;
-  padding: 0.3rem;
+  padding: 0.5rem;
   border-radius: 0.3rem; 
   width: fit-content;
 }
@@ -159,7 +159,7 @@ body,html {
   display: flex;
   /* flex-wrap: wrap; */
   overflow: hidden;
-  height: 7.5rem;
+  max-height: 7.5rem;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
@@ -407,6 +407,14 @@ grid-gap: 1px; */
 }
 
   #main-show-home {
+    display: grid;
+    row-gap: 20px;
+    column-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 10px;
+  }
+
+  .desk-book{
     display: grid;
     row-gap: 20px;
     column-gap: 20px;

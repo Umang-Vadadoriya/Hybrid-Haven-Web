@@ -8,10 +8,14 @@ import {
   employeeByEmail,
   TurnOnLoader,
   TurnOffLoader,
+  getAllDeskbooking,
+  getEmployeeById,
+  getVacationEmpByDate,
 } from "./common.js";
 import { deskBookigPage } from "./deskBook.js";
 import { loadEventsPage } from "./eventspage.js";
 import {
+  createEmployeeModal,
   createProfilemodel,
   createSidebar,
   openProfileModal,
@@ -46,6 +50,7 @@ async function GetAndSetUser() {
     })
     .catch((error) => {
       console.error("Error fetching userdata", error);
+      localStorage.clear();
     });
 
   return users;
@@ -145,60 +150,169 @@ async function login() {
 async function loadHomePage() {
   const officeContentDiv = document.getElementById("office-content");
   const vacationContentDiv = document.getElementById("vacation-content");
+  const homeContentDiv = document.getElementById("home-content");
 
   const innerOfficeDiv = document.createElement("div");
   innerOfficeDiv.classList.add("inner");
+  innerOfficeDiv.id = "innerContainer";
+  // innerOfficeDiv.style.height="10rem";
 
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
 
-  await fetch(`${APIURL}desk-bookings/date/${todayDate}`, fetchOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      data.map(async (deskbooking, index) => {
-        await fetch(
-          `${APIURL}employees/id/${deskbooking.employeeId}`,
-          fetchOptions
-        )
-          .then((response) => response.json())
-          .then((employeeData) => {
-            const employeeName = employeeData.employeeName;
-            const empDiv = document.createElement("div");
-            empDiv.style.padding = ".5em";
-            empDiv.classList.add("name-tag");
-            empDiv.textContent = `${employeeName} `;
-            innerOfficeDiv.appendChild(empDiv);
-          })
-          .catch((error) => {
-            console.error("Error fetching employee data:", error);
-          });
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+  const innerHomeDiv = document.createElement("div");
+  innerHomeDiv.classList.add("inner");
+
+  let bookings = await getAllDeskbooking();
+  let vacationEmp = await getVacationEmpByDate();
+
+  console.log(vacationEmp);
+  let empNames = [];
+
+  let officeTotal = 0,
+    vacationTotal = 0,
+    homeTotal = 0;
+
+  let deskdata = [];
+  let homedata = [];
+
+  bookings.map(async (book) => {
+    let employee = await getEmployeeById(book.employeeId);
+    const employeeName = employee.employeeName;
+    empNames.push(employeeName);
+    deskdata.push(employeeName);
+    officeTotal++;
+    const empDiv = document.createElement("div");
+    empDiv.style.padding = ".5em";
+    empDiv.classList.add("name-tag");
+    empDiv.textContent = `${employeeName} `;
+    innerOfficeDiv.appendChild(empDiv);
+  });
 
   officeContentDiv.appendChild(innerOfficeDiv);
 
-  await fetch(`${APIURL}vacations/date/${todayDate}`, fetchOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((vacations) => {
-        const employeedata = vacations.employeeByEmployeeId;
+  vacationEmp.map((data) => {
+    const employeedata = data.employeeByEmployeeId;
+    const employeeName = employeedata.employeeName;
+    empNames.push(employeeName);
+    vacationTotal++;
+    const empDiv = document.createElement("div");
+    empDiv.style.padding = ".5em";
+    empDiv.classList.add("name-tag");
 
+    empDiv.textContent = `${employeeName} `;
+    innerVacctionDiv.appendChild(empDiv);
+  });
+  vacationContentDiv.appendChild(innerVacctionDiv);
+
+  console.log(empNames);
+
+  let employees = await GetAllEmployee();
+  employees.map((emp) => {
+    if (!empNames.includes(emp.employeeName)) {
+      const employeeName = emp.employeeName;
+      const empDiv = document.createElement("div");
+      empDiv.style.padding = ".5em";
+      empDiv.classList.add("name-tag");
+      homeTotal++;
+      homedata.push(employeeName);
+      empDiv.textContent = `${employeeName} `;
+      innerHomeDiv.appendChild(empDiv);
+    }
+  });
+
+  homeContentDiv.appendChild(innerHomeDiv);
+
+  console.log(officeTotal);
+  console.log(vacationTotal);
+  console.log(deskdata);
+  if (vacationTotal > 3) {
+    const hoverdiv = document.createElement("div");
+    hoverdiv.id = "viewMore";
+    hoverdiv.textContent = `+${vacationTotal - 1} More ...`;
+    hoverdiv.classList.add("view-more");
+    hoverdiv.addEventListener("click", function () {
+      viewHover("vacation", vacationEmp);
+    });
+    vacationContentDiv.appendChild(hoverdiv);
+  }
+
+  if (officeTotal > 3) {
+    const hoverdiv = document.createElement("div");
+    hoverdiv.id = "viewMore";
+    hoverdiv.textContent = `+${officeTotal - 1} More ...`;
+    hoverdiv.classList.add("view-more");
+    hoverdiv.addEventListener("click", function () {
+      viewHover("office", deskdata);
+    });
+    officeContentDiv.appendChild(hoverdiv);
+  }
+
+  if (homeTotal > 3) {
+    const hoverdiv = document.createElement("div");
+    hoverdiv.id = "viewMore";
+    hoverdiv.textContent = `+${homeTotal - 1} More ...`;
+    hoverdiv.classList.add("view-more");
+    hoverdiv.addEventListener("click", function () {
+      viewHover("home", homedata);
+    });
+    homeContentDiv.appendChild(hoverdiv);
+  }
+}
+
+async function viewHover(type, result) {
+  let parent = document.getElementById("emp-model");
+  let heading = document.getElementById("view-heading");
+  let old_div = document.getElementById("emplist");
+  let employeeDiv = document.createElement("div");
+  employeeDiv.id = "emplist";
+  employeeDiv.classList.add("employee-list");
+  const innerEmpDiv = document.createElement("div");
+  innerEmpDiv.classList.add("inner-vac");
+
+  let modal = document.getElementById("employeeModal");
+  modal.style.display = "flex";
+
+  heading.textContent = type;
+  switch (type) {
+    case "vacation":
+      result.map((data) => {
+        const employeedata = data.employeeByEmployeeId;
         const employeeName = employeedata.employeeName;
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";
         empDiv.classList.add("name-tag");
-
         empDiv.textContent = `${employeeName} `;
-        innerVacctionDiv.appendChild(empDiv);
+        innerEmpDiv.appendChild(empDiv);
       });
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-  vacationContentDiv.appendChild(innerVacctionDiv);
+      employeeDiv.appendChild(innerEmpDiv);
+      break;
+    case "office":
+      result.map((data) => {
+        console.log(data);
+        const employeeName = data;
+        const empDiv = document.createElement("div");
+        empDiv.style.padding = ".5em";
+        empDiv.classList.add("name-tag");
+        empDiv.textContent = `${employeeName} `;
+        innerEmpDiv.appendChild(empDiv);
+      });
+      employeeDiv.appendChild(innerEmpDiv);
+      break;
+    case "home":
+      result.map((data) => {
+        console.log(data);
+        const employeeName = data;
+        const empDiv = document.createElement("div");
+        empDiv.style.padding = ".5em";
+        empDiv.classList.add("name-tag");
+        empDiv.textContent = `${employeeName} `;
+        innerEmpDiv.appendChild(empDiv);
+      });
+      employeeDiv.appendChild(innerEmpDiv);
+      break;
+  }
+  parent.replaceChild(employeeDiv, old_div);
 }
 
 export async function indexPage() {
@@ -214,7 +328,6 @@ export async function createRightpanel() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-    <h2>Welcome to HybridHaven!</h2>
     <h3>Today</h2><hr>
     <div id="main-show-home">
       <div>
@@ -224,6 +337,16 @@ export async function createRightpanel() {
         </div>
         <div id="office-content">
           <p><i>Work from Office</i></p>
+        </div>
+        <br>
+      </div>
+      <div>
+        <div class="home flex-con">
+          <div><img src="./image/home.jpg" alt="home Image"></div>
+          <div> Home</div>
+        </div>
+        <div id="home-content">
+          <p><i>Work from home</i></p>
         </div>
         <br>
       </div>
@@ -391,4 +514,5 @@ export async function pageStructure() {
   document.body.replaceChild(newelement, div);
   createSidebar();
   createProfilemodel();
+  createEmployeeModal();
 }

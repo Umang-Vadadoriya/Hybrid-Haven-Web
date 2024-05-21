@@ -18,7 +18,7 @@ export function loadEventsPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-      <h1>Events</h1>
+      <h1>Events<button>kr</button></h1>
       <hr />
       <div id="main-show2"><div></div></div>
     `;

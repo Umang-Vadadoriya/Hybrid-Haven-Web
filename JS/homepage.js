@@ -18,16 +18,15 @@ import { loadVacationPage } from "./vacation.js";
 
 var APIURL = API_RUN;
 
-async function login() {
+async function GetAndSetUser() {
   let username;
-  let useremail;
   let userDiv = document.getElementById("userName");
   let userimage = document.getElementById("user-img");
   let userimage1 = document.getElementById("user-img1");
   let sidebarImage = document.getElementById("sidebar-img");
   let sidebarUname = document.getElementById("sidebar-uname");
 
-  fetch(`https://api.github.com/user`, {
+  let users = await fetch(`https://api.github.com/user`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -47,7 +46,10 @@ async function login() {
       console.error("Error fetching userdata", error);
     });
 
-  fetch(`https://api.github.com/user/emails`, {
+  return users;
+}
+async function GetAndSetEmails() {
+  let emails = await fetch(`https://api.github.com/user/emails`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -56,12 +58,18 @@ async function login() {
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
-      useremail = data[0]["email"];
+      let useremail = data[0]["email"];
       localStorage.setItem("userEmail", useremail);
     })
     .catch((error) => {
       console.error("Error fetching userdata", error);
     });
+  return emails;
+}
+
+async function login() {
+  let users = await GetAndSetUser();
+  let emails = await GetAndSetEmails();
 
   let saved = false;
 

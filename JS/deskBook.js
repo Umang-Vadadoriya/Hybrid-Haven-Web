@@ -43,23 +43,36 @@ async function loadDeskBooking() {
   const old_mainShow = document.getElementById("main-show");
   const new_mainshow = document.createElement("div");
   new_mainshow.id = "main-show";
-  
+
   let ele = document.createElement("div");
+  ele.classList.add("desk-book");
 
   let booked = false;
   let bookedNeighbourHoodName;
   let bookedBookingID;
+
+  let totalemp = {};
+
+  let neiNames = [];
   NeighbourHoods.map((nei) => {
     let avail = 0;
+    let arr = [];
+    neiNames.push(nei.neighbourName);
+
+    let neighbourhoodDiv = document.createElement("div");
+    neighbourhoodDiv.classList.add("neighbourhood-div");
 
     let heading = document.createElement("h3");
     heading.textContent = nei.neighbourName;
-    ele.appendChild(heading);
+    neighbourhoodDiv.appendChild(heading);
+
     avail = nei.neighbourNumberOfDesk;
+
     let innerElement = document.createElement("div");
 
     if (countBooking(nei.neighbourId, Bookings) > 0) {
       innerElement.classList.add("inner");
+      innerElement.id = `${nei.neighbourName}-inner`;
       Bookings.map((booking) => {
         if (booking.neighbourId == nei.neighbourId) {
           Employees.map((emp) => {
@@ -69,6 +82,7 @@ async function loadDeskBooking() {
                 bookedNeighbourHoodName = nei.neighbourName;
                 bookedBookingID = booking.deskBookingId;
               }
+              arr.push(emp.employeeName);
               let employeeNameElement = document.createElement("span");
               employeeNameElement.classList.add("name-tag");
               employeeNameElement.textContent = `${emp.employeeName}`;
@@ -79,20 +93,21 @@ async function loadDeskBooking() {
         }
       });
     } else {
-      let nothingBooked = document.createElement("p");
-      let italicTxt = document.createElement("i");
-      italicTxt.textContent = `No one Book the ${nei.neighbourName}`;
-      nothingBooked.appendChild(italicTxt);
-      innerElement.appendChild(nothingBooked);
+      innerElement.id = `${nei.neighbourName}-inner`;
+      innerElement.style.fontStyle = "italic";
+
+      innerElement.textContent = `No one booked the ${nei.neighbourName}`;
     }
-    ele.appendChild(innerElement);
+    let name = nei.neighbourName;
+    totalemp[name] = arr;
+    neighbourhoodDiv.appendChild(innerElement);
 
-    let employeeNameElement = document.createElement("div");
-    employeeNameElement.classList.add("avail-tag");
-    employeeNameElement.textContent = `+${avail} Desks left`;
-    ele.appendChild(employeeNameElement);
+    let availTag = document.createElement("div");
+    availTag.classList.add("avail-tag");
+    availTag.textContent = `+${avail} Desks left`;
+    neighbourhoodDiv.appendChild(availTag);
 
-    if ((avail > 0 && !booked) && !booked) {      
+    if (avail > 0 && !booked && !booked) {
       let joinButton = document.createElement("button");
       joinButton.id = `neighbourhood-${nei.neighbourName}`;
       joinButton.classList.add("join-btn");
@@ -105,22 +120,70 @@ async function loadDeskBooking() {
           tommorrowDate
         );
       };
-      ele.appendChild(joinButton);
+      neighbourhoodDiv.appendChild(joinButton);
     } else if (booked && nei.neighbourName == bookedNeighbourHoodName) {
-      let CancelButton = document.createElement("button");
-      CancelButton.id = `neighbourhood-${nei.neighbourName}`;
-      CancelButton.classList.add("cancel-btn");
-      CancelButton.textContent = "Cancel";
-      CancelButton.value = bookedBookingID;
-      CancelButton.onclick = function () {
-        cancelDesk(CancelButton.value);
+      let cancelButton = document.createElement("button");
+      cancelButton.id = `neighbourhood-${nei.neighbourName}`;
+      cancelButton.classList.add("cancel-btn");
+      cancelButton.textContent = "Cancel";
+      cancelButton.value = bookedBookingID;
+      cancelButton.onclick = function () {
+        cancelDesk(cancelButton.value);
       };
-      ele.appendChild(CancelButton);
+      neighbourhoodDiv.appendChild(cancelButton);
     }
+
+
+    ele.appendChild(neighbourhoodDiv);
+
   });
   new_mainshow.appendChild(ele);
-  contentDiv.replaceChild(new_mainshow,old_mainShow);
+  contentDiv.replaceChild(new_mainshow, old_mainShow);
+
+  neiNames.map((nei) => {
+    let classname = `${nei}-inner`;
+    let total = document.getElementById(classname).children.length;
+    let div = document.getElementById(classname);
+    if (total > 3) {
+      const hoverdiv = document.createElement("div");
+      hoverdiv.id = "viewMore";
+      hoverdiv.textContent = `+${total - 3} More ...`;
+      hoverdiv.classList.add("view-more");
+      hoverdiv.addEventListener("click", function () {
+        deskHover(totalemp[nei],nei);
+      });
+      div.appendChild(hoverdiv);
+    }
+  });
+
   TurnOffLoader();
+}
+
+function deskHover(data,type){
+  let parent = document.getElementById("emp-model");
+  let heading = document.getElementById("view-heading");
+  let old_div = document.getElementById("emplist");
+  let employeeDiv = document.createElement("div");
+  employeeDiv.id = "emplist";
+  employeeDiv.classList.add("employee-list");
+  const innerEmpDiv = document.createElement("div");
+  innerEmpDiv.classList.add("inner-vac");
+
+  let modal = document.getElementById("employeeModal");
+  modal.style.display = "flex";
+
+  heading.textContent = type;
+  data.map((d)=>{
+    const employeeName = d;
+        const empDiv = document.createElement("div");
+        empDiv.style.padding = ".5em";
+        empDiv.classList.add("name-tag");
+        empDiv.textContent = `${employeeName} `;
+        innerEmpDiv.appendChild(empDiv);
+  })
+  employeeDiv.appendChild(innerEmpDiv);
+  parent.replaceChild(employeeDiv, old_div);
+
 }
 
 function joinDesk(type, name, date) {

@@ -64,7 +64,6 @@ async function GetAndSetEmails() {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       let useremail = data[0]["email"];
       localStorage.setItem("userEmail", useremail);
     })
@@ -82,7 +81,6 @@ async function login() {
 
   if (localStorage.getItem("userEmail")) {
     let employee = await employeeByEmail(localStorage.getItem("userEmail"));
-    console.log(employee);
     if (employee) {
       saved = true;
       localStorage.setItem("employeeId", employee.employeeId);
@@ -125,7 +123,6 @@ async function login() {
           }),
         };
 
-        console.log(data);
         fetch(`${APIURL}employeeContact/`, requestBodyContact)
           .then((response) => {
             if (!response.ok) {
@@ -134,7 +131,6 @@ async function login() {
             return response.json();
           })
           .then((contact) => {
-            console.log(contact);
             // indexPage();
           })
           .catch((error) => {
@@ -155,7 +151,6 @@ async function loadHomePage() {
   const innerOfficeDiv = document.createElement("div");
   innerOfficeDiv.classList.add("inner");
   innerOfficeDiv.id = "innerContainer";
-  // innerOfficeDiv.style.height="10rem";
 
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
@@ -166,7 +161,6 @@ async function loadHomePage() {
   let bookings = await getAllDeskbooking();
   let vacationEmp = await getVacationEmpByDate();
 
-  console.log(vacationEmp);
   let empNames = [];
 
   let officeTotal = 0,
@@ -205,7 +199,6 @@ async function loadHomePage() {
   });
   vacationContentDiv.appendChild(innerVacctionDiv);
 
-  console.log(empNames);
 
   let employees = await GetAllEmployee();
   employees.map((emp) => {
@@ -223,16 +216,13 @@ async function loadHomePage() {
 
   homeContentDiv.appendChild(innerHomeDiv);
 
-  console.log(officeTotal);
-  console.log(vacationTotal);
-  console.log(deskdata);
   if (vacationTotal > 3) {
     const hoverdiv = document.createElement("div");
     hoverdiv.id = "viewMore";
     hoverdiv.textContent = `+${vacationTotal - 1} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
-      viewHover("vacation", vacationEmp);
+      viewHover("Vacation", vacationEmp);
     });
     vacationContentDiv.appendChild(hoverdiv);
   }
@@ -243,7 +233,7 @@ async function loadHomePage() {
     hoverdiv.textContent = `+${officeTotal - 1} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
-      viewHover("office", deskdata);
+      viewHover("Office", deskdata);
     });
     officeContentDiv.appendChild(hoverdiv);
   }
@@ -254,13 +244,13 @@ async function loadHomePage() {
     hoverdiv.textContent = `+${homeTotal - 1} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
-      viewHover("home", homedata);
+      viewHover("Home", homedata);
     });
     homeContentDiv.appendChild(hoverdiv);
   }
 }
 
-async function viewHover(type, result) {
+export async function viewHover(type, result) {
   let parent = document.getElementById("emp-model");
   let heading = document.getElementById("view-heading");
   let old_div = document.getElementById("emplist");
@@ -275,7 +265,7 @@ async function viewHover(type, result) {
 
   heading.textContent = type;
   switch (type) {
-    case "vacation":
+    case "Vacation":
       result.map((data) => {
         const employeedata = data.employeeByEmployeeId;
         const employeeName = employeedata.employeeName;
@@ -287,9 +277,8 @@ async function viewHover(type, result) {
       });
       employeeDiv.appendChild(innerEmpDiv);
       break;
-    case "office":
+    case "Office":
       result.map((data) => {
-        console.log(data);
         const employeeName = data;
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";
@@ -299,9 +288,8 @@ async function viewHover(type, result) {
       });
       employeeDiv.appendChild(innerEmpDiv);
       break;
-    case "home":
+    case "Home":
       result.map((data) => {
-        console.log(data);
         const employeeName = data;
         const empDiv = document.createElement("div");
         empDiv.style.padding = ".5em";

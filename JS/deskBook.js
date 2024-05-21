@@ -36,7 +36,6 @@ async function loadDeskBooking() {
   const NeighbourHoods = await getAllNeighbour();
   const Employees = await GetAllEmployee();
 
-
   const contentDiv = document.getElementById("content");
   const old_mainShow = document.getElementById("main-show");
   const new_mainshow = document.createElement("div");

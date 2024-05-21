@@ -30,6 +30,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     toggleButton();
   });
 
+  toggleButton();
+  
+
   // employeeByEmail(localStorage.getItem("userEmail"));
 });
 

@@ -18,16 +18,15 @@ import { loadVacationPage } from "./vacation.js";
 
 var APIURL = API_RUN;
 
-async function login() {
+async function GetAndSetUser() {
   let username;
-  let useremail;
   let userDiv = document.getElementById("userName");
   let userimage = document.getElementById("user-img");
   let userimage1 = document.getElementById("user-img1");
   let sidebarImage = document.getElementById("sidebar-img");
   let sidebarUname = document.getElementById("sidebar-uname");
 
-  fetch(`https://api.github.com/user`, {
+  let users = await fetch(`https://api.github.com/user`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -47,7 +46,10 @@ async function login() {
       console.error("Error fetching userdata", error);
     });
 
-  fetch(`https://api.github.com/user/emails`, {
+  return users;
+}
+async function GetAndSetEmails() {
+  let emails = await fetch(`https://api.github.com/user/emails`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -56,12 +58,18 @@ async function login() {
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
-      useremail = data[0]["email"];
+      let useremail = data[0]["email"];
       localStorage.setItem("userEmail", useremail);
     })
     .catch((error) => {
       console.error("Error fetching userdata", error);
     });
+  return emails;
+}
+
+async function login() {
+  let users = await GetAndSetUser();
+  let emails = await GetAndSetEmails();
 
   let saved = false;
 
@@ -304,6 +312,7 @@ export function pageStructure() {
 
   const topRightDiv = document.createElement("div");
   topRightDiv.classList.add("top-right");
+  topRightDiv.id = "top-right";
 
   const toggleButtonDiv = document.createElement("div");
 
@@ -337,20 +346,37 @@ export function pageStructure() {
 
   toggleButtonDiv.appendChild(toggleButton);
 
+  const LogoAndSlogunHolder = document.createElement("div")
+  LogoAndSlogunHolder.classList.add("LogoContainer");
+
   const logoImg = document.createElement("img");
-  logoImg.src = "./image/logo1.jpg";
+  logoImg.src = "./image/logo1.png";
   logoImg.alt = "HybridHaven Logo";
 
-  const title = document.createElement("h1");
-  title.textContent = "HybridHaven";
+  const Slogan = document.createElement("h2");
+  Slogan.classList.add("slogan");
 
-  topRightDiv.appendChild(toggleButtonDiv);
-  topRightDiv.appendChild(logoImg);
-  topRightDiv.appendChild(title);
+  const SloganPart1 = document.createElement("span");
+  SloganPart1.classList.add("slogan-text");
+  SloganPart1.textContent = "The Smarter Path to ";
+  Slogan.appendChild(SloganPart1);
+  
+  const SloganPart2 = document.createElement("span");
+  SloganPart2.classList.add("slogan-highlight");
+  SloganPart2.textContent = "Hybrid Workflows";
+  Slogan.appendChild(SloganPart2);
 
+  LogoAndSlogunHolder.appendChild(logoImg);
+  LogoAndSlogunHolder.appendChild(Slogan);
+  
+  
+  topRightDiv.appendChild(LogoAndSlogunHolder);
+  
+  
   const contentDiv = document.createElement("div");
   contentDiv.id = "content";
-
+  
+  rightPanel.appendChild(toggleButtonDiv);
   rightPanel.appendChild(topRightDiv);
   rightPanel.appendChild(contentDiv);
 

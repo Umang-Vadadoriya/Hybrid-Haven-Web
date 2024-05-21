@@ -49,6 +49,10 @@ body,html {
   transition: 0.3 all ease-in-out;
 }
 
+.top-right-mobile div{
+  align-self: start;
+}
+
 .top-right .LogoContainer{
   display: flex;
   flex-direction: column;

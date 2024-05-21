@@ -4,6 +4,8 @@ import {
   getAllEventsEmployee,
   getEmployeeByName,
   closeNav,
+  TurnOnLoader,
+  TurnOffLoader,
 } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN} from "./URLCollection.js";
@@ -27,6 +29,7 @@ export function loadEventsPage() {
 }
 
 async function loadEvents() {
+  TurnOnLoader();
   const Events = await getAllEvents();
   const EventsEmployees = await getAllEventsEmployee();
   const contentDiv = document.getElementById("content");
@@ -99,6 +102,7 @@ async function loadEvents() {
   });
   new_mainShow.appendChild(ele);
   contentDiv.replaceChild(new_mainShow,old_mainShow);
+  TurnOffLoader();
 }
 
 async function joinEvent(eventId, name) {

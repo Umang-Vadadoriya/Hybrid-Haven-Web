@@ -6,6 +6,8 @@ import {
   closeNav,
   openNav,
   employeeByEmail,
+  TurnOnLoader,
+  TurnOffLoader,
 } from "./common.js";
 import { deskBookigPage } from "./deskBook.js";
 import { loadEventsPage } from "./eventspage.js";
@@ -150,11 +152,14 @@ async function loadHomePage() {
   const innerVacctionDiv = document.createElement("div");
   innerVacctionDiv.classList.add("inner");
 
-  fetch(`${APIURL}desk-bookings/date/${todayDate}`, fetchOptions)
+  await fetch(`${APIURL}desk-bookings/date/${todayDate}`, fetchOptions)
     .then((response) => response.json())
     .then((data) => {
-      data.forEach((deskbooking, index) => {
-        fetch(`${APIURL}employees/id/${deskbooking.employeeId}`, fetchOptions)
+      data.map(async (deskbooking, index) => {
+        await fetch(
+          `${APIURL}employees/id/${deskbooking.employeeId}`,
+          fetchOptions
+        )
           .then((response) => response.json())
           .then((employeeData) => {
             const employeeName = employeeData.employeeName;
@@ -175,7 +180,7 @@ async function loadHomePage() {
 
   officeContentDiv.appendChild(innerOfficeDiv);
 
-  fetch(`${APIURL}vacations/date/${todayDate}`, fetchOptions)
+  await fetch(`${APIURL}vacations/date/${todayDate}`, fetchOptions)
     .then((response) => response.json())
     .then((data) => {
       data.forEach((vacations) => {
@@ -197,12 +202,13 @@ async function loadHomePage() {
 }
 
 export async function indexPage() {
-  pageStructure();
+  await pageStructure();
   await login();
-  createRightpanel();
+  await createRightpanel();
 }
 
-export function createRightpanel() {
+export async function createRightpanel() {
+  TurnOnLoader();
   const rightPanel = document.getElementById("right-panel");
   const contentDiv = document.getElementById("content");
   const div = document.createElement("div");
@@ -233,11 +239,12 @@ export function createRightpanel() {
     </div>`;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);
-  loadHomePage();
+  await loadHomePage();
   closeNav();
-}
 
-export function pageStructure() {
+TurnOffLoader();}
+
+export async function pageStructure() {
   const div = document.getElementById("main-container");
   const newelement = document.createElement("main");
   newelement.classList.add("container");
@@ -278,8 +285,8 @@ export function pageStructure() {
   const deskBookingItem = document.createElement("li");
   deskBookingItem.id = "deskbooking";
   deskBookingItem.textContent = "Desk Booking";
-  deskBookingItem.addEventListener("click", function () {
-    deskBookigPage();
+  deskBookingItem.addEventListener("click", async function () {
+    await deskBookigPage();
   });
 
   const eventsItem = document.createElement("li");
@@ -346,7 +353,7 @@ export function pageStructure() {
 
   toggleButtonDiv.appendChild(toggleButton);
 
-  const LogoAndSlogunHolder = document.createElement("div")
+  const LogoAndSlogunHolder = document.createElement("div");
   LogoAndSlogunHolder.classList.add("LogoContainer");
 
   const logoImg = document.createElement("img");
@@ -360,7 +367,7 @@ export function pageStructure() {
   SloganPart1.classList.add("slogan-text");
   SloganPart1.textContent = "The Smarter Path to ";
   Slogan.appendChild(SloganPart1);
-  
+
   const SloganPart2 = document.createElement("span");
   SloganPart2.classList.add("slogan-highlight");
   SloganPart2.textContent = "Hybrid Workflows";
@@ -368,14 +375,12 @@ export function pageStructure() {
 
   LogoAndSlogunHolder.appendChild(logoImg);
   LogoAndSlogunHolder.appendChild(Slogan);
-  
-  
+
   topRightDiv.appendChild(LogoAndSlogunHolder);
-  
-  
+
   const contentDiv = document.createElement("div");
   contentDiv.id = "content";
-  
+
   rightPanel.appendChild(toggleButtonDiv);
   rightPanel.appendChild(topRightDiv);
   rightPanel.appendChild(contentDiv);

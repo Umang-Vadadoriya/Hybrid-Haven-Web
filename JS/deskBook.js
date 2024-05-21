@@ -7,6 +7,8 @@ import {
   closeNav,
   getTomorrowDate,
   getEmployeeByName,
+  TurnOnLoader,
+  TurnOffLoader,
 } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
@@ -15,7 +17,7 @@ var APIURL = API_RUN;
 
 // Deskbooking Page
 
-export function deskBookigPage() {
+export async function deskBookigPage() {
   const rightPanel = document.getElementById("right-panel");
   const contentDiv = document.getElementById("content");
   const div = document.createElement("div");
@@ -27,11 +29,12 @@ export function deskBookigPage() {
   `;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);
-  loadDeskBooking();
+  await loadDeskBooking();
   closeNav();
 }
 
 async function loadDeskBooking() {
+  TurnOnLoader();
   const Bookings = await getBookingWithDate(tommorrowDate);
   const NeighbourHoods = await getAllNeighbour();
   const Employees = await GetAllEmployee();
@@ -117,6 +120,7 @@ async function loadDeskBooking() {
   });
   new_mainshow.appendChild(ele);
   contentDiv.replaceChild(new_mainshow,old_mainShow);
+  TurnOffLoader();
 }
 
 function joinDesk(type, name, date) {

@@ -1,4 +1,4 @@
-import { closeNav, formatDateToYYYYMMDD,fetchOptions } from "./common.js";
+import { closeNav, formatDateToYYYYMMDD,fetchOptions, TurnOnLoader, TurnOffLoader } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
 
@@ -21,6 +21,7 @@ export function loadVacationPage() {
 }
 
 function loadVacation() {
+  TurnOnLoader();
   const contentDiv = document.getElementById("content");
   const old_mainShowVacation = document.getElementById("main-show-vacation");
   const new_mainShowVacation = document.createElement("div");
@@ -106,6 +107,7 @@ function loadVacation() {
       joinVacation(formatDateToYYYYMMDD(start),formatDateToYYYYMMDD(end));
     }
   });
+  TurnOffLoader();
 }
 
 

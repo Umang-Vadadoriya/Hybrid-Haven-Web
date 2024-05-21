@@ -1,4 +1,4 @@
-import { API_RUN,WEB_RUN } from "./URLCollection.js";
+import { API_RUN, WEB_RUN } from "./URLCollection.js";
 import { loadLoginPage } from "./scriptlogin.js";
 
 var APIURL = API_RUN;
@@ -49,13 +49,22 @@ export const tommorrowDate = `${tomorrow
   .toString()
   .padStart(2, "0")}.${tomorrow.getFullYear()}`;
 
-
 // For Event date display formate
 export function formatDate(date) {
   const originalDate = date;
   const parts = originalDate.split("-");
   const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
   return formattedDate;
+}
+
+export function TurnOnLoader() {
+  const loader = document.querySelector(".loader");
+  loader.style.display = "block";
+}
+
+export function TurnOffLoader() {
+  const loader = document.querySelector(".loader");
+  loader.style.display = "none";
 }
 
 export function toggleButton() {
@@ -151,8 +160,8 @@ export function getTomorrowDate() {
 
 export function formatDateToYYYYMMDD(date) {
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
@@ -160,23 +169,28 @@ export function formatDateToYYYYMMDD(date) {
 // logout
 export function logout() {
   const profileModal = document.getElementById("profileModal");
-  if (localStorage.getItem("access_token") && localStorage.getItem("username")) {
+  if (
+    localStorage.getItem("access_token") &&
+    localStorage.getItem("username")
+  ) {
     console.log("logout");
     localStorage.clear();
     profileModal.style.display = "none";
     loadLoginPage();
   }
-  
 }
 
 // employeeEmail
 
-export async function employeeByEmail(email){
-  let employee = await fetch(`${APIURL}employeeContact/byEmail?email=${email}`, fetchOptions)
-  .then((response) => response.json())
-  .catch((error) => {
-    console.error("Error fetching employees data:", error);
-  });
+export async function employeeByEmail(email) {
+  let employee = await fetch(
+    `${APIURL}employeeContact/byEmail?email=${email}`,
+    fetchOptions
+  )
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error fetching employees data:", error);
+    });
   return employee;
 }
 

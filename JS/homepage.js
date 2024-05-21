@@ -369,14 +369,14 @@ export function pageStructure() {
   LogoAndSlogunHolder.appendChild(logoImg);
   LogoAndSlogunHolder.appendChild(Slogan);
   
-  topRightDiv.appendChild(toggleButtonDiv);
   
   topRightDiv.appendChild(LogoAndSlogunHolder);
-
-
+  
+  
   const contentDiv = document.createElement("div");
   contentDiv.id = "content";
-
+  
+  rightPanel.appendChild(toggleButtonDiv);
   rightPanel.appendChild(topRightDiv);
   rightPanel.appendChild(contentDiv);
 

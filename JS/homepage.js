@@ -48,6 +48,7 @@ async function GetAndSetUser() {
     })
     .catch((error) => {
       console.error("Error fetching userdata", error);
+      localStorage.clear();
     });
 
   return users;

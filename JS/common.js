@@ -176,3 +176,33 @@ export async function employeeByEmail(email){
   });
   return employee;
 }
+
+// get all deskbooking
+
+export async function getAllDeskbooking(){
+  let deskbooking = await fetch(`${APIURL}desk-bookings/date/${todayDate}`, fetchOptions)
+  .then((response) => response.json())
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });
+  return deskbooking;
+}
+
+export async function getEmployeeById(id){
+  let employee = await fetch(`${APIURL}employees/id/${id}`, fetchOptions)
+  .then((response) => response.json())
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });
+  return employee;
+}
+
+// get vacation employees by today date
+export async function getVacationEmpByDate(){
+  let employee = await fetch(`${APIURL}vacations/date/${todayDate}`, fetchOptions)
+  .then((response) => response.json())
+  .catch((error) => {
+    console.error("Error fetching employees data:", error);
+  });
+  return employee;
+}

@@ -112,6 +112,7 @@ body,html {
   background-color: lightblue;
   padding: 0.3rem;
   border-radius: 0.3rem; 
+  width: fit-content;
 }
 .avail-tag{
   color: var(--secondary-color);
@@ -121,10 +122,18 @@ body,html {
 
 .inner{
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
+  overflow: hidden;
+  height: 7.5rem;
+  flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+/* .inner:hover{
+  height: auto;
+} */
+
 
 /* display: grid;
 grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
@@ -362,6 +371,15 @@ grid-gap: 1px; */
   height: 63vh;
 }
 
+  #main-show-home {
+    display: grid;
+    row-gap: 20px;
+    column-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    padding: 10px;
+  }
+  
+
 /* logout */
 #logout-button {
   background-color: #e74c3c;  
@@ -434,3 +452,15 @@ grid-gap: 1px; */
   margin-top: 1rem;
   color: red;
 }
+
+ /* view more */
+ .view-more{
+  color: #818181;
+  font-style: italic;
+  cursor: pointer;
+ }
+
+ .eventBtn{
+  /* display: flex; */
+  float: right;
+ }

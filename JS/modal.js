@@ -175,3 +175,48 @@ profileModal.appendChild(profileModalContent);
 document.body.appendChild(profileModal);
 
 }
+
+// Employee Modal
+
+export function createEmployeeModal() {
+  
+  const modal = document.createElement('div');
+  modal.id = 'employeeModal';
+  modal.classList.add('employee-modal');
+
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('employee-modal-content');
+  modalContent.id = "emp-model";
+
+  const closeButton = document.createElement('span');
+  closeButton.classList.add('employee-close');
+  closeButton.innerHTML = '&times;';
+
+  const header = document.createElement('h2');
+  header.id = "view-heading"
+  header.textContent = 'Employee Names';
+
+  const employeeList = document.createElement('div');
+  employeeList.id = "emplist";
+  employeeList.classList.add('employee-list');
+
+  modalContent.appendChild(closeButton);
+  modalContent.appendChild(header);
+  modalContent.appendChild(employeeList);
+
+  modal.appendChild(modalContent);
+
+  document.body.appendChild(modal);
+
+  closeButton.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+
+
+  window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}

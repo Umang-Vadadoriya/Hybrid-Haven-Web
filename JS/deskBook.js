@@ -27,7 +27,6 @@ export async function deskBookigPage() {
     <div id="deskpage">
       <h1 style="display:inline-block">WHO'S IN TOMORROW</h1>
     </div>
-    <hr />
     <div id="main-show"><div></div></div>
   `;
   div.innerHTML = html;

@@ -24,7 +24,7 @@ export async function deskBookigPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-    <div id="deskpage">
+    <div id="deskpage" class="heading-Container">
       <h1 style="display:inline-block">WHO'S IN TOMORROW</h1>
     </div>
     <div id="main-show"><div></div></div>
@@ -290,7 +290,6 @@ function deskBookAdvance() {
   let deskBtn = document.createElement("button");
   deskBtn.id = "deskBookingBtn";
   deskBtn.textContent = "Advance Book";
-  deskBtn.style.float = "right";
   deskBtn.addEventListener("click", function () {
     openDeskBookingModal();
   });

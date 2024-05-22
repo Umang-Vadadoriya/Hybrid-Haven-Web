@@ -36,6 +36,19 @@ export async function deskBookigPage() {
   closeNav();
 }
 
+function GetImagePerNeighbour(type){
+  switch (type) {
+    case "Meeting":
+      return "./image/Meeting.png";
+    case "Hot Desk":
+      return "./image/man.png";
+    case "Collab":
+      return "./image/collaboration.png";
+    default: 
+      return "";   
+  }
+}
+
 async function loadDeskBooking() {
   TurnOnLoader();
   const Bookings = await getBookingWithDate(tommorrowDate);
@@ -64,6 +77,12 @@ async function loadDeskBooking() {
 
     let neighbourhoodDiv = document.createElement("div");
     neighbourhoodDiv.classList.add("neighbourhood-div");
+
+    let img = document.createElement("img")
+    img.src = GetImagePerNeighbour(nei.neighbourName);
+    img.alt = `${nei.neighbourName} Image`;
+    img.classList.add("desk-img");
+    neighbourhoodDiv.appendChild(img);
 
     let heading = document.createElement("h3");
     heading.textContent = nei.neighbourName;
@@ -297,6 +316,7 @@ function deskBookAdvance() {
 }
 
 async function openDeskBookingModal() {
+  TurnOnLoader();
   let parent = document.getElementById("emp-model");
   let heading = document.getElementById("view-heading");
   let old_div = document.getElementById("emplist");
@@ -317,7 +337,7 @@ async function openDeskBookingModal() {
   form.id = "bookingForm";
 
   const deskTypeLabel = document.createElement("label");
-  deskTypeLabel.textContent = "NeighbourHood";
+  deskTypeLabel.textContent = "NeighbourHood:";
   form.appendChild(deskTypeLabel);
 
   const deskTypeSelect = document.createElement("select");
@@ -415,4 +435,5 @@ async function openDeskBookingModal() {
     console.log(neighbour);
     console.log(joinDate);
   });
+  TurnOffLoader();
 }

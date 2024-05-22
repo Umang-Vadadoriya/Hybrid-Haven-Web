@@ -109,8 +109,8 @@ export function createSidebar() {
   const vacationLi = document.createElement("li");
   vacationLi.id = "vacation-side";
   vacationLi.textContent = "Vacation";
-  vacationLi.addEventListener("click", function () {
-    loadVacationPage();
+  vacationLi.addEventListener("click",async function () {
+    await loadVacationPage();
   });
 
   ulElement.appendChild(homeLi);

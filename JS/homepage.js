@@ -1,4 +1,4 @@
-import { API_RUN } from "./URLCollection.js";
+import { API_RUN, WEB_RUN } from "./URLCollection.js";
 import {
   GetAllEmployee,
   todayDate,
@@ -38,7 +38,13 @@ async function GetAndSetUser() {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`,
     },
   })
-    .then((res) => res.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+    })
     .then((data) => {
       username = data.name ? data.name : "Profile";
       localStorage.setItem("username", username);
@@ -51,8 +57,8 @@ async function GetAndSetUser() {
     .catch((error) => {
       console.error("Error fetching userdata", error);
       localStorage.clear();
+      window.location.href = WEB_RUN;
     });
-
   return users;
 }
 async function GetAndSetEmails() {
@@ -316,7 +322,8 @@ export async function createRightpanel() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-    <h3>Today</h2><hr>
+    <h2>Today</h2>
+    <hr>
     <div id="main-show-home">
       <div>
         <div class="office flex-con">
@@ -353,7 +360,8 @@ export async function createRightpanel() {
   await loadHomePage();
   closeNav();
 
-TurnOffLoader();}
+  TurnOffLoader();
+}
 
 export async function pageStructure() {
   const div = document.getElementById("main-container");
@@ -410,8 +418,8 @@ export async function pageStructure() {
   const vacationItem = document.createElement("li");
   vacationItem.id = "vacation";
   vacationItem.textContent = "Vacation";
-  vacationItem.addEventListener("click", function () {
-    loadVacationPage();
+  vacationItem.addEventListener("click",async function () {
+    await loadVacationPage();
   });
 
   menuList.appendChild(homeItem);

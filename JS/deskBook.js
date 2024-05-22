@@ -292,7 +292,7 @@ function deskBookAdvance() {
   deskBtn.id = "deskBookingBtn";
   deskBtn.textContent = "Advance Book";
   deskBtn.style.float = "right";
-  deskBtn.addEventListener("click", function() {
+  deskBtn.addEventListener("click", function () {
     openDeskBookingModal();
   });
   deskpage.appendChild(deskBtn);
@@ -361,9 +361,7 @@ async function openDeskBookingModal() {
   employeeDiv.appendChild(innerEmpDiv);
   parent.replaceChild(employeeDiv, old_div);
 
-
-
-  form.addEventListener("submit", async(event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const neighbour = deskTypeSelect.value;
     const joinDate = bookingDateInput.value;
@@ -373,49 +371,49 @@ async function openDeskBookingModal() {
     let booked = false;
     let Deskbooking = await getBookingWithDate(formatDate2(joinDate));
 
-    Deskbooking.map((desk)=>{
-      if(desk.employeeId === empid && desk.deskBookingDate === joinDate){
+    Deskbooking.map((desk) => {
+      if (desk.employeeId === empid && desk.deskBookingDate === joinDate) {
         booked = true;
         return;
-      }     
+      }
     });
 
-    if(!booked){
+    if (!booked) {
       const url = `${APIURL}desk-bookings`;
       const requestBody = {
         method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        employeeId: empid,
-        neighbourId: neighbour,
-        deskBookingDate: joinDate,
-      }),
-    };
-    
-    // Send the POST request
-    fetch(url, requestBody)
-    .then((response) => {
-      if (!response.ok) {
-          openModal("Failed to create desk booking");
-          throw new Error("Failed to create desk booking :(");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        modal.style.display = "none";
-        deskBookigPage();
-        openModal("Desk booking created successfully..!!");
-      })
-      .catch((error) => {
-        console.error("Error creating desk booking :(", error);
-      });
-    }else if(booked){
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          employeeId: empid,
+          neighbourId: neighbour,
+          deskBookingDate: joinDate,
+        }),
+      };
+
+      // Send the POST request
+      fetch(url, requestBody)
+        .then((response) => {
+          if (!response.ok) {
+            openModal("Failed to create desk booking");
+            throw new Error("Failed to create desk booking :(");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          modal.style.display = "none";
+          deskBookigPage();
+          openModal("Desk booking created successfully..!!");
+        })
+        .catch((error) => {
+          console.error("Error creating desk booking :(", error);
+        });
+    } else if (booked) {
       openModal("You already booked your Desk");
     }
-    
+
     console.log(neighbour);
     console.log(joinDate);
   });

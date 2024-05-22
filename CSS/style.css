@@ -126,6 +126,7 @@ html {
 .right-panel {
   padding: 1rem;
   flex: 5;
+  overflow: auto;
   height: 100vh;
 }
 
@@ -368,6 +369,7 @@ grid-gap: 1px; */
   column-gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   padding: 10px;
+
 }
 
 .event-card {
@@ -421,22 +423,22 @@ grid-gap: 1px; */
     display: block;
     margin-right: 1rem;
     transition: all 0.3s ease;
-    width: 1rem;
+    width: 10rem;
 }
 /* overflow */
 
 #main-show,
 #main-show2,
 #main-show-home {
-  overflow-y: auto;
-  height: 63vh;
+  /* overflow-y: auto; */
+  /* height: 63vh; */
 }
 
 #main-show-vacation{
   display: grid;
   row-gap: 20px;
   column-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   padding: 10px;
 }
 
@@ -444,7 +446,7 @@ grid-gap: 1px; */
   display: grid;
   row-gap: 20px;
   column-gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   padding: 10px;
 }
 
@@ -452,7 +454,7 @@ grid-gap: 1px; */
     display: grid;
     row-gap: 20px;
     column-gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
     padding: 10px;
   }
 

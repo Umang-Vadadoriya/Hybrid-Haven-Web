@@ -154,14 +154,14 @@ async function loadDeskBooking() {
       hoverdiv.addEventListener("click", function () {
         deskHover(totalemp[nei], nei);
       });
-      div.appendChild(hoverdiv);
+      div.parentNode.insertBefore(hoverdiv, div.nextSibling);
     }
   });
 
   TurnOffLoader();
 }
 
-function deskHover(data, type) {
+export function deskHover(data, type) {
   let parent = document.getElementById("emp-model");
   let heading = document.getElementById("view-heading");
   let old_div = document.getElementById("emplist");

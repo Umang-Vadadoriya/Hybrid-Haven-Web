@@ -323,7 +323,6 @@ export async function createRightpanel() {
   div.id = "content";
   const html = `
     <h2>Today</h2>
-    <hr>
     <div id="main-show-home">
       <div>
         <div class="office flex-con">

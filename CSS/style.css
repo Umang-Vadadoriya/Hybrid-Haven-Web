@@ -78,6 +78,7 @@ html {
 
 .slogan-text {
   font-weight: 400;
+  font-size: 1.4rem;
 }
 
 .slogan-highlight {
@@ -486,7 +487,7 @@ grid-gap: 1px; */
 
 .vacation-div {
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: top;
   margin: 0;
   font-family: Arial, sans-serif;
@@ -584,9 +585,13 @@ grid-gap: 1px; */
 .vacation-Show-Container{
   display: flex;
   flex-direction: column;
+  background-color: #c7c7c768;
+  padding: 1rem;
+  border-radius: 0.5rem;
 }
 
 .vacation-Show-Container .name-tag{
+  background-color: #BDC6D1;
   margin: 0.5rem;
 }
 
@@ -595,7 +600,14 @@ grid-gap: 1px; */
   max-width: 2rem;
   max-height: 2rem;
   margin: 0.1rem 0.1rem 0.1rem 1rem;
+  border-color: #D90429;
+  color: #D90429;
 }
+
+.name-tag .cancel-btn:hover {
+  color: #fff;
+}
+
 
 /* Advanced booking btn */
 
@@ -616,4 +628,19 @@ grid-gap: 1px; */
 #deskBookingBtn:hover,.add-event:hover{
   transform: translate(0rem, -0.5rem);
   box-shadow: 0.2rem 0.2rem .5rem rgb(49, 130, 1);
+}
+
+.text-center{
+  text-align: center;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: center;
+  gap: 1 rem;
+}
+
+.fw-6{
+  font-weight: 600;
 }

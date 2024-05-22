@@ -17,7 +17,6 @@ export async function loadVacationPage() {
   div.id = "content";
   const html = `
       <h1>Apply For Vacation</h1>
-      <hr />
       <div id="main-show-vacation"><div></div></div>
     `;
   div.innerHTML = html;
@@ -42,9 +41,11 @@ async function loadVacation() {
 
   const vacationForm = document.createElement("div");
   vacationForm.classList.add("vacation-form");
+  vacationForm.style.display = "Grid";
 
   const startDateLabel = document.createElement("label");
   startDateLabel.setAttribute("for", "startDate");
+  startDateLabel.classList.add("fw-6");
   startDateLabel.textContent = "Vacation Start Date:";
 
   const startDateInput = document.createElement("input");
@@ -56,6 +57,7 @@ async function loadVacation() {
 
   const endDateLabel = document.createElement("label");
   endDateLabel.setAttribute("for", "endDate");
+  endDateLabel.classList.add("fw-6");
   endDateLabel.textContent = "Vacation End Date:";
 
   const endDateInput = document.createElement("input");
@@ -90,11 +92,16 @@ async function loadVacation() {
 
   const heading = document.createElement("h2");
   heading.textContent = "Your Upcoming Vacations";
+  heading.classList.add("text-center");
   RightEle.appendChild(heading);
+
+  const GridLayout = document.createElement("div")
+  GridLayout.classList.add("grid");
+
 
   Vacations.map((vac) => {
     if (vac.employeeId == localStorage.getItem("employeeId")) {
-      let DataContainer = document.createElement("div");
+      let DataContainer = document.createElement("span");
       DataContainer.classList.add("name-tag");
       DataContainer.textContent = `${vac.vacationStartDate} To ${vac.vacationEndDate}`;
 
@@ -107,9 +114,10 @@ async function loadVacation() {
       };
 
       DataContainer.appendChild(button);
-      RightEle.appendChild(DataContainer);
+      GridLayout.appendChild(DataContainer);
     }
   });
+  RightEle.appendChild(GridLayout);
 
   new_mainShowVacation.appendChild(ele);
   new_mainShowVacation.appendChild(RightEle);

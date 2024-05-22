@@ -9,12 +9,13 @@ import {
   getEmployeeByName,
   TurnOnLoader,
   TurnOffLoader,
+  formatDate2,
 } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
 
 var APIURL = API_RUN;
-
+let neighbourhoodNames;
 // Deskbooking Page
 
 export async function deskBookigPage() {
@@ -23,13 +24,16 @@ export async function deskBookigPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-    <h1>WHO'S IN TOMORROW</h1>
+    <div id="deskpage">
+      <h1 style="display:inline-block">WHO'S IN TOMORROW</h1>
+    </div>
     <hr />
     <div id="main-show"><div></div></div>
   `;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);
   await loadDeskBooking();
+  deskBookAdvance();
   closeNav();
 }
 
@@ -132,13 +136,12 @@ async function loadDeskBooking() {
       };
       neighbourhoodDiv.appendChild(cancelButton);
     }
-
-
     ele.appendChild(neighbourhoodDiv);
-
   });
   new_mainshow.appendChild(ele);
   contentDiv.replaceChild(new_mainshow, old_mainShow);
+
+  neighbourhoodNames = neiNames;
 
   neiNames.map((nei) => {
     let classname = `${nei}-inner`;
@@ -150,7 +153,7 @@ async function loadDeskBooking() {
       hoverdiv.textContent = `+${total - 3} More ...`;
       hoverdiv.classList.add("view-more");
       hoverdiv.addEventListener("click", function () {
-        deskHover(totalemp[nei],nei);
+        deskHover(totalemp[nei], nei);
       });
       div.appendChild(hoverdiv);
     }
@@ -159,7 +162,7 @@ async function loadDeskBooking() {
   TurnOffLoader();
 }
 
-function deskHover(data,type){
+function deskHover(data, type) {
   let parent = document.getElementById("emp-model");
   let heading = document.getElementById("view-heading");
   let old_div = document.getElementById("emplist");
@@ -173,17 +176,16 @@ function deskHover(data,type){
   modal.style.display = "flex";
 
   heading.textContent = type;
-  data.map((d)=>{
+  data.map((d) => {
     const employeeName = d;
-        const empDiv = document.createElement("div");
-        empDiv.style.padding = ".5em";
-        empDiv.classList.add("name-tag");
-        empDiv.textContent = `${employeeName} `;
-        innerEmpDiv.appendChild(empDiv);
-  })
+    const empDiv = document.createElement("div");
+    empDiv.style.padding = ".5em";
+    empDiv.classList.add("name-tag");
+    empDiv.textContent = `${employeeName} `;
+    innerEmpDiv.appendChild(empDiv);
+  });
   employeeDiv.appendChild(innerEmpDiv);
   parent.replaceChild(employeeDiv, old_div);
-
 }
 
 function joinDesk(type, name, date) {
@@ -280,4 +282,141 @@ async function cancelDeskBooking(deskBookingId) {
     .catch((error) => {
       console.error("Error creating desk booking :(", error);
     });
+}
+
+// advance booking
+
+function deskBookAdvance() {
+  let deskpage = document.getElementById("deskpage");
+  let deskBtn = document.createElement("button");
+  deskBtn.id = "deskBookingBtn";
+  deskBtn.textContent = "Advance Book";
+  deskBtn.style.float = "right";
+  deskBtn.addEventListener("click", function() {
+    openDeskBookingModal();
+  });
+  deskpage.appendChild(deskBtn);
+}
+
+async function openDeskBookingModal() {
+  let parent = document.getElementById("emp-model");
+  let heading = document.getElementById("view-heading");
+  let old_div = document.getElementById("emplist");
+  let employeeDiv = document.createElement("div");
+  employeeDiv.id = "emplist";
+  employeeDiv.classList.add("employee-list");
+  const innerEmpDiv = document.createElement("div");
+  innerEmpDiv.classList.add("inner-vac");
+
+  let modal = document.getElementById("employeeModal");
+  modal.style.display = "flex";
+  heading.textContent = "Book Your Desk";
+
+  let formcontainer = document.createElement("div");
+  formcontainer.classList.add("form-container");
+
+  const form = document.createElement("form");
+  form.id = "bookingForm";
+
+  const deskTypeLabel = document.createElement("label");
+  deskTypeLabel.textContent = "NeighbourHood";
+  form.appendChild(deskTypeLabel);
+
+  const deskTypeSelect = document.createElement("select");
+  deskTypeSelect.id = "deskType";
+  deskTypeSelect.name = "deskType";
+  deskTypeSelect.required = true;
+  form.appendChild(deskTypeSelect);
+
+  let nei = await getAllNeighbour();
+  nei.map((nei) => {
+    const option = document.createElement("option");
+    option.value = nei.neighbourId;
+    option.textContent = nei.neighbourName;
+    deskTypeSelect.appendChild(option);
+  });
+
+  const bookingDateLabel = document.createElement("label");
+  bookingDateLabel.textContent = "Booking Date:";
+  form.appendChild(bookingDateLabel);
+
+  const bookingDateInput = document.createElement("input");
+  bookingDateInput.type = "date";
+  bookingDateInput.id = "bookingDate";
+  bookingDateInput.name = "bookingDate";
+  bookingDateInput.required = true;
+  form.appendChild(bookingDateInput);
+
+  let tomorrow = getTomorrowDate();
+  bookingDateInput.setAttribute("min", tomorrow);
+
+  const submitButton = document.createElement("button");
+  submitButton.type = "submit";
+  submitButton.textContent = "Book Now";
+  form.appendChild(submitButton);
+
+  formcontainer.appendChild(form);
+  innerEmpDiv.appendChild(formcontainer);
+
+  employeeDiv.appendChild(innerEmpDiv);
+  parent.replaceChild(employeeDiv, old_div);
+
+
+
+  form.addEventListener("submit", async(event) => {
+    event.preventDefault();
+    const neighbour = deskTypeSelect.value;
+    const joinDate = bookingDateInput.value;
+    let empid = localStorage.getItem("employeeId");
+    console.log(formatDate2(joinDate));
+
+    let booked = false;
+    let Deskbooking = await getBookingWithDate(formatDate2(joinDate));
+
+    Deskbooking.map((desk)=>{
+      if(desk.employeeId === empid && desk.deskBookingDate === joinDate){
+        booked = true;
+        return;
+      }     
+    });
+
+    if(!booked){
+      const url = `${APIURL}desk-bookings`;
+      const requestBody = {
+        method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        employeeId: empid,
+        neighbourId: neighbour,
+        deskBookingDate: joinDate,
+      }),
+    };
+    
+    // Send the POST request
+    fetch(url, requestBody)
+    .then((response) => {
+      if (!response.ok) {
+          openModal("Failed to create desk booking");
+          throw new Error("Failed to create desk booking :(");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        modal.style.display = "none";
+        deskBookigPage();
+        openModal("Desk booking created successfully..!!");
+      })
+      .catch((error) => {
+        console.error("Error creating desk booking :(", error);
+      });
+    }else if(booked){
+      openModal("You already booked your Desk");
+    }
+    
+    console.log(neighbour);
+    console.log(joinDate);
+  });
 }

@@ -406,6 +406,14 @@ grid-gap: 1px; */
   height: 63vh;
 }
 
+#main-show-vacation{
+  display: grid;
+  row-gap: 20px;
+  column-gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  padding: 10px;
+}
+
   #main-show-home {
     display: grid;
     row-gap: 20px;
@@ -538,3 +546,24 @@ grid-gap: 1px; */
   /* display: flex; */
   float: right;
  }
+
+/* Advanced booking btn */
+
+#deskBookingBtn{
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  display: block;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+}
+
+#deskBookingBtn:hover{
+  transform: translate(0rem, -0.5rem);
+  box-shadow: 0.2rem 0.2rem .5rem rgb(49, 130, 1);
+}

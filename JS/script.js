@@ -33,8 +33,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   toggleButton();
-  
-
   // employeeByEmail(localStorage.getItem("userEmail"));
 });
 

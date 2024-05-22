@@ -644,3 +644,9 @@ grid-gap: 1px; */
 .fw-6{
   font-weight: 600;
 }
+
+.heading-Container{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}

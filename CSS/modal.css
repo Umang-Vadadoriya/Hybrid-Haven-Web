@@ -60,7 +60,8 @@
 
 .form-container {
     background-color: white;
-    padding: 20px;
+    /* padding: 20px; */
+    padding: 1.5rem 3rem;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -83,12 +84,18 @@
 }
 
 .form-container button {
-    background-color: #00ff00;
-    color: white;
+  background-color: #011f3e;
+  color: #fff;
+    font-weight: bold;
     border: none;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
+    margin-bottom: 0;
 }
 
 .form-container button:hover {
-    background-color: #011f3e;
+
+    background-color: #00ff00;
+    color: black;
+    font-weight: bold;
 }

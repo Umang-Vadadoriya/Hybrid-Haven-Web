@@ -57,6 +57,14 @@ export function formatDate(date) {
   return formattedDate;
 }
 
+// like this 13.02.2024
+export function formatDate2(date) {
+  const originalDate = date;
+  const parts = originalDate.split("-");
+  const formattedDate = `${parts[2]}.${parts[1]}.${parts[0]}`;
+  return formattedDate;
+}
+
 export function TurnOnLoader() {
   const loader = document.querySelector(".loader");
   loader.style.display = "block";

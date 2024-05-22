@@ -19,7 +19,7 @@
     /* max-width: 500px; */
     /* margin-top: 2rem; */
     border-radius: 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 80vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     animation-name: modalopen;
@@ -56,3 +56,39 @@
 
   }
   
+  /* deskmodal booking*/
+
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input, select, button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form-container button {
+    background-color: #00ff00;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #011f3e;
+}

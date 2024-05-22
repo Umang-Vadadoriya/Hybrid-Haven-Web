@@ -75,7 +75,7 @@
     font-weight: bold;
 }
 
-.form-container input, select, button {
+.form-container input, select, button,textarea {
     margin-bottom: 15px;
     padding: 10px;
     border: 1px solid #ccc;

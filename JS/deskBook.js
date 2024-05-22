@@ -404,17 +404,17 @@ async function openDeskBookingModal() {
     let empid = localStorage.getItem("employeeId");
     console.log(formatDate2(joinDate));
 
-    let booked = false;
+    let dbooked = false;
     let Deskbooking = await getBookingWithDate(formatDate2(joinDate));
 
     Deskbooking.map((desk) => {
-      if (desk.employeeId === empid && desk.deskBookingDate === joinDate) {
-        booked = true;
+      if (desk.employeeId == empid && desk.deskBookingDate == joinDate) {
+        dbooked = true;
         return;
       }
     });
 
-    if (!booked) {
+    if (!dbooked) {
       const url = `${APIURL}desk-bookings`;
       const requestBody = {
         method: "POST",
@@ -446,7 +446,8 @@ async function openDeskBookingModal() {
         .catch((error) => {
           console.error("Error creating desk booking :(", error);
         });
-    } else if (booked) {
+    } else if (dbooked) {
+      modal.style.display = "none";
       openModal("You already booked your Desk");
     }
 

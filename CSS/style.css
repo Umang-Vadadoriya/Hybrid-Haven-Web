@@ -292,18 +292,35 @@ grid-gap: 1px; */
 /* Modal Content/Box */
 .modal-content {
   background-color: var(--modal-content-bg-color);
-  margin: 15% auto;
-  padding: 2rem;
+  margin: 15rem auto;
+  /* padding: 2rem; */
   border-radius: 0.7rem;
-  width: 50%;
+  max-width: 30%;
   height: auto;
   text-align: center;
+  animation-name: modalopen2;
+    animation-duration: 0.4s;
+    display: flex;
+  flex-direction: column;
 }
 
+@keyframes modalopen2 {
+  from {transform: scale(0.7);}
+  to {transform: scale(1);}
+}
+#model-inner{
+ /* padding: 1rem; */
+ font-weight: 600;
+ margin-bottom: 2rem;
+}
+.close-container {
+  display: flex;
+  justify-content: flex-end;
+}
 /* The Close Button */
 .close {
   color: var(--modal-close-color);
-  float: right;
+  margin-right: .6rem;
   font-size: 2rem;
   font-weight: bold;
 }

@@ -19,7 +19,6 @@ export function loadEventsPage() {
   div.id = "content";
   const html = `
       <h1>Events<button>kr</button></h1>
-      <hr />
       <div id="main-show2"><div></div></div>
     `;
   div.innerHTML = html;

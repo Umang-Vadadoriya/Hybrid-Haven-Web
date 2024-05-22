@@ -36,16 +36,16 @@ export async function deskBookigPage() {
   closeNav();
 }
 
-function GetImagePerNeighbour(type){
+function GetImagePerNeighbour(type) {
   switch (type) {
-    case "Meeting":
-      return "./image/Meeting.png";
+    case "Quite Space":
+      return "./image/mute.png";
     case "Hot Desk":
       return "./image/man.png";
     case "Collab":
       return "./image/collaboration.png";
-    default: 
-      return "";   
+    default:
+      return "";
   }
 }
 
@@ -70,6 +70,10 @@ async function loadDeskBooking() {
   let totalemp = {};
 
   let neiNames = [];
+
+  let buttonFlag = ShouldShowButton(Bookings);
+  console.log("Button", buttonFlag);
+
   NeighbourHoods.map((nei) => {
     let avail = 0;
     let arr = [];
@@ -78,7 +82,7 @@ async function loadDeskBooking() {
     let neighbourhoodDiv = document.createElement("div");
     neighbourhoodDiv.classList.add("neighbourhood-div");
 
-    let img = document.createElement("img")
+    let img = document.createElement("img");
     img.src = GetImagePerNeighbour(nei.neighbourName);
     img.alt = `${nei.neighbourName} Image`;
     img.classList.add("desk-img");
@@ -129,7 +133,7 @@ async function loadDeskBooking() {
     availTag.textContent = `+${avail} Desks left`;
     neighbourhoodDiv.appendChild(availTag);
 
-    if (avail > 0 && !booked && !booked) {
+    if (avail > 0 && !booked && buttonFlag) {
       let joinButton = document.createElement("button");
       joinButton.id = `neighbourhood-${nei.neighbourName}`;
       joinButton.classList.add("join-btn");
@@ -143,7 +147,10 @@ async function loadDeskBooking() {
         );
       };
       neighbourhoodDiv.appendChild(joinButton);
-    } else if (booked && nei.neighbourName == bookedNeighbourHoodName) {
+    } else if (
+      booked &&
+      nei.neighbourName == bookedNeighbourHoodName
+    ) {
       let cancelButton = document.createElement("button");
       cancelButton.id = `neighbourhood-${nei.neighbourName}`;
       cancelButton.classList.add("cancel-btn");
@@ -212,6 +219,17 @@ function joinDesk(type, name, date) {
 
 function cancelDesk(deskBookingId) {
   cancelDeskBooking(deskBookingId);
+}
+
+function ShouldShowButton(Bookings) {
+  const ID = localStorage.getItem("employeeId");
+  let flag = true;
+  Bookings.map((book) => {
+    if (book.employeeId == ID) {
+      flag= false;
+    }
+  });
+  return flag;
 }
 
 async function createDeskBooking(

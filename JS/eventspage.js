@@ -19,8 +19,7 @@ export function loadEventsPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-      <h1>Events<button id="add-event" class="add-event">Add Events</button></h1>
-      <h1>Events<button>kr</button></h1>
+  <h1 style="padding: 10px;">Events<button id="add-event" class="add-event">Add Events</button></h1>
       <div id="main-show2"><div></div></div>
     `;
   div.innerHTML = html;

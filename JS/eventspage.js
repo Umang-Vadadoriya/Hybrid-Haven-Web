@@ -8,6 +8,7 @@ import {
   TurnOffLoader,
   getTomorrowDate,
 } from "./common.js";
+import { deskHover } from "./deskBook.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
 
@@ -19,8 +20,11 @@ export function loadEventsPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-  <h1 style="padding: 10px;">Events<button id="add-event" class="add-event">Add Events</button></h1>
-      <div id="main-show2"><div></div></div>
+  <div class="heading-Container">
+    <h1 style="padding: 10px;">Events</h1>
+    <button id="add-event" class="add-event">Add Events</button>
+  </div>
+  <div id="main-show2"><div></div></div>
     `;
   div.innerHTML = html;
   rightPanel.replaceChild(div, contentDiv);
@@ -41,8 +45,14 @@ async function loadEvents() {
   let ele = document.createElement("div");
   ele.classList.add("event-div");
 
+  let eventEmp = {};
+  let eventNames = [];
+
   Events.map((events) => {
     let eventbooked = false;
+    let arr = [];
+
+    eventNames.push(events.eventName);
     let card = document.createElement("div");
     card.classList.add("event-card");
 
@@ -72,6 +82,7 @@ async function loadEvents() {
 
     let eventEmployee = document.createElement("div");
     eventEmployee.classList.add("inner");
+    eventEmployee.id = `${events.eventName}`;
     EventsEmployees.map((eventemp) => {
       if (events.eventId == eventemp.eventId) {
         if (
@@ -80,6 +91,7 @@ async function loadEvents() {
         ) {
           eventbooked = true;
         }
+        arr.push(eventemp.employeeByEmployeeId.employeeName);
         let employeeNameElement = document.createElement("div");
         employeeNameElement.classList.add("name-tag");
         employeeNameElement.textContent = `${eventemp.employeeByEmployeeId.employeeName}`;
@@ -88,6 +100,7 @@ async function loadEvents() {
     });
     div.appendChild(eventEmployee);
     card.appendChild(div);
+    eventEmp[events.eventName] = arr;
     if (!eventbooked) {
       let joinButton = document.createElement("button");
       joinButton.id = `event-${events.eventId}`;
@@ -104,6 +117,23 @@ async function loadEvents() {
   });
   new_mainShow.appendChild(ele);
   contentDiv.replaceChild(new_mainShow, old_mainShow);
+  console.log(eventEmp);
+
+  eventNames.map((event)=>{
+    let classname = `${event}`;
+    let total = document.getElementById(classname).children.length;
+    let div = document.getElementById(classname);
+    if (total > 1) {
+      const hoverdiv = document.createElement("div");
+      hoverdiv.id = "viewMore";
+      hoverdiv.textContent = `+${total - 1} More ...`;
+      hoverdiv.classList.add("view-more");
+      hoverdiv.addEventListener("click", function () {
+        deskHover(eventEmp[event], event);
+      });
+      div.parentNode.insertBefore(hoverdiv, div.nextSibling);
+    }
+  })
   TurnOffLoader();
 }
 

@@ -16,7 +16,7 @@ export async function loadVacationPage() {
   const div = document.createElement("div");
   div.id = "content";
   const html = `
-      <h1>Apply For Vacation</h1>
+      <h1 style="text-align: center;">Apply For Vacation</h1>
       <div id="main-show-vacation"><div></div></div>
     `;
   div.innerHTML = html;

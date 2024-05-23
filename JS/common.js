@@ -50,6 +50,7 @@ export const tommorrowDate = `${tomorrow
   .padStart(2, "0")}.${tomorrow.getFullYear()}`;
 
 // For Event date display formate
+// 26-05-2024
 export function formatDate(date) {
   const originalDate = date;
   const parts = originalDate.split("-");

@@ -4,6 +4,7 @@ import {
   fetchOptions,
   TurnOnLoader,
   TurnOffLoader,
+  formatDate,
 } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
@@ -42,6 +43,7 @@ async function loadVacation() {
   const vacationForm = document.createElement("div");
   vacationForm.classList.add("vacation-form");
   vacationForm.style.display = "Grid";
+  vacationForm.style.width = "120%";
 
   const startDateLabel = document.createElement("label");
   startDateLabel.setAttribute("for", "startDate");
@@ -95,28 +97,50 @@ async function loadVacation() {
   heading.classList.add("text-center");
   RightEle.appendChild(heading);
 
-  const GridLayout = document.createElement("div")
+  const GridLayout = document.createElement("div");
   GridLayout.classList.add("grid");
 
+  if (Vacations.length > 0) {
+    Vacations.map((vac) => {
+      if (vac.employeeId == localStorage.getItem("employeeId")) {
+        let DataContainer = document.createElement("span");
+        DataContainer.classList.add("name-tag");
 
-  Vacations.map((vac) => {
-    if (vac.employeeId == localStorage.getItem("employeeId")) {
-      let DataContainer = document.createElement("span");
-      DataContainer.classList.add("name-tag");
-      DataContainer.textContent = `${vac.vacationStartDate} To ${vac.vacationEndDate}`;
+        const DateHolder = document.createElement("container");
+        DateHolder.classList.add("date-holder");
 
-      let button = document.createElement("button");
-      button.value = vac.vacationId;
-      button.classList.add("cancel-btn");
-      button.textContent = "X";
-      button.onclick = async function () {
-        await cancelVacation(button.value);
-      };
+        const startDateEle = document.createElement("p");
+        startDateEle.textContent = `${formatDate(vac.vacationStartDate)}`;
+        DateHolder.appendChild(startDateEle);
 
-      DataContainer.appendChild(button);
-      GridLayout.appendChild(DataContainer);
-    }
-  });
+        const ToDateEle = document.createElement("p");
+        ToDateEle.textContent = ` To `;
+        DateHolder.appendChild(ToDateEle);
+
+        const endDateEle = document.createElement("p");
+        endDateEle.textContent = `${formatDate(vac.vacationEndDate)}`;
+        DateHolder.appendChild(endDateEle);
+
+        let button = document.createElement("button");
+        button.value = vac.vacationId;
+        button.classList.add("cancel-btn");
+        button.textContent = "X";
+        button.onclick = async function () {
+          await cancelVacation(button.value);
+        };
+        DateHolder.appendChild(button);
+        
+        DataContainer.appendChild(DateHolder);
+        GridLayout.appendChild(DataContainer);
+      }
+    });
+  } else {
+    const NoEle = document.createElement("span");
+    NoEle.style.color = "#aaa111";
+    NoEle.textContent = `No Upcoming Vacations..!!`;
+    GridLayout.appendChild(NoEle);
+  }
+
   RightEle.appendChild(GridLayout);
 
   new_mainShowVacation.appendChild(ele);
@@ -210,6 +234,8 @@ async function joinVacation(startDate, endDate) {
   await fetch(`${APIURL}vacations`, requestBody)
     .then((res) => res.json())
     .then((data) => {
+      loadVacationPage();
+      openModal("You have joined the vacation!");
       mes.textContent = "You have joined the vacation!";
       mes.style.color = "green";
     })

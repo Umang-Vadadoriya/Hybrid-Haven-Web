@@ -46,7 +46,7 @@ async function GetAndSetUser() {
       }
     })
     .then((data) => {
-      username = data.name ? data.name : "Profile";
+      username = data.name ? data.name : data.login;
       localStorage.setItem("username", username);
       userDiv.innerText = localStorage.getItem("username");
       sidebarUname.innerText = localStorage.getItem("username");

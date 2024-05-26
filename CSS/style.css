@@ -709,7 +709,7 @@ grid-gap: 1px; */
   gap: 1rem;
   padding: 1rem;
   width: 15rem;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   /* border: .1rem solid black; */
   background-color: rgb(236, 236, 236);

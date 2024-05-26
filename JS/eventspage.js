@@ -126,7 +126,7 @@ async function loadEvents() {
     if (total > 1) {
       const hoverdiv = document.createElement("div");
       hoverdiv.id = "viewMore";
-      hoverdiv.textContent = `+${total - 1} More ...`;
+      hoverdiv.textContent = `+${total - 3} More ...`;
       hoverdiv.classList.add("view-more");
       hoverdiv.addEventListener("click", function () {
         deskHover(eventEmp[event], event);

@@ -469,15 +469,11 @@ async function openDeskBookingModal() {
       modal.style.display = "none";
       openModal("You already booked your Desk");
     }
-
-    console.log(neighbour);
-    console.log(joinDate);
   });
   TurnOffLoader();
 }
 
-function openUpcomingModal(){
-  TurnOnLoader();
+async function openUpcomingModal(){
   let parent = document.getElementById("emp-model");
   let heading = document.getElementById("view-heading");
   let old_div = document.getElementById("emplist");
@@ -499,7 +495,6 @@ function openUpcomingModal(){
   employeeDiv.appendChild(innerEmpDiv);
   parent.replaceChild(employeeDiv, old_div);
 
-  TurnOffLoader();
 }
 
 async function fetchBookings(empId) {
@@ -553,7 +548,6 @@ function displayBooking(booking) {
   bookingDiv.appendChild(card);
 
   div.appendChild(bookingDiv);
-  // modal.style.display = 'block';
 }
 
 

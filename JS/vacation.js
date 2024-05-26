@@ -235,7 +235,7 @@ async function joinVacation(startDate, endDate) {
     .then((res) => res.json())
     .then((data) => {
       loadVacationPage();
-      openModal("You have joined the vacation!");
+      openModal(data.message);
       mes.textContent = "You have joined the vacation!";
       mes.style.color = "green";
     })

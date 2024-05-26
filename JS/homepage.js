@@ -225,7 +225,7 @@ async function loadHomePage() {
   if (vacationTotal > 3) {
     const hoverdiv = document.createElement("div");
     hoverdiv.id = "viewMore";
-    hoverdiv.textContent = `+${vacationTotal - 1} More ...`;
+    hoverdiv.textContent = `+${vacationTotal - 3} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
       viewHover("Vacation", vacationEmp);
@@ -236,7 +236,7 @@ async function loadHomePage() {
   if (officeTotal > 3) {
     const hoverdiv = document.createElement("div");
     hoverdiv.id = "viewMore";
-    hoverdiv.textContent = `+${officeTotal - 1} More ...`;
+    hoverdiv.textContent = `+${officeTotal - 3} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
       viewHover("Office", deskdata);
@@ -247,7 +247,7 @@ async function loadHomePage() {
   if (homeTotal > 3) {
     const hoverdiv = document.createElement("div");
     hoverdiv.id = "viewMore";
-    hoverdiv.textContent = `+${homeTotal - 1} More ...`;
+    hoverdiv.textContent = `+${homeTotal - 3} More ...`;
     hoverdiv.classList.add("view-more");
     hoverdiv.addEventListener("click", function () {
       viewHover("Home", homedata);

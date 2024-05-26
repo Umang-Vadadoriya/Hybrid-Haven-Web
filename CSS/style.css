@@ -151,13 +151,15 @@ html {
   gap: 0.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
+  justify-content: center;
 }
 
 .name-tag {
-  background-color: lightblue;
+  background-color: var(--primary-color);
   padding: 0.5rem;
   border-radius: 0.3rem; 
   width: fit-content;
+  color: var(--font-color-white);
 }
 
 .avail-tag {
@@ -169,12 +171,13 @@ html {
 
 .inner {
   display: flex;
-  /* flex-wrap: wrap; */
   overflow: hidden;
   max-height: 7.5rem;
   flex-direction: column;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
+  align-items: center;
+
 }
 
 /* .inner:hover{
@@ -400,13 +403,16 @@ grid-gap: 1px; */
 }
 
 .event-card {
-  padding: 0.7rem;
   background-color: rgba(243, 242, 242, 0.826);
   margin-bottom: 1em;
   border-radius: 0.5em;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  background-color: #d8d9ff;
+  padding: 1rem;
+  justify-self: auto;
+  text-align: center;
 }
 
 .event-line {
@@ -451,6 +457,7 @@ grid-gap: 1px; */
     margin-right: 1rem;
     transition: all 0.3s ease;
     width: 10rem;
+    align-self: center;
 }
 
 
@@ -469,6 +476,14 @@ grid-gap: 1px; */
   column-gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   padding: 10px;
+}
+
+#main-show-home > div{
+  background-color: #d8d9ff;
+  padding: 1rem;
+  justify-self: auto;
+  border-radius: 1rem;
+  text-align: center;
 }
 
   .desk-book{
@@ -617,7 +632,7 @@ grid-gap: 1px; */
 }
 
 .vacation-Show-Container .name-tag{
-  background-color: #BDC6D1;
+  background-color: var(--primary-color);
   margin: 0.5rem;
 }
 
@@ -711,4 +726,15 @@ grid-gap: 1px; */
   /* outline-color: #c0392b; */
   outline:#c0392b solid .1rem;
   color: #c0392b;
+}
+
+
+/* // whitespaces */
+
+.neighbourhood-div{
+  background-color: #d8d9ff;
+    padding: 1rem;
+    justify-self: auto;
+    border-radius: 1rem;
+    text-align: center;
 }

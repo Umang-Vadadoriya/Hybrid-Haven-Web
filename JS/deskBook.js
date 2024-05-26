@@ -10,12 +10,14 @@ import {
   TurnOnLoader,
   TurnOffLoader,
   formatDate2,
+  fetchOptions,
+  formatDate
 } from "./common.js";
 import { openModal } from "./modal.js";
 import { API_RUN } from "./URLCollection.js";
 
 var APIURL = API_RUN;
-let neighbourhoodNames;
+let neighbourhoodNamesById = {};
 // Deskbooking Page
 
 export async function deskBookigPage() {
@@ -124,8 +126,12 @@ async function loadDeskBooking() {
 
       innerElement.textContent = `No one booked the ${nei.neighbourName}`;
     }
+
     let name = nei.neighbourName;
+    let neighbourId = nei.neighbourId;
     totalemp[name] = arr;
+    neighbourhoodNamesById[neighbourId] = name;
+
     neighbourhoodDiv.appendChild(innerElement);
 
     let availTag = document.createElement("div");
@@ -165,8 +171,6 @@ async function loadDeskBooking() {
   });
   new_mainshow.appendChild(ele);
   contentDiv.replaceChild(new_mainshow, old_mainShow);
-
-  neighbourhoodNames = neiNames;
 
   neiNames.map((nei) => {
     let classname = `${nei}-inner`;
@@ -324,13 +328,28 @@ async function cancelDeskBooking(deskBookingId) {
 
 function deskBookAdvance() {
   let deskpage = document.getElementById("deskpage");
+
+  let div = document.createElement('div');
+  div.style.display="flex";
+  
+  let summarybtn = document.createElement("button");
+  summarybtn.id = "upcoming";
+  summarybtn.textContent = "Upcomming Bookings";
+  summarybtn.addEventListener("click", function () {
+    openUpcomingModal();
+  });
+  
   let deskBtn = document.createElement("button");
   deskBtn.id = "deskBookingBtn";
   deskBtn.textContent = "Advance Book";
   deskBtn.addEventListener("click", function () {
     openDeskBookingModal();
-  });
-  deskpage.appendChild(deskBtn);
+  }); 
+
+  div.appendChild(summarybtn);
+  div.appendChild(deskBtn);
+  
+  deskpage.appendChild(div);
 }
 
 async function openDeskBookingModal() {
@@ -398,7 +417,7 @@ async function openDeskBookingModal() {
   parent.replaceChild(employeeDiv, old_div);
 
   form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    event.preventDefault(); 
     const neighbour = deskTypeSelect.value;
     const joinDate = bookingDateInput.value;
     let empid = localStorage.getItem("employeeId");
@@ -455,4 +474,118 @@ async function openDeskBookingModal() {
     console.log(joinDate);
   });
   TurnOffLoader();
+}
+
+function openUpcomingModal(){
+  TurnOnLoader();
+  let parent = document.getElementById("emp-model");
+  let heading = document.getElementById("view-heading");
+  let old_div = document.getElementById("emplist");
+  let employeeDiv = document.createElement("div");
+  employeeDiv.id = "emplist";
+  employeeDiv.classList.add("employee-list");
+  const innerEmpDiv = document.createElement("div");
+  innerEmpDiv.classList.add("inner-vac");
+  innerEmpDiv.id = "upcoming-div";
+
+  const empId = localStorage.getItem('employeeId');
+
+  let modal = document.getElementById("employeeModal");
+  modal.style.display = "flex";
+  heading.textContent = "Upcoming Bookings";
+
+  fetchBookings(empId);
+
+  employeeDiv.appendChild(innerEmpDiv);
+  parent.replaceChild(employeeDiv, old_div);
+
+  TurnOffLoader();
+}
+
+async function fetchBookings(empId) {
+  TurnOnLoader();
+  const today = new Date();
+  for (let i = 2; i <= 6; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const formattedDate = date.toISOString().split('T')[0];
+      const fdate = formatDate2(formattedDate);
+      await fetch(`${APIURL}desk-bookings/date/${fdate}`,fetchOptions)
+          .then(response => response.json())
+          .then(data => {
+              data.forEach(booking => {
+                  if (booking.employeeId == empId) {
+                      displayBooking(booking);
+                  }
+              });
+          })
+          .catch(error => console.error('Error fetching bookings:', error));
+  }
+  TurnOffLoader();
+}
+
+function displayBooking(booking) {
+  let div = document.getElementById("upcoming-div");
+  const bookingDiv = document.createElement('div');
+  bookingDiv.className = 'booking';
+
+  const card = document.createElement('div');
+  card.classList.add("upcoming-card");
+
+  const dispDate = document.createElement('div');
+  dispDate.classList.add("dispdate");
+  dispDate.textContent = formatDate(booking.deskBookingDate);
+
+  const dispNeiName = document.createElement('div');
+  dispNeiName.classList.add("dispNeiName");
+  dispNeiName.textContent = neighbourhoodNamesById[booking.neighbourId];
+
+  const deleteBookingBtn = document.createElement("button");
+  deleteBookingBtn.classList.add("deleteBookingBtn");
+  deleteBookingBtn.textContent = " X "; 
+  deleteBookingBtn.addEventListener("click",function(){
+    deleteDeskbookingById(booking.deskBookingId);
+  });
+
+  card.appendChild(dispDate);
+  card.appendChild(dispNeiName);
+  card.appendChild(deleteBookingBtn);
+  bookingDiv.appendChild(card);
+
+  div.appendChild(bookingDiv);
+  // modal.style.display = 'block';
+}
+
+
+function deleteDeskbookingById(id){
+  // console.log(id);
+  TurnOnLoader();
+  let modal = document.getElementById("employeeModal");
+  modal.style.display = "none";
+
+  const url = `${APIURL}desk-bookings/id/${id}`;
+
+  const requestBody = {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  fetch(url, requestBody)
+    .then((response) => {
+      if (!response.ok) {
+        openModal("Failed To Cancel DeskBooking");
+        throw new Error("Failed To Cancel DeskBooking");
+      }
+    })
+    .then(() => {
+      openModal("Sorry To See You Go..!!");
+      deskBookigPage();
+    })
+    .catch((error) => {
+      console.error("Error Deleting Deskbooking ", error);
+    });
+    TurnOffLoader();
 }

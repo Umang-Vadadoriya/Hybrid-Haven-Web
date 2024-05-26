@@ -127,7 +127,9 @@ html {
   padding: 1rem;
   flex: 5;
   overflow: auto;
-  height: 100vh;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .flex-con img {
@@ -295,7 +297,7 @@ grid-gap: 1px; */
   margin: 15rem auto;
   /* padding: 2rem; */
   border-radius: 0.7rem;
-  max-width: 30%;
+  max-width: 35%;
   height: auto;
   text-align: center;
   animation-name: modalopen2;
@@ -450,14 +452,8 @@ grid-gap: 1px; */
     transition: all 0.3s ease;
     width: 10rem;
 }
-/* overflow */
 
-#main-show,
-#main-show2,
-#main-show-home {
-  /* overflow-y: auto; */
-  /* height: 63vh; */
-}
+
 
 #main-show-vacation{
   display: grid;
@@ -651,7 +647,7 @@ grid-gap: 1px; */
 
 /* Advanced booking btn */
 
-#deskBookingBtn,.add-event{
+#deskBookingBtn,.add-event,#upcoming{
   padding: 0.5rem 1rem;
   margin: 1rem 0;
   font-size: 1rem;
@@ -665,7 +661,7 @@ grid-gap: 1px; */
   transition: all 0.3s ease;
 }
 
-#deskBookingBtn:hover,.add-event:hover{
+#deskBookingBtn:hover,.add-event:hover,#upcoming:hover{
   transform: translate(0rem, -0.5rem);
   box-shadow: 0.2rem 0.2rem .5rem rgb(49, 130, 1);
 }
@@ -689,4 +685,30 @@ grid-gap: 1px; */
   display: flex;
   justify-content: space-between;
   padding: 10px;
+}
+
+/* upcoming card */
+
+.upcoming-card{
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  width: 15rem;
+  justify-content: center;
+  align-items: center;
+  /* border: .1rem solid black; */
+  background-color: rgb(236, 236, 236);
+  border-radius: .4rem;
+  box-shadow: .1rem .1rem .2rem ;
+}
+
+.upcoming-card .dispdate{
+  font-size: 1rem;
+  font-weight: bold;
+}
+.upcoming-card .deleteBookingBtn{
+  margin-bottom: 0;
+  /* outline-color: #c0392b; */
+  outline:#c0392b solid .1rem;
+  color: #c0392b;
 }

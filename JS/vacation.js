@@ -216,7 +216,6 @@ async function GetAllVacations() {
 }
 
 async function joinVacation(startDate, endDate) {
-  const mes = document.getElementById("message");
   let empid = localStorage.getItem("employeeId");
   const requestBody = {
     method: "POST",
@@ -232,14 +231,24 @@ async function joinVacation(startDate, endDate) {
   };
 
   await fetch(`${APIURL}vacations`, requestBody)
-    .then((res) => res.json())
-    .then((data) => {
+    .then((res) => {
+      if (res.status == 201) {
+        return res.json();
+      }
+      else if(res.status == 409){
+        var msg = "You're Already On Vacation..!!";
+        openModal(msg);
+        throw new Error(msg);
+      }else {
+        openModal(`Error Joining Vacations..!!\nCode:${res.status}:${res.statusText}`);
+        throw new Error("Error Joining Vacations..!!");
+      }
+    })
+    .then(() => {
       loadVacationPage();
-      openModal(data.message);
-      mes.textContent = "You have joined the vacation!";
-      mes.style.color = "green";
+      openModal("You have joined the vacation!");
     })
     .catch((error) => {
-      console.log("error creating vacation", error);
+      console.log("Error creating vacation", error);
     });
 }

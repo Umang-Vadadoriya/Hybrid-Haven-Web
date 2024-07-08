@@ -123,7 +123,7 @@ async function loadEvents() {
     let classname = `${event}`;
     let total = document.getElementById(classname).children.length;
     let div = document.getElementById(classname);
-    if (total > 1) {
+    if (total > 3) {
       const hoverdiv = document.createElement("div");
       hoverdiv.id = "viewMore";
       hoverdiv.textContent = `+${total - 3} More ...`;
